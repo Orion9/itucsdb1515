@@ -1,5 +1,6 @@
 import datetime
 import os
+import config
 
 from flask import Flask
 from flask import render_template
