@@ -1,3 +1,5 @@
+__author__ = "ITUCSDB1515"
+
 import psycopg2
 
 """DBConnect method is the main method for database connection.

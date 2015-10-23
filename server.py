@@ -16,6 +16,7 @@ def home():
     now = datetime.datetime.now()
     return render_template('home.html', current_time=now.ctime())
 
+
 def get_elephantsql_dsn(vcap_services):
     """Returns the data source name for ElephantSQL."""
     parsed = json.loads(vcap_services)
@@ -32,8 +33,8 @@ if __name__ == '__main__':
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
         """Change this line according to your local db credentials"""
-        app.config['dsn'] = """user='vagrant' password='vagrant'
-                               host='localhost' port=54321 dbname='itucsdb'"""
+        app.config['dsn'] = """user='postgres' password='password'
+                               host='localhost' port=5432 dbname='itucsdb1515'"""
                                
     PORT = int(os.getenv('VCAP_APP_PORT', '5000'))
     app.run(host='0.0.0.0', port=int(PORT))
