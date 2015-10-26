@@ -1,24 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
+
+<!-- Head area -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap JS ve CSS files taken from Bootstrap CDN -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="../static/css/font-awesome.css">
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
 
     <!-- Custom CSS style -->
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
 
     <!-- Custom js functions -->
-    <script src="../static/js/custom.js"></script>
+    <script src="/static/js/custom.js"></script>
 
     <title>DBall | {% block title %}{% endblock %}</title>
 
 </head>
+<!-- End Head area -->
+
+<!-- Navbar area -->
 <header>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
@@ -30,7 +37,6 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">DBall</a>
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
@@ -41,76 +47,87 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                  <li><a href="#" data-toggle="modal" data-target="#searchModal" >
-                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                  </a> </li>
-
-				<!-- User area -->
-					{%  if 0 %}
-                  <li><a href="#" id="userMenuPopover" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                  </a></li>
-					{% else %}
-                    <li><a href="#" data-toggle="modal" data-target="#loginModal">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                  </a></li>
+                    <!-- User navbar area -->
+                    {%  if not session.logged_in %}
+                        <li><a href="#" data-toggle="modal" data-target="#loginModal">
+                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                        </a></li>
+                    {% else %}
+                        <li><a href="#" id="userMenuPopover" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        </a></li>
                     {% endif %}
-				<!-- End user area -->
+				    <!-- End user navbar area -->
                 </ul>
             </div>
         </div>
     </div>
 </header>
+<!-- End Navbar area -->
+
+<!-- Modal form for Login Screen -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="loginModalLabel">Login</h4>
+      </div>
+        <div id="login-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Oops!</strong> You entered wrong credentials.
+        </div>
+    <form id="modal-submit-form" action="" method="post">
+      <div class="modal-body">
+
+          <div class="form-group">
+            <label>Email address</label>
+            <input id="modal-login-email" type="email" name="email" class="form-control" placeholder="Enter Email" required>
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input id="modal-login-password" type="password" name="password" class="form-control" placeholder="Enter Password" required>
+          </div>
+
+        </div>
+
+          <div class="modal-footer">
+           <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+<!-- End modal form -->
 
 <!-- If user logged in it will face with this screen -->
 <div id="userMenuPopoverContent">
 
     <div>
-        <button type="button" class="btn btn-default btn-lg btn-block"
-                data-toggle="tooltip" data-placement="left" title="Admin Panel"
+        <a type="button" href="{{ url_for('manage') }}" class="btn btn-default btn-lg btn-block"
+                data-toggle="tooltip" data-placement="left" title="Management"
                 aria-haspopup="true" aria-expanded="false" >
-            <div class="pull-right"><span class="glyphicon glyphicon-console"></span></div>
-        </button>
+            <span class="glyphicon glyphicon-console"></span>
+        </a>
     </div>
     <div>
-        <button type="button" class="btn btn-default btn-lg btn-block"
+        <a type="button" href="#" class="btn btn-default btn-lg btn-block"
                 data-toggle="tooltip" data-placement="left" title="Settings"
                 aria-haspopup="true" aria-expanded="false">
-            <div class="pull-right"><span class="glyphicon glyphicon-list"></span></div>
-        </button>
+            <span class="glyphicon glyphicon-list"></span>
+        </a>
     </div>
     <div>
-        <button type="button" class="btn btn-default btn-lg btn-block" data-toggle="tooltip"
+        <a href="{{ url_for('logout') }}" type="button" class="btn btn-default btn-lg btn-block" data-toggle="tooltip"
                 data-placement="left" title="Sign out" aria-haspopup="true" aria-expanded="false">
-            <div class="pull-right"><span class="glyphicon glyphicon-off"></span></div>
-        </button>
+            <span class="glyphicon glyphicon-off"></span>
+        </a>
     </div>
 
 </div>
 <!-- End user menu -->
-
-<!-- Modal form for Search Screen -->
-<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="searchModalLabel">Search</h4>
-      </div>
-      <div class="modal-body">
-        <form role="search">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-       <button type="submit" class="btn btn-default">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End modal form -->
 
 <!-- Modal form for About Screen -->
 <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
@@ -124,7 +141,7 @@
         <p>You know who we are.</p>
       </div>
       <div class="modal-footer center-block">
-          <div class="pull-left"><small>v0.1-20151023</small></div>
+          <div class="pull-left"><small>DBall Database Application v0.2.6</small></div>
         <span class="glyphicon glyphicon-plane" aria-hidden="true"></span>
         <span class="glyphicon glyphicon-plane" aria-hidden="true"></span>
         <span class="glyphicon glyphicon-tower" aria-hidden="true"></span>
@@ -137,35 +154,7 @@
 </div>
 <!-- End modal form -->
 
-<!-- Modal form for Login Screen -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="loginModalLabel">Login</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label>Email address</label>
-            <input type="email" class="form-control" placeholder="Enter Email">
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" class="form-control" placeholder="Enter Password">
-          </div>
-
-        </form>
-      </div>
-      <div class="modal-footer">
-       <button type="submit" class="btn btn-default">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End modal form -->
-
+<!-- Body area -->
 <body>
   <div class="container-fluid">
     <div class="jumbotron">
@@ -173,15 +162,20 @@
     </div>
   </div>
 </body>
+<!-- End Body area -->
 
+<!-- Footer area -->
 <footer class="footer">
-    <div class="container">
-      <p class="text-muted">
-        &copy 2015. DBall.
-        <a href="#" class="pull-right" data-toggle="modal" data-target="#aboutModal">
-          <span class="glyphicon glyphicon-qrcode" aria-hidden="true" ></span>
-        </a>
-      </p>
+    <div>
+        <div class="container">
+          <p class="text-muted">
+            &copy; 2015. DBall.
+            <a href="#" class="pull-right" data-toggle="modal" data-target="#aboutModal">
+              <span class="glyphicon glyphicon-qrcode" aria-hidden="true" ></span>
+            </a>
+          </p>
+        </div>
     </div>
 </footer>
+<!-- End Footer area -->
 </html>
