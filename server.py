@@ -37,10 +37,22 @@ def manage():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
-    return render_template("manager/home.html")
+    user_data = session.get('email')
+    return render_template("manager/home.html", user_data=user_data)
 
 
-# Auth API #
+###############################################################################################
+# Auth API                                                                                    #
+# Send your data in JSON format                                                               #
+# to the routes. It will be automatically                                                     #
+# processed.                                                                                  #
+#                                                                                             #
+# Usage: (using curl lib)                                                                     #
+#                                                                                             #
+# curl -H "Accept: application/json" -H "Content-type: application/json"                      #
+# -X POST -d '{"alias": "testuser", "user_email": "test@test.com", "user_password": "test"}'  #
+# http://localhost:5000/api/register                                                          #
+###############################################################################################
 @app.route('/api/register', methods=['POST'])
 def api_user_register():
     json_user_info = request.json
@@ -54,8 +66,10 @@ def api_user_register():
     cursor = conn.cursor()
 
     try:
-        cursor.execute("""INSERT INTO users (user_name, password_hash, user_email, is_admin) VALUES (%s, %s, %s, %s);""",
-                       (user_info.alias, user_info.password_hash, user_info.email, user_info.user_type))
+        cursor.execute(
+            """INSERT INTO users (user_name, password_hash, user_email, is_admin) VALUES (%s, %s, %s, %s);""",
+                       (user_info.alias, user_info.password_hash, user_info.email, user_info.user_type)
+        )
         conn.commit()
 
         status = 'success'
@@ -77,6 +91,8 @@ def api_user_login():
     if user_info is not None:
         if bcrypt.verify(json_user_data['user_password'], user_info[2]) is True:
             session['logged_in'] = True
+            session['email'] = json_user_data['user_email']
+
             status = True
         else:
             status = False
@@ -88,6 +104,7 @@ def api_user_login():
 
 @app.route('/api/logout')
 def api_user_logout():
+    session.pop('email', None)
     session.pop('logged_in', None)
     return jsonify({'result': 'success'})
 
@@ -98,7 +115,7 @@ if __name__ == '__main__':
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
         # Enable following line only if you need it. It will show call stack and so.#
-        app.debug=True
+        # app.debug = True
         # Change this line according to your local db credentials #
         app.config['dsn'] = """user='postgres' password='password'
                                host='localhost' port=5432 dbname='itucsdb1515'"""

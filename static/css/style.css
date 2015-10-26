@@ -5,6 +5,15 @@ body {
 	font-size:16px;
 	color: #36424a;
 }
+
+.body-manager{
+    background-size: 100%;
+	background-color: lightgrey;
+
+	font-size:16px;
+	color: #36424a;
+}
+
 section{
 	margin:20px 0 30px 0;
 }
@@ -74,3 +83,38 @@ html {
 	    margin: 0;
 	}
 }
+
+.sidebar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+      background-color: #f5f5f5;
+      position: fixed;
+      top: 31px;
+      left: 0;
+      bottom: 0;
+      display: block;
+      padding: 20px;
+  }
+}
+
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+
+}
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+    color: #383838;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+    color: whitesmoke;
+    background-color: #383838;
+}
+

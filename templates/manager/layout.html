@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+<!-- Head area -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap JS ve CSS files taken from Bootstrap CDN -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+
+    <!-- Custom CSS style -->
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <!-- Custom js functions -->
+    <script src="/static/js/custom.js"></script>
+
+    <title>DBall | {% block title %}{% endblock %}</title>
+
+</head>
+<!-- End Head area -->
+
+<!-- Body area -->
+<body class="body-manager">
+  <div class="container-fluid">
+    <section>
+      {% block content %}{% endblock %}
+    </section>
+  </div>
+</body>
+<!-- End Body area -->
+
+</html>

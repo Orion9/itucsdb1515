@@ -26,6 +26,7 @@ $(function(){
 
 $(document).ready(function() {
     $('#modal-submit-form').submit(function() {
+        $('#modal-login-button').prop('disabled', true);
         var user_data = {user_email: $('#modal-login-email').val(), user_password: $('#modal-login-password').val()};
         $.ajax({
             url: "/api/login",
@@ -33,19 +34,18 @@ $(document).ready(function() {
             data: JSON.stringify(user_data),
             type: "POST",
             dataType : "json",
-            success: function( json, post_data ) {
+            success: function( json ) {
                 if ( json.result ) {
                     location.reload();
                 } else {
                     $('#login-error-alert').show();
                 }
-                console.log(json);
+                console.log( json );
             },
-            error: function( xhr, status, errorThrown ) {
-                console.log( "Sorry, there was a problem!" );
+            error: function( ) {
+                console.log( "TROUBLE!" );
             }
         });
-        json = '';
         return false;
     });
 });
