@@ -49,3 +49,7 @@ $(document).ready(function() {
         return false;
     });
 });
+
+$(document).ready(function() {
+    $('#glorious-table').dataTable();
+} );

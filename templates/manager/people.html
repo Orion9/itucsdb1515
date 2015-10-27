@@ -1,0 +1,34 @@
+{% extends "manager/layout.html" %}
+{% block title %}People{% endblock %}
+{% set active_page = 'people' %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of people registered in database
+        </div>
+        <div class="panel-body">
+            <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Person ID</th>
+                        <th>Person Name</th>
+                        <th>Birth Date</th>
+                        <th>Birth Place</th>
+                        <th>Person Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for person in people_data %}
+                    <tr>
+                        <td>{{ person['id'] }}</td>
+                        <td>{{ person['name'] }}</td>
+                        <td>{{ person['birth_date'] }}</td>
+                        <td>{{ person['birth_place'] }}</td>
+                        <td>{{ person['type'] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

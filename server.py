@@ -12,6 +12,7 @@ import os
 import json
 import re
 import user
+import people
 
 from config import *
 from flask import *
@@ -37,8 +38,64 @@ def manage():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
-    user_data = session.get('email')
-    return render_template("manager/home.html", user_data=user_data)
+    return render_template("manager/main.html")
+
+
+@app.route('/manage/users', methods=['GET', 'POST'])
+def manage_users():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    return render_template("manager/users.html")
+
+
+@app.route('/manage/users/<int:user_id>', methods=['GET', 'POST'])
+def show_user(user_id):
+    pass
+
+
+@app.route('/manage/people', methods=['GET', 'POST'])
+def manage_people():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    people_json = api_get_person_all()
+    print(people_json)
+    people_data = json.loads(people_json)
+    return render_template("manager/people.html", people_data=people_data)
+
+
+@app.route('/manage/penalties', methods=['GET', 'POST'])
+def manage_penalties():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    return render_template("manager/penalties.html")
+
+
+@app.route('/manage/penalties/<int:penalty_id>', methods=['GET', 'POST'])
+def show_penalty(penalty_id):
+    pass
+
+
+@app.route('/manage/cities', methods=['GET', 'POST'])
+def manage_cities():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    people_json = api_get_person_all()
+    return render_template("manager/cities.html")
+
+
+@app.route('/manage/people/<int:person_id>', methods=['GET', 'POST'])
+def show_person(person_id):
+    pass
+
+
+@app.route('/api')
+def api_welcome_screen():
+    data = {"welcome_message": "Welcome to the DBall API v1.0"}
+    return jsonify(data)
 
 
 ###############################################################################################
@@ -109,13 +166,43 @@ def api_user_logout():
     return jsonify({'result': 'success'})
 
 
+###############################################################################################
+# Data API                                                                                    #
+# Gets your data in JSON format to the routes. It will be automatically processed.            #
+#                                                                                             #
+# Usage: (using curl lib)                                                                     #
+#                                                                                             #
+#  curl http://localhost:5000/api/<route>/<id>                                                #
+###############################################################################################
+@app.route('/api/person', methods=['GET'])
+def api_get_person_all():
+    person = people.Person()
+    people_data = person.get_person_by_id()
+
+    return json.dumps(people_data)
+
+
+@app.route('/api/person/<int:data_id>', methods=['GET'])
+def api_get_person(data_id):
+    person_obj = people.Person()
+    person_obj.get_person_by_id(data_id)
+    data = {
+        'id': person_obj.id,
+        'name': person_obj.name,
+        'birth_date': person_obj.birth_date.strftime('%d/%m/%Y'),
+        'birth_place': person_obj.birth_place
+    }
+
+    return jsonify(data)
+
+
 if __name__ == '__main__':
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')
     if VCAP_SERVICES is not None:
         app.config['dsn'] = get_elephantsql_dsn(VCAP_SERVICES)
     else:
         # Enable following line only if you need it. It will show call stack and so.#
-        # app.debug = True
+        app.debug = True
         # Change this line according to your local db credentials #
         app.config['dsn'] = """user='postgres' password='password'
                                host='localhost' port=5432 dbname='itucsdb1515'"""
