@@ -7,7 +7,6 @@
 {% set active_page = active_page|default('main') -%}
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
 
 <!-- Head area -->
 <head>
@@ -18,13 +17,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
     <!-- Bootstrap JS ve CSS files taken from Bootstrap CDN -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
-    <link rel="stylesheet" href="/static/css/font-awesome.css">
 
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
-    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+
+    <!-- FontAwesome Library for different icons -->
+    <link rel="stylesheet" href="/static/css/font-awesome.css">
 
     <!-- Custom CSS style -->
     <link rel="stylesheet" href="/static/css/style.css">
@@ -46,7 +46,7 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                            data-target="#navbar" aria-expanded="false">
+                            data-target="#nav-bar" aria-expanded="false">
                       <span class="sr-only">Toggle navigation</span>
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
@@ -54,7 +54,7 @@
                     </button>
                     <a class="navbar-brand" href="{{ url_for('manage') }}">DBall Manager</a>
                 </div>
-                <div id="navbar" class="collapse navbar-collapse">
+                <div id="nav-bar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav visible-xs-block">
                         {% for href, id, caption in navigation_bar %}
                               <li{% if id == active_page %} class="active"{% endif %}>
@@ -65,14 +65,15 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <!-- User navbar area -->
-                        <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"
-                                   aria-haspopup="true" aria-expanded="false">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">
                                  {{ session.email }}
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url_for('home') }}">Home</a></li>
                                 <li><a href="#">Settings</a></li>
-                                <li role="separator" class="divider"></li>
+                                <li class="divider"></li>
                                 <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
                             </ul>
                         </li>
@@ -104,6 +105,7 @@
         </div>
     </section>
   </div>
+
 </body>
 <!-- End Body area -->
 

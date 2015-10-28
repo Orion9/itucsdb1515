@@ -13,6 +13,7 @@ import json
 import re
 import user
 import people
+import cities
 
 from config import *
 from flask import *
@@ -54,17 +55,6 @@ def show_user(user_id):
     pass
 
 
-@app.route('/manage/people', methods=['GET', 'POST'])
-def manage_people():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-    people_json = api_get_person_all()
-    print(people_json)
-    people_data = json.loads(people_json)
-    return render_template("manager/people.html", people_data=people_data)
-
-
 @app.route('/manage/penalties', methods=['GET', 'POST'])
 def manage_penalties():
     if not session.get('logged_in'):
@@ -92,6 +82,25 @@ def show_person(person_id):
     pass
 
 
+@app.route('/manage/people', methods=['GET', 'POST'])
+def manage_people():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    api_response = api_get_person_all()
+
+    person = people.Person(None, None, None, None)
+    people_data = person.get_person_by_id()
+
+    types_data = people.get_person_types()
+    city_obj = cities.City(None)
+    cities_data = city_obj.get_city()
+
+    return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
+
+
+# API START #
 @app.route('/api')
 def api_welcome_screen():
     data = {"welcome_message": "Welcome to the DBall API v1.0"}
@@ -168,7 +177,7 @@ def api_user_logout():
 
 ###############################################################################################
 # Data API                                                                                    #
-# Gets your data in JSON format to the routes. It will be automatically processed.            #
+# GETs your data in JSON format to the routes. It will be automatically processed.            #
 #                                                                                             #
 # Usage: (using curl lib)                                                                     #
 #                                                                                             #
@@ -176,15 +185,15 @@ def api_user_logout():
 ###############################################################################################
 @app.route('/api/person', methods=['GET'])
 def api_get_person_all():
-    person = people.Person()
+    person = people.Person(None, None, None, None)
     people_data = person.get_person_by_id()
-
-    return json.dumps(people_data)
+    people_json = json.dumps(people_data)
+    return Response(people_json, mimetype="application/json")
 
 
 @app.route('/api/person/<int:data_id>', methods=['GET'])
 def api_get_person(data_id):
-    person_obj = people.Person()
+    person_obj = people.Person(None, None, None, None)
     person_obj.get_person_by_id(data_id)
     data = {
         'id': person_obj.id,
@@ -194,6 +203,37 @@ def api_get_person(data_id):
     }
 
     return jsonify(data)
+
+
+@app.route('/api/person/add', methods=['POST'])
+def api_add_person():
+    if not session.get('logged_in'):
+        return jsonify({"result":  "Unauthorized Access. Please identify yourself"})
+
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    person_info = people.Person(json_post_data['person_name'], json_post_data['person_birth_date'],
+                                json_post_data['person_birth_place'], json_post_data['person_type'])
+
+    result = person_info.add_to_db()
+    return jsonify({'result': result})
+
+
+@app.route('/api/person/delete', methods=['POST'])
+def api_delete_person():
+    if not session.get('logged_in'):
+        return jsonify({"result":  "Unauthorized Access. Please identify yourself"})
+
+    status = False
+    person_id_json = request.get_json()
+    print(person_id_json)
+    for person_id in person_id_json:
+        person_obj = people.Person(None, None, None, None)
+        person_obj.get_person_by_id(person_id)
+        print(person_id)
+        status = person_obj.delete_from_db()
+
+    return jsonify({'result': status})
 
 
 if __name__ == '__main__':

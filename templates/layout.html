@@ -6,7 +6,6 @@
 {% set active_page = active_page|default('home') -%}
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
 
 <!-- Head area -->
 <head>
@@ -17,6 +16,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
     <link rel="stylesheet" href="/static/css/font-awesome.css">
 
+    <!-- Bootstrap JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
@@ -61,9 +61,20 @@
                             <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
                         </a></li>
                     {% else %}
-                        <li><a href="#" id="userMenuPopover" aria-haspopup="true" aria-expanded="false">
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                        </a></li>
+                        <!-- User navbar area -->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                 {{ session.email }}
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url_for('manage') }}">Manager</a></li>
+                                <li><a href="#">Settings</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
+                            </ul>
+                        </li>
+                        <!-- End user navbar area -->
                     {% endif %}
 				    <!-- End user navbar area -->
                 </ul>
@@ -85,7 +96,7 @@
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>Oops!</strong> You entered wrong credentials.
         </div>
-    <form id="modal-submit-form" action="" method="post">
+    <form id="modal-submit-form" action="#" method="post">
       <div class="modal-body">
 
           <div class="form-group">
@@ -110,33 +121,6 @@
 </div>
 <!-- End modal form -->
 
-<!-- If user logged in it will face with this screen -->
-<div id="userMenuPopoverContent">
-
-    <div>
-        <a type="button" href="{{ url_for('manage') }}" class="btn btn-default btn-lg btn-block"
-                data-toggle="tooltip" data-placement="left" title="Management"
-                aria-haspopup="true" aria-expanded="false" >
-            <span class="glyphicon glyphicon-console"></span>
-        </a>
-    </div>
-    <div>
-        <a type="button" href="#" class="btn btn-default btn-lg btn-block"
-                data-toggle="tooltip" data-placement="left" title="Settings"
-                aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-list"></span>
-        </a>
-    </div>
-    <div>
-        <a href="{{ url_for('logout') }}" type="button" class="btn btn-default btn-lg btn-block" data-toggle="tooltip"
-                data-placement="left" title="Sign out" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-off"></span>
-        </a>
-    </div>
-
-</div>
-<!-- End user menu -->
-
 <!-- Modal form for About Screen -->
 <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -149,7 +133,7 @@
         <p>You know who we are.</p>
       </div>
       <div class="modal-footer center-block">
-          <div class="pull-left"><small>DBall Database Application v0.3.1</small></div>
+          <div class="pull-left"><small>DBall Database Application v0.3.4</small></div>
         <span class="glyphicon glyphicon-plane" aria-hidden="true"></span>
         <span class="glyphicon glyphicon-plane" aria-hidden="true"></span>
         <span class="glyphicon glyphicon-tower" aria-hidden="true"></span>
@@ -170,8 +154,9 @@
               {% block content %}{% endblock %}
           </div>
       </section>
-  <!-- Footer area -->
-<div class="footer visible-lg-block">
+  </div>
+    <!-- Footer area -->
+    <div class="footer visible-lg-block">
         <div class="container">
           <p class="text-muted">
             &copy; 2015. DBall.
@@ -181,8 +166,8 @@
             </a>
           </p>
         </div>
-</div>
-<!-- End Footer area -->
+    </div>
+    <!-- End Footer area -->
 </body>
 <!-- End Body area -->
 </html>

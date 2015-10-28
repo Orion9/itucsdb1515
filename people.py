@@ -10,7 +10,7 @@
 from config import db_connect
 
 class Person(object):
-    def __init__(self, name=None, birth_date=None, birth_place=None, user_type=None, user_id=None):
+    def __init__(self, name, birth_date, birth_place, user_type, user_id=None):
         self.id = user_id
         self.name = name
         self.birth_date = birth_date
@@ -31,6 +31,7 @@ class Person(object):
                 conn.commit()
             except conn.Error as error:
                 print(error)
+                conn.rollback()
 
             data = cursor.fetchone()
             if data is not None:
@@ -60,6 +61,7 @@ class Person(object):
                 conn.commit()
             except conn.Error as error:
                 print(error)
+                conn.rollback()
 
             data_array = []
             data = cursor.fetchall()
@@ -74,12 +76,78 @@ class Person(object):
                     }
                 )
 
-            print(data_array)
+            # print(data_array)
             cursor.close()
             conn.close()
 
             return data_array
 
+    def add_to_db(self):
+        conn = db_connect()
+        cursor = conn.cursor()
 
-def add_person(person_obj):
-    pass
+        query_type = """SELECT id FROM person_types WHERE person_type_name = %s"""
+        query_city = """SELECT city_id FROM city WHERE city_name = %s"""
+        query = """INSERT INTO person(person_name, person_birth_date, person_birth_location, person_type)
+                            VALUES (%s, %s, %s, %s)"""
+
+        try:
+            cursor.execute(query_type,(self.type,))
+            conn.commit()
+            type_id = cursor.fetchone()
+
+            cursor.execute(query_city,(self.birth_place,))
+            conn.commit()
+            city_id = cursor.fetchone()
+
+            cursor.execute(query, (self.name, self.birth_date, city_id, type_id))
+            conn.commit()
+            status = True
+
+        except conn.Error as error:
+            print(error)
+            conn.rollback()
+            status = False
+
+        cursor.close()
+        conn.close()
+        return status
+
+    def delete_from_db(self):
+        conn = db_connect()
+        cursor = conn.cursor()
+
+        query = """DELETE FROM person WHERE person_id = %s"""
+
+        try:
+            cursor.execute(query, (self.id, ))
+            conn.commit()
+            status = True
+
+        except conn.Error as error:
+            print(error)
+            conn.rollback()
+            status = False
+
+        cursor.close()
+        conn.close()
+        return status
+
+def get_person_types():
+    conn = db_connect()
+    cursor = conn.cursor()
+    types = None
+    query_type = """SELECT person_type_name FROM person_types"""
+
+    try:
+        cursor.execute(query_type)
+        conn.commit()
+        types = cursor.fetchall()
+
+    except conn.Error as error:
+        print(error)
+
+    cursor.close()
+    conn.close()
+
+    return types

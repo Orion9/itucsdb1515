@@ -19,18 +19,6 @@ class User(object):
         self.password_hash = bcrypt.encrypt(user_pass)
         self.user_type = is_admin
 
-    @staticmethod
-    def is_logged_in(self):
-        return True
-
-    @staticmethod
-    def is_active(self):
-        return True
-
-    @staticmethod
-    def is_anon(self):
-        return False
-
 
 def get_user(email):
         conn = db_connect()

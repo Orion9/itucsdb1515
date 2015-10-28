@@ -10,6 +10,7 @@ body {
     min-height: 100%;
 }
 .body-manager{
+    overflow: auto;
     background-size: 100%;
 	background-color: lightgrey;
 
@@ -48,14 +49,7 @@ html {
 	color: #36424a;
 }
 
-#userMenuPopoverContent {
-	display: none;
-}
-
-#userMenuPopoverTitle{
-	display: none;
-}
-
+/* Will be edited not responsive enough */
 .search-box {
     display: table;
     width: 100%;
@@ -123,4 +117,26 @@ html {
     background-color: #383838;
 }
 
+.body-manager .selected {
+    background:#E8E8E8;
+}
 
+.body-manager .btn-primary {
+    background: #383838;
+}
+
+.body-manager .btn-primary:active,
+.body-manager .open > .dropdown-toggle.btn-primary
+{
+    background: #888888;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    background: #484848;
+    border-color: #484848;
+}
