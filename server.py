@@ -23,15 +23,34 @@ app = Flask(__name__)
 app.secret_key = 'come_on_dude_it_is_a_secret'
 
 
+# Create test user before #
+@app.before_first_request
+def create_user():
+    user_info = user.User("test", "test@test.com", "test")
+    user_info.add_user_to_db()
+
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('home.html')
 
 
-@app.before_first_request
-def create_user():
-    user_info = user.User("test", "test@test.com", "test")
-    user_info.add_user_to_db()
+@app.route('/people')
+def show_people():
+    person_obj = people.Person()
+    people_data = person_obj.get_person_by_id()
+
+    return render_template("people.html", people_data=people_data)
+
+
+@app.route('/penalties')
+def show_penalties():
+    return render_template("penalties.html")
+
+
+@app.route('/cities')
+def show_cities():
+    return render_template("cities.html")
 
 
 @app.route('/logout')
@@ -93,17 +112,22 @@ def manage_people():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
-    # Create empty person and get all data from db#
-    person = people.Person(None, None, None, None)
+    # Create empty person and get all data from db #
+    person = people.Person()
     people_data = person.get_person_by_id()
     # Same for types and city objects #
-    types_obj = people.PersonType(None)
+    types_obj = people.PersonType()
     types_data = types_obj.get_person_type()
 
-    city_obj = cities.City(None)
+    city_obj = cities.City()
     cities_data = city_obj.get_city()
 
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    pass
 
 
 # API START #
@@ -187,14 +211,20 @@ def api_user_logout():
 #                                                                                             #
 # curl http://localhost:5000/api/<route>/<id>                                                 #
 ###############################################################################################
+@app.route('/api/search/<string:keywords>')
+def api_db_search(keywords):
+    pass
+
+
 @app.route('/api/person', methods=['GET'])
 def api_get_person_all():
     # Create empty person then get all data from db #
     person = people.Person(None, None, None, None)
     people_data = person.get_person_by_id()
+    # jsonify function does not work for arrays #
     people_json = json.dumps(people_data)
 
-    # Return JSON response. jsonify function does not work for arrays. #
+    # Return JSON response. #
     return Response(people_json, mimetype="application/json")
 
 

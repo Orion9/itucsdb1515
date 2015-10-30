@@ -9,6 +9,7 @@
 
 from config import db_connect
 
+
 class Person(object):
     def __init__(self, name=None, birth_date=None, birth_place=None, user_type=None, user_id=None):
         self.id = user_id

@@ -4,7 +4,7 @@
         ('/penalties', 'penalties', 'Penalties'),
         ('/cities', 'cities', 'Cities') ] -%}
 {% set active_page = active_page|default('home') -%}
-{% set version = '0.3.4' -%}
+{% set version = '0.3.6' -%}
 
 <!DOCTYPE html>
 
@@ -18,9 +18,10 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
     <link rel="stylesheet" href="/static/css/font-awesome.css">
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap and DataTables JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
     <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
 
     <!-- Custom CSS style -->

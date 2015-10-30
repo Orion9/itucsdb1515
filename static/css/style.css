@@ -117,17 +117,18 @@ html {
     background-color: #383838;
 }
 
-.body-manager .selected {
+.selected {
     background:#E8E8E8;
 }
 
-.body-manager .btn-primary {
+.btn-primary {
     background: #383838;
     border-color: #383838;
 }
 
-.body-manager .btn-primary:active,
-.body-manager .open > .dropdown-toggle.btn-primary
+.btn-primary:active,
+.open > .dropdown-toggle.btn-primary,
+.btn-primary:hover
 {
     background: #888888;
     border-color: #383838;

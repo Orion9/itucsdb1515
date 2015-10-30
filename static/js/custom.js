@@ -138,6 +138,7 @@ $(function(){
     $('#op-error-close').click( function(){
             $('#op-error-alert').hide();
             $('#op-main-error-alert').hide();
+            $('#log-main-error-alert').hide();
         }
     )
 });
@@ -155,7 +156,6 @@ $(function(){
         }
     )
 });
-
 
 // Add POST Handler
 // Handles add modal's POST data
