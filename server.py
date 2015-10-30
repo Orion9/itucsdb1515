@@ -28,6 +28,12 @@ def home():
     return render_template('home.html')
 
 
+@app.before_first_request
+def create_user():
+    user_info = user.User("test", "test@test.com", "test")
+    user_info.add_user_to_db()
+
+
 @app.route('/logout')
 def logout():
     api_user_logout()
