@@ -1,7 +1,17 @@
+###############################
+# Author: ITUCSDB1515         #
+# Oguz Kerem Tural 150130125  #
+# Umut Can Ozyar 150130022    #
+# Mert Seker 150130119        #
+# Furkan Akgun 150130106      #
+# Emine Oyku Bozkir 150120017 #
+###############################
+
 from config import db_connect
 
+
 class City(object):
-    def __init__(self, city_name, city_id=None):
+    def __init__(self, city_name=None, city_id=None):
         self.id = city_id
         self.name = city_name
 

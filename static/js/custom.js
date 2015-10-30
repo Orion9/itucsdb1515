@@ -32,7 +32,7 @@ $(document).ready(function() {
 });
 
 // For enabling jQuery Data Tables
-$(document).ready(function() {
+$(function() {
     var glorious_table = $('#glorious-table').DataTable();
 
     $('#glorious-table-body').on('click', 'tr', function() {
@@ -61,6 +61,7 @@ $(document).ready(function() {
             dataType : "json",
             success: function( json ) {
                 if ( json.result ) {
+                    $('#op-main-success-alert').show();
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();
@@ -72,6 +73,63 @@ $(document).ready(function() {
             }
         });
         console.log(data);
+    });
+
+    $('#update-rows-button').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-update-person').modal('show');
+            var user_data = selected_row[0];
+            $('#modal-update-person-id').val(user_data[0]);
+            $('#modal-update-person-name').val(user_data[1]);
+
+            //Let us arrange date value a little bit.
+            var date_array = user_data[2].split('/');
+            var date = date_array[2] + "-" + date_array[1] + "-" + date_array[0];
+
+            $('#modal-update-person-bday').val(date);
+            $('#modal-update-person-bplace').val(user_data[3]);
+            $('#modal-update-person-type').val(user_data[4]);
+
+            console.log(user_data);
+        }
+    });
+
+    $('#modal-update-form').submit(function(){
+        var data = {
+            person_id: $('#modal-update-person-id').val(),
+            person_name: $('#modal-update-person-name').val(),
+            person_birth_date: $('#modal-update-person-bday').val(),
+            person_birth_place: $('#modal-update-person-bplace').val(),
+            person_type: $('#modal-update-person-type').val()
+        };
+
+       $.ajax({
+           url: "/api/person/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-person').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
     });
 } );
 
@@ -85,11 +143,19 @@ $(function(){
 });
 
 $(function(){
+   $('#op-update-close').click(function(){
+            $('#op-update-error-alert').hide();
+        }
+   )
+});
+
+$(function(){
     $('#op-success-close').click( function(){
             $('#op-main-success-alert').hide();
         }
     )
 });
+
 
 // Add POST Handler
 // Handles add modal's POST data
@@ -111,10 +177,11 @@ $(document).ready(function() {
             dataType : "json",
             success: function( json ) {
                 if ( json.result ) {
+                    $('#op-main-success-alert').show();
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();
-                    $('#modal-add-form').hide();
+                    $('#add-new-person').modal('hide');
                 }
                 console.log( json );
             },
@@ -127,3 +194,36 @@ $(document).ready(function() {
     });
 });
 
+// Add Type POST Handler
+// Handles add type modal's POST data
+$(document).ready(function() {
+    $('#modal-add-type-form').submit(function() {
+        var user_data = {
+                person_type: $('#add-modal-person-type').val()
+            };
+
+        $.ajax({
+            url: "/api/person/type/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#add-new-person-type').hide();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-person-type').hide();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+});

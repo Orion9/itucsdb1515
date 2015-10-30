@@ -10,7 +10,7 @@
 from config import db_connect
 
 class Person(object):
-    def __init__(self, name, birth_date, birth_place, user_type, user_id=None):
+    def __init__(self, name=None, birth_date=None, birth_place=None, user_type=None, user_id=None):
         self.id = user_id
         self.name = name
         self.birth_date = birth_date
@@ -133,21 +133,103 @@ class Person(object):
         conn.close()
         return status
 
-def get_person_types():
-    conn = db_connect()
-    cursor = conn.cursor()
-    types = None
-    query_type = """SELECT person_type_name FROM person_types"""
+    def update_db(self):
+        conn = db_connect()
+        cursor = conn.cursor()
+        status = False
 
-    try:
-        cursor.execute(query_type)
-        conn.commit()
-        types = cursor.fetchall()
+        query_city = """SELECT city_id FROM city WHERE city_name=%s"""
+        query_type = """SELECT id FROM person_types WHERE person_type_name=%s"""
+        query = """UPDATE person
+                   SET person_name=%s, person_birth_date=%s, person_birth_location=%s, person_type=%s
+                   WHERE person_id=%s"""
 
-    except conn.Error as error:
-        print(error)
+        try:
+            cursor.execute(query_city, (self.birth_place, ))
+            conn.commit()
+            city_id = cursor.fetchone()
 
-    cursor.close()
-    conn.close()
+            cursor.execute(query_type, (self.type, ))
+            conn.commit()
+            type_id = cursor.fetchone()
 
-    return types
+            cursor.execute(query, (self.name, self.birth_date, city_id, type_id, self.id))
+            conn.commit()
+            status = True
+        except conn.Error as error:
+            print(error)
+            conn.rollback()
+            status = False
+        finally:
+            cursor.close()
+            conn.close()
+            return status
+
+
+class PersonType(object):
+    def __init__(self, type_name=None, type_id=None):
+        self.id = type_id
+        self.type = type_name
+
+    def get_person_type(self, type_id=None):
+        conn = db_connect()
+        cursor = conn.cursor()
+        types = None
+
+        if type_id is None:
+            query_type = """SELECT person_type_name FROM person_types"""
+
+            try:
+                cursor.execute(query_type)
+                conn.commit()
+                types = cursor.fetchall()
+
+            except conn.Error as error:
+                print(error)
+                conn.rollback()
+
+                cursor.close()
+                conn.close()
+
+            return types
+
+        else:
+            query_type = """SELECT person_type_name FROM person_types WHERE id=%s"""
+
+            try:
+                cursor.execute(query_type, (type_id, ))
+                conn.commit()
+                types = cursor.fetchone()
+
+                if types is not None:
+                    self.id = type_id
+                    self.type = types[0]
+
+            except conn.Error as error:
+                print(error)
+                conn.rollback()
+
+                cursor.close()
+                conn.close()
+
+            return self
+
+    def add_to_db(self):
+        conn = db_connect()
+        cursor = conn.cursor()
+        status = False
+
+        query = """INSERT INTO person_types(person_type_name) VALUES (%s)"""
+
+        try:
+            cursor.execute(query, (self.type, ))
+            conn.commit()
+            status = True
+        except conn.Error as error:
+            print(error)
+            conn.rollback()
+            status = False
+        finally:
+            cursor.close()
+            conn.close()
+            return status

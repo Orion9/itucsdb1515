@@ -4,6 +4,7 @@
         ('/penalties', 'penalties', 'Penalties'),
         ('/cities', 'cities', 'Cities') ] -%}
 {% set active_page = active_page|default('home') -%}
+{% set version = '0.3.4' -%}
 
 <!DOCTYPE html>
 
@@ -11,6 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Oguz Kerem Tural, Umut Can Ozyar, Mert Seker, Furkan Akgun, Emine Oyku Bozkir">
 
     <!-- Bootstrap JS ve CSS files taken from Bootstrap CDN -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
@@ -96,6 +98,10 @@
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>Oops!</strong> You entered wrong credentials.
         </div>
+        <div id="login-error-alert" class="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Test user credentials: </strong> User mail: <i>test@test.com</i> Password: <i>test</i>
+        </div>
     <form id="modal-submit-form" action="#" method="post">
       <div class="modal-body">
 
@@ -133,7 +139,7 @@
         <p>You know who we are.</p>
       </div>
       <div class="modal-footer center-block">
-          <div class="pull-left"><small>DBall Database Application v0.3.4</small></div>
+          <div class="pull-left"><small>DBall Database Application v{{ version }}</small></div>
         <span class="glyphicon glyphicon-plane" aria-hidden="true"></span>
         <span class="glyphicon glyphicon-plane" aria-hidden="true"></span>
         <span class="glyphicon glyphicon-tower" aria-hidden="true"></span>

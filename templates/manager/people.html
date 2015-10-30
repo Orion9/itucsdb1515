@@ -11,6 +11,10 @@
                 <button type="button" class="close" id="op-error-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>Shame! <i>*rings bell*</i></strong> Something went wrong and your process could not be completed.
             </div>
+            <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Whoa!</strong> You choose too many people or you forgot to choose some one.
+            </div>
             <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>BAM! </strong> Your operation successfully completed.
@@ -44,21 +48,23 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li><a href="#" data-toggle="modal" data-target="#add-new-person">Add New Person</a></li>
-                    <li><a href="#">Add New Person Type</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#add-new-person-type">Add New Person Type</a></li>
                 </ul>
             </div>
 
-            <button class="btn btn-primary">Update Selected Row</button>
+            <button class="btn btn-primary" href="#" id="update-rows-button">Update Selected Row</button>
             <button class="btn btn-primary" href="#" id="delete-rows-button">Delete Selected Row(s)</button>
         </div>
     </div>
 
     <!-- Modal form for Add Screen -->
-    <div class="modal fade" id="add-new-person" tabindex="-1" role="dialog" aria-labelledby="add-new-person-label" aria-hidden="true">
+    <div class="modal fade" id="add-new-person" tabindex="-1" role="dialog" aria-labelledby="add-new-person-label"
+         aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="add-new-person-title">Add New Person</h4>
           </div>
         <form id="modal-add-form" action="#" method="post">
@@ -95,9 +101,11 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                       <select class="form-control" id="modal-person-type" required>
+                      {% if types %}
                         {% for type in types %}
                         <option>{{ type[0] }}</option>
                         {% endfor %}
+                      {% endif %}
                       </select>
                 </div>
               </div>
@@ -114,5 +122,102 @@
     </div>
     <!-- End modal form -->
 
+    <!-- Modal form for Add Type Screen -->
+    <div class="modal fade" id="add-new-person-type" tabindex="-1" role="dialog"
+         aria-labelledby="add-new-person-type-label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-person-title">Add New Person</h4>
+          </div>
+        <form id="modal-add-type-form" action="#" method="post">
+          <div class="modal-body">
+              <div class="form-group">
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input id="add-modal-person-type" type="text" name="person_type"
+                       class="form-control" placeholder="Person Type" required>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+    <!-- Modal form for Update Screen -->
+    <div class="modal fade" id="modal-update-person" tabindex="-1" role="dialog" aria-labelledby="update-person-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-person-title">Update Person</h4>
+          </div>
+        <form id="modal-update-form" action="#" method="post">
+          <div class="modal-body">
+              <div class="form-group">
+                <input type="hidden" id="modal-update-person-id">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input id="modal-update-person-name" type="text" name="person_name"
+                       class="form-control" placeholder="Person Name" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-update-person-bday" type="date" name="b_day"
+                       class="form-control" placeholder="Birth Day" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-update-person-bplace" required>
+                        {% for city in cities %}
+                        <option>{{ city[0] }}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                      <select class="form-control" id="modal-update-person-type" required>
+                      {% if types %}
+                        {% for type in types %}
+                        <option>{{ type[0] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
 
 {% endblock %}
