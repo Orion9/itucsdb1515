@@ -37,7 +37,7 @@ class League (object):
             connection.commit()
             country_id = cursor.fetchone()
             
-            cursor.execute(query,(self.name, self.start_date, self.country_id, self.team_count))
+            cursor.execute(query,(self.name, self.start_date, country_id, self.team_count))
             connection.commit()
             status = True
 
