@@ -14,6 +14,7 @@ import re
 import user
 import people
 import cities
+import sponsorships
 
 from config import *
 from flask import *
@@ -43,6 +44,14 @@ def show_people():
     return render_template("people.html", people_data=people_data)
 
 
+@app.route('/sponsorships')
+def show_sponsorships():
+    sponsorship_obj = sponsorships.Sponsorship()
+    sponsorships_data = sponsorship_obj.get_sponsorship_by_id()
+
+    return render_template("sponsorships.html", sponsorships_data=sponsorships_data)
+
+
 @app.route('/penalties')
 def show_penalties():
     return render_template("penalties.html")
@@ -51,7 +60,6 @@ def show_penalties():
 @app.route('/cities')
 def show_cities():
     return render_template("cities.html")
-
 
 @app.route('/logout')
 def logout():
@@ -123,6 +131,26 @@ def manage_people():
     cities_data = city_obj.get_city()
 
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
+
+
+@app.route('/manage/sponsorships/<int:sponsorship_id>', methods=['GET', 'POST'])
+def show_sponsorship(sponsorship_id):
+    pass
+
+
+@app.route('/manage/sponsorships', methods=['GET', 'POST'])
+def manage_sponsorships():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    # Create empty person and get all data from db #
+    sponsorship = sponsorships.Sponsorship()
+    sponsorships_data = sponsorship.get_sponsorship_by_id()
+    # Same for types and city objects #
+    person_obj = people.Person()
+    people_data = person_obj.get_person_by_id()
+
+    return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, people=people_data)
 
 
 @app.route('/search', methods=['POST'])
@@ -331,6 +359,78 @@ def api_delete_person():
         person_obj.get_person_by_id(person_id)
         # print(person_id)
         status = person_obj.delete_from_db()
+
+    return jsonify({'result': status})
+
+
+@app.route('/api/sponsorship', methods=['GET'])
+def api_get_sponsorship_all():
+    # Create empty sponsorship then get all data from db #
+    sponsorship = sponsorships.Sponsorship()
+    sponsorships_data = sponsorship.get_sponsorship_by_id()
+    # jsonify function does not work for arrays #
+    sponsorships_json = json.dumps(sponsorships_data)
+
+    # Return JSON response. #
+    return Response(sponsorships_json, mimetype="application/json")
+
+
+@app.route('/api/sponsorship/<int:data_id>', methods=['GET'])
+def api_get_sponsorship(data_id):
+    # Create empty sponsorship and fill it from db #
+    sponsorship_obj = sponsorships.Sponsorship()
+    sponsorship_obj.get_sponsorship_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': sponsorship_obj.id,
+        'name': sponsorship_obj.name,
+        'start_date': sponsorship_obj.birth_date.strftime('%d/%m/%Y'),
+        'league': sponsorship_obj.league,
+        'team': sponsorship_obj.team,
+        'person': sponsorship_obj.person
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/sponsorship/add', methods=['POST'])
+def api_add_sponsorship():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create an person object #
+    sponsorship_info = sponsorships.Sponsorship(json_post_data['sponsorship_name'],
+                                                json_post_data['sponsorship_start_date'],
+                                json_post_data['sponsorship_league'], json_post_data['sponsorship_team'],
+                                json_post_data['sponsorship_persn'])
+
+    # Add it to db and send result #
+    result = sponsorship_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/sponsorship/delete', methods=['POST'])
+def api_delete_sponsorship():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+    # Get request #
+    sponsorship_id_json = request.get_json()
+    # print(sponsorship_id_json)
+    # Delete every requested id #
+    for sponsorship_id in sponsorship_id_json:
+        sponsorship_obj = sponsorships.Sponsorship()
+        sponsorship_obj.get_sponsorship_by_id(sponsorship_id)
+        # print(person_id)
+        status = sponsorship_obj.delete_from_db()
 
     return jsonify({'result': status})
 
