@@ -55,7 +55,6 @@
                 </ul>
             </div>
 
-            <button class="btn btn-primary" href="#" id="update-rows-button">Update Selected Row</button>
             <button class="btn btn-primary" href="#" id="delete-rows-button">Delete Selected Row(s)</button>
         </div>
     </div>
@@ -91,20 +90,9 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-sponsorship-person" required>
-                        {% for person in people %}
-                        <option>{{ person[0] }}</option>
-                        {% endfor %}
-                      </select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <input id="modal-sponsorship-league" type="text" name="sponsorship_league"
-                       class="form-control" placeholder="Sponsorship League" required>
+                       class="form-control" placeholder="Sponsorship League">
                 </div>
               </div>
 
@@ -112,15 +100,18 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <input id="modal-sponsorship-team" type="text" name="sponsorship_team"
-                       class="form-control" placeholder="Sponsorship Team" required>
+                       class="form-control" placeholder="Sponsorship Team">
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input id="modal-sponsorship-person" type="text" name="sponsorship_person"
-                       class="form-control" placeholder="Sponsorship Person" required>
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-sponsorship-person">
+                        {% for person in people %}
+                        <option>{{ person[0] }}</option>
+                        {% endfor %}
+                      </select>
                 </div>
               </div>
 
