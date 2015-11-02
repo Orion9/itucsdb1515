@@ -1,0 +1,33 @@
+{% extends "manager/layout.html" %}
+{% set active_page = 'countries' %}
+{% block title %}Countries{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of Countries registered in database
+        </div>
+        <div class="panel-body">
+            
+            <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Country ID</th>
+                        <th>Country Name</th>
+                        <th>Country Population</th>
+                    </tr>
+                </thead>
+                <tbody id="glorious-table-body">
+                
+                </tbody>
+            </table>
+         
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add New Data <span class="caret"></span>
+            </button>
+                
+            <button class="btn btn-primary" href="#" id="update-rows-button">Update Selected Row</button>
+            <button class="btn btn-primary" href="#" id="delete-rows-button">Delete Selected Row(s)</button>
+        </div>
+    </div>

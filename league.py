@@ -18,7 +18,62 @@ class League (object):
         self.country = league_country
        
     def get_league_by_id(self, get_id=None):
-        pass
+        connection = db_connect()
+        cursor = connection.cursor()
+
+        if get_id is not None:
+            query = """SELECT * FROM league
+                                JOIN country ON country.country_id = leauge.league_country
+                                WHERE league_id = %s"""
+            try:
+                cursor.execute(query, (get_id,))
+                connection.commit()
+                data = cursor.fetchone()
+                if data is not None:
+                    self.id = data[0]
+                    self.name = data[1]
+                    self.start_date = data[3]
+                    self.country = data[5]
+
+                    cursor.close()
+                    connection.close()
+                    return self
+
+                else:
+                    cursor.close()
+                    connection.close()
+                    return None
+                
+            except connection.Error as error:
+                print(error)
+                connection.rollback()
+
+        else:
+            query = """SELECT * FROM league
+                                JOIN country ON country.country_id = league.league_country"""
+            try:
+                cursor.execute(query)
+                connection.commit()
+            except connection.Error as error:
+                print(error)
+                connection.rollback()
+
+            array = []
+            data = cursor.fetchall()
+            for person in data:
+                array.append(
+                    {
+                        'id': league[0],
+                        'name': league[1],
+                        'start_date': person[3].strftime('%d/%m/%Y'),
+                        'country': person[5]                     
+                    }
+                )
+
+            cursor.close()
+            connection.close()
+
+            return array
 
     def add_to_db(self):
         connection = db_connect()
@@ -52,7 +107,48 @@ class League (object):
         return status
 
     def delete_from_db(self):
-        pass
+        connection = db_connect()
+        cursor = connection.cursor()
+
+        query = """DELETE FROM league WHERE league_id = %s"""
+
+        try:
+            cursor.execute(query, (self.id, ))
+            connection.commit()
+            status = True
+
+        except connection.Error as error:
+            print(error)
+            connection.rollback()
+            status = False
+
+        cursor.close()
+        connection.close()
+        return status
 
     def update_db(self):
-        pass
+        connection = db_connect()
+        cursor = connection.cursor()
+
+        query_country = """SELECT country_id FROM country WHERE country_name=%s"""
+        query = """UPDATE league
+                   SET league_name=%s, league_start_date=%s, league_country=%s
+                   WHERE league_id=%s"""
+
+        try:
+            cursor.execute(query_country, (self.country, ))
+            connection.commit()
+            country_id = cursor.fetchone()
+
+            cursor.execute(query, (self.name, self.start_date, country_id, self.id,))
+            connection.commit()
+            status = True
+        except connection.Error as error:
+            print(error)
+            connection.rollback()
+            status = False
+        finally:
+            cursor.close()
+            connection.close()
+            return status
+

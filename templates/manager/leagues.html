@@ -1,0 +1,34 @@
+{% extends "manager/layout.html" %}
+{% set active_page = 'leagues' %}
+{% block title %}Leagues{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of Leagues registered in database
+        </div>
+        <div class="panel-body">
+            
+            <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>League ID</th>
+                        <th>League Name</th>
+                        <th>League Country</th>
+                        <th>League Start Date</th>
+                    </tr>
+                </thead>
+                <tbody id="glorious-table-body">
+                
+                </tbody>
+            </table>
+         
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Add New Data <span class="caret"></span>
+            </button>
+                
+            <button class="btn btn-primary" href="#" id="update-rows-button">Update Selected Row</button>
+            <button class="btn btn-primary" href="#" id="delete-rows-button">Delete Selected Row(s)</button>
+        </div>
+    </div>
