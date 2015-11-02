@@ -51,6 +51,13 @@ def show_sponsorships():
 
     return render_template("sponsorships.html", sponsorships_data=sponsorships_data)
 
+@app.route('/countries')
+def show_countries():
+    return render_template("countries.html")
+
+@app.route('/leagues')
+def show_leagues():
+    return render_template("leagues.html")
 
 @app.route('/penalties')
 def show_penalties():
@@ -109,6 +116,21 @@ def manage_cities():
 
     return render_template("manager/cities.html")
 
+@app.route('/manage/countries', methods=['GET', 'POST'])
+def manage_countries():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    return render_template("manager/countries.html")
+
+@app.route('/manage/leagues', methods=['GET', 'POST'])
+def manage_leagues():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    return render_template("manager/leagues.html")
 
 @app.route('/manage/people/<int:person_id>', methods=['GET', 'POST'])
 def show_person(person_id):
