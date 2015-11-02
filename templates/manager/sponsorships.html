@@ -1,0 +1,139 @@
+{% extends "manager/layout.html" %}
+{% block title %}Sponsorships{% endblock %}
+{% set active_page = 'sponsorships' %}
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of sponsors registered in database
+        </div>
+        <div class="panel-body">
+            <div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-error-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Shame! <i>*rings bell*</i></strong> Something went wrong and your process could not be completed.
+            </div>
+            <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Whoa!</strong> You choose too many sponsorships or you forgot to choose some one.
+            </div>
+            <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>BAM! </strong> Your operation successfully completed.
+            </div>
+            <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Sponsorship ID</th>
+                        <th>Sponsor Name</th>
+                        <th>Sponsorship Start Date</th>
+                        <th>Sponsored League</th>
+                        <th>Sponsored Team</th>
+                        <th>Sponsored Person</th>
+                    </tr>
+                </thead>
+                <tbody id="glorious-table-body">
+                {% if sponsorships_data %}
+                {% for sponsorship in sponsorships_data %}
+                    <tr>
+                        <td>{{ sponsorship['id'] }}</td>
+                        <td>{{ sponsorship['name'] }}</td>
+                        <td>{{ sponsorship['start_date'] }}</td>
+                        <td>{{ sponsorship['league'] }}</td>
+                        <td>{{ sponsorship['team'] }}</td>
+                        <td>{{ sponsorship['person'] }}</td>
+                    </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New Data <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target="#add-new-sponsorship">Add New Sponsorship</a></li>
+                </ul>
+            </div>
+
+            <button class="btn btn-primary" href="#" id="update-rows-button">Update Selected Row</button>
+            <button class="btn btn-primary" href="#" id="delete-rows-button">Delete Selected Row(s)</button>
+        </div>
+    </div>
+
+    <!-- Modal form for Add Screen -->
+    <div class="modal fade" id="add-new-sponsorship" tabindex="-1" role="dialog"
+         aria-labelledby="add-new-sponsorship-label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-sponsorship-title">Add New Sponsorship</h4>
+          </div>
+        <form id="modal-add-form" action="#" method="post">
+          <div class="modal-body">
+              <div class="form-group">
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input id="modal-sponsorship-name" type="text" name="sponsorship_name"
+                       class="form-control" placeholder="Sponsorship Name" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-sponsorship-sday" type="date" name="s_day"
+                       class="form-control" placeholder="Sponsorship Start Day" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-sponsorship-person" required>
+                        {% for person in people %}
+                        <option>{{ person[0] }}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input id="modal-sponsorship-league" type="text" name="sponsorship_league"
+                       class="form-control" placeholder="Sponsorship League" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input id="modal-sponsorship-team" type="text" name="sponsorship_team"
+                       class="form-control" placeholder="Sponsorship Team" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input id="modal-sponsorship-person" type="text" name="sponsorship_person"
+                       class="form-control" placeholder="Sponsorship Person" required>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+{% endblock %}
