@@ -105,6 +105,35 @@ $(function() {
         console.log(data);
     });
 
+    $('#delete-rows-button-sponsorship').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/sponsorship/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     $('#update-rows-button').click(function(){
 
         var selected_row = glorious_table.rows('.selected').data();
@@ -212,6 +241,40 @@ $(document).ready(function() {
                 } else {
                     $('#op-main-error-alert').show();
                     $('#add-new-person').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    $('#modal-add-form-sponsorship').submit(function() {
+        var user_data =
+            {
+                sponsorship_name: $('#modal-sponsorship-name').val(),
+                sponsorship_start_date: $('#modal-sponsorship-start-date').val(),
+                sponsorship_league: $('#modal-sponsorship-league').val(),
+                sponsorship_team: $('#modal-sponsorship-team').val(),
+                sponsorship_person: $('#modal-sponsorship-person').val()
+            };
+
+        $.ajax({
+            url: "/api/sponsorship/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-sponsorship').modal('hide');
                 }
                 console.log( json );
             },
