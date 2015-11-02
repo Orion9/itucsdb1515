@@ -56,7 +56,6 @@ class Sponsorship(object):
                 return None
 
         if get_id is None:
-            print("tita")
             statement = """SELECT * FROM sponsorship
                             JOIN person ON person.person_id = sponsorship.sponsorship_person"""
 
@@ -67,7 +66,7 @@ class Sponsorship(object):
                 connection.rollback()
 
                 sponsorship_array = []
-                sponsorship = fetchall();
+                sponsorship = cursor.fetchall()
                 for sponsorship_id, sponsorship_name, sponsorship_start_date, \
                         sponsorship_league, sponsorship_team, sponsorship_person in sponsorship:
                     sponsorship_array.append(
