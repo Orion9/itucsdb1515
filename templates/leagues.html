@@ -10,7 +10,7 @@
 
             <a id = "send-to-manager" class="btn btn-default"
                {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
-                    href="{% if session.logged_in %}{{ url_for('manage_league') }}{% else %}#{% endif %}">Manage</a>
+                    href="{% if session.logged_in %}{{ url_for('manage_leagues') }}{% else %}#{% endif %}">Manage</a>
         </div>
 
         <div class="panel-body">
