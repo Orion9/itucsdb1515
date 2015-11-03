@@ -173,12 +173,12 @@ def manage_sponsorships():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
-    # Create empty person and get all data from db #
+    # Create empty sponsorship and get all data from db #
     sponsorship = sponsorships.Sponsorship()
     sponsorships_data = sponsorship.get_sponsorship_by_id()
-    # Same for types and city objects #
+    # Same for city object #
     person_obj = people.Person()
-    people_data = person_obj.get_person_by_id()
+    people_data = person_obj.get_person()
 
     return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, people=people_data)
 
@@ -286,9 +286,9 @@ def api_get_country_all():
 def api_get_league_all():
     league_obj = league.League()
     league_data = league_obj.get_league_by_id()
-    leauge_json = json.dumps(league_data)
+    league_json = json.dumps(league_data)
 
-    return Response(country_json, mimetype="application/json")
+    return Response(league_json, mimetype="application/json")
 
 
 @app.route('/api/person', methods=['GET'])
@@ -466,7 +466,7 @@ def api_get_sponsorship(data_id):
     data = {
         'id': sponsorship_obj.id,
         'name': sponsorship_obj.name,
-        'start_date': sponsorship_obj.birth_date.strftime('%d/%m/%Y'),
+        'start_date': sponsorship_obj.start_date.strftime('%d/%m/%Y'),
         'league': sponsorship_obj.league,
         'team': sponsorship_obj.team,
         'person': sponsorship_obj.person
@@ -488,7 +488,7 @@ def api_add_sponsorship():
     sponsorship_info = sponsorships.Sponsorship(json_post_data['sponsorship_name'],
                                                 json_post_data['sponsorship_start_date'],
                                 json_post_data['sponsorship_league'], json_post_data['sponsorship_team'],
-                                json_post_data['sponsorship_persn'])
+                                json_post_data['sponsorship_person'])
 
     # Add it to db and send result #
     result = sponsorship_info.add_to_db()
@@ -510,7 +510,6 @@ def api_delete_sponsorship():
     for sponsorship_id in sponsorship_id_json:
         sponsorship_obj = sponsorships.Sponsorship()
         sponsorship_obj.get_sponsorship_by_id(sponsorship_id)
-        # print(person_id)
         status = sponsorship_obj.delete_from_db()
 
     return jsonify({'result': status})

@@ -36,17 +36,14 @@ class Sponsorship(object):
             except connection.Error:
                 connection.rollback()
 
-            sponsorship = cursor.fetchone()
-            if sponsorship is not None:
-                for sponsorship_id, sponsorship_name, sponsorship_start_date, \
-                    sponsorship_league, sponsorship_team, sponsorship_person in sponsorship:
-                    self.id = sponsorship_id
-                    self.name = sponsorship_name
-                    self.start_date = sponsorship_start_date
-                    self.league = sponsorship_league
-                    self.team = sponsorship_team
-                    self.person = sponsorship_person
-            if sponsorship is not None:
+            s_data = cursor.fetchone()
+            if s_data is not None:
+                self.id = s_data[0]
+                self.name = s_data[1]
+                self.start_date = s_data[2]
+                self.league = s_data[3]
+                self.team = s_data[4]
+                self.person = s_data[5]
                 cursor.close()
                 connection.close()
                 return self
@@ -55,7 +52,7 @@ class Sponsorship(object):
                 connection.close()
                 return None
 
-        if get_id is None:
+        else:
             statement = """SELECT * FROM sponsorship
                             JOIN person ON person.person_id = sponsorship.sponsorship_person"""
 
@@ -65,21 +62,23 @@ class Sponsorship(object):
             except connection.Error:
                 connection.rollback()
 
-                sponsorship_array = []
-                sponsorship = cursor.fetchall()
-                for sponsorship_id, sponsorship_name, sponsorship_start_date, \
-                        sponsorship_league, sponsorship_team, sponsorship_person in sponsorship:
-                    sponsorship_array.append(
-                        {
-                            'id': sponsorship_id,
-                            'name': sponsorship_name,
-                            'start_date': sponsorship_start_date,
-                            'league': sponsorship_league,
-                            'team': sponsorship_team,
-                            'person': sponsorship_person
-                        }
-                    )
-                return sponsorship_array
+            sponsorship_array = []
+            s_data = cursor.fetchall()
+            for sponsorship in s_data:
+                sponsorship_array.append(
+                    {
+                        'id': sponsorship[0],
+                        'name': sponsorship[1],
+                        'start_date': sponsorship[2].strftime('%d/%m/%Y'),
+                        'league': sponsorship[3],
+                        'team': sponsorship[4],
+                        'person': sponsorship[5]
+                    }
+                )
+            print(sponsorship_array)
+            cursor.close()
+            connection.close()
+            return sponsorship_array
 
     def add_to_db(self):
         connection = db_connect()
@@ -88,10 +87,10 @@ class Sponsorship(object):
         statement = """INSERT INTO sponsorship (sponsorship_name, sponsorship_start_date,
                         sponsorship_league, sponsorship_team, sponsorship_person )
                         VALUES (%s, %s, %s, %s, %s)"""
-        person = """SELECT person_id FROM person WHERE person_name = %s"""
+        person_to_add = """SELECT person_id FROM person WHERE person_name = %s"""
 
         try:
-            cursor.execute(person, (self.person,))
+            cursor.execute(person_to_add, (self.person,))
             connection.commit()
             person_id = cursor.fetchone()
 

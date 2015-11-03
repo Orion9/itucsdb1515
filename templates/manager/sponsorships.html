@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
-                {% if sponsorships_data %}
+                {% if sponsorship_data %}
                 {% for sponsorship in sponsorships_data %}
                     <tr>
                         <td>{{ sponsorship['id'] }}</td>
@@ -55,7 +55,7 @@
                 </ul>
             </div>
 
-            <button class="btn btn-primary" href="#" id="delete-rows-button">Delete Selected Row(s)</button>
+            <button class="btn btn-primary" href="#" id="delete-rows-button-sponsorship">Delete Selected Row(s)</button>
         </div>
     </div>
 
@@ -69,7 +69,7 @@
                 <span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="add-new-sponsorship-title">Add New Sponsorship</h4>
           </div>
-        <form id="modal-add-form" action="#" method="post">
+        <form id="modal-sponsorship-add-form" action="#" method="post">
           <div class="modal-body">
               <div class="form-group">
 
@@ -83,8 +83,8 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input id="modal-sponsorship-sday" type="date" name="s_day"
-                       class="form-control" placeholder="Sponsorship Start Day" required>
+                    <input id="modal-sponsorship-start-date" type="date" name="start_date"
+                       class="form-control" placeholder="Sponsorship Start Date" required>
                 </div>
               </div>
 

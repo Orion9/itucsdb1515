@@ -29,7 +29,6 @@
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
-                {% if sponsorships_data %}
                 {% for sponsorship in sponsorships_data %}
                     <tr>
                         <td>{{ sponsorship['id'] }}</td>
@@ -40,7 +39,6 @@
                         <td>{{ sponsorship['person'] }}</td>
                     </tr>
                 {% endfor %}
-                {% endif %}
                 </tbody>
             </table>
         </div>
