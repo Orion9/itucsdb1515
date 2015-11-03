@@ -17,6 +17,8 @@ import cities
 import sponsorships
 import country
 import league
+import team
+
 
 from config import *
 from flask import *
@@ -45,9 +47,11 @@ def show_people():
 
     return render_template("people.html", people_data=people_data)
 
-@app.route('/teams')
+@app.route('/team')
 def show_teams():
-    return render_template("teams.html")
+    team_obj = team.Team()
+    team_data=team_obj.get_team_by_id()
+    return render_template("teams.html", team_data=team_data)
 
 
 @app.route('/sponsorships')
