@@ -380,7 +380,7 @@ def api_add_team():
     json_post_data = request.get_json()
     # print(json_post_data)
     # Create a person type object #
-    team_info = team.Team(json_post_data['team_name'], json_post_data['couch_id'])
+    team_info = team.Team(json_post_data['team_name'], json_post_data['team_couch'])
     # Add it to db #
     result = team_info.add_to_db()
 
@@ -425,13 +425,16 @@ def api_delete_team():
     if not session.get('logged_in'):
         return jsonify({"result": "Unauthorized Access. Please identify yourself"})
 
-    # Get request #
-    team_json = request.get_json()
+    status = False
 
-    for team_id in team_json:
+    # Get request #
+    team_id_json = request.get_json()
+
+    for team_id in team_id_json:
         team_obj = team.Team()
         team_obj.get_team_by_id(team_id)
         status = team_obj.delete_from_db()
+    return jsonify({'result': status})
 
 @app.route('/api/person/update', methods=['POST'])
 def api_update_person():

@@ -106,7 +106,7 @@ $(function() {
     });
 
     // delete team button
-    $('#delete-team').click(function(){
+    $('#delete-rows-button-team').click(function(){
 
         var data = [];
         var selected_rows = glorious_table.rows('.selected').data();
@@ -353,10 +353,10 @@ $(document).ready(function() {
 
 // Team Add Handler
 $(document).ready(function() {
-    $('#modal-team-add-form').submit(function() {
+    $('#modal-add-form-team').submit(function() {
         var user_data = {
-                team_name: $('#add-modal-team-name').val(),
-                couch_id: $('#add-modal-couch-id').val()
+                team_name: $('#modal-team-name').val(),
+                team_couch: $('#modal-team-couch').val()
             };
 
         $.ajax({
@@ -368,7 +368,6 @@ $(document).ready(function() {
             success: function( json ) {
                 if ( json.result ) {
                     $('#op-main-success-alert').show();
-                    $('#add-new-team').hide();
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();

@@ -10,10 +10,10 @@
 from config import db_connect
 
 class Team (object):
-    def __init__(self, team_name=None, couch_id=None, team_id=None):
+    def __init__(self, team_name=None, team_couch=None, team_id=None):
         self.id = team_id
         self.name = team_name
-        self.couch = couch_id
+        self.couch = team_couch
 
     def get_team_by_id(self, get_id=None):
         connection = db_connect()
@@ -57,7 +57,7 @@ class Team (object):
                         {
                             'id': team[0],
                             'name': team[1],
-                            'couch_id': team[2]
+                            'couch': team[2]
                         }
                         )
 
@@ -75,11 +75,11 @@ class Team (object):
         cursor = connection.cursor()
 
         # query to add given team tuple to database
-        query = """INSERT INTO team (team_name, couch_id)
+        query = """INSERT INTO team (team_name, team_couch)
                         VALUES (%s, %s)"""
 
         try:
-            cursor.execute(query, (self.name, self.couch))
+            cursor.execute(query,(self.name, self.couch))
             connection.commit()
             status = True
 
