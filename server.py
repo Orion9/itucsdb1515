@@ -45,6 +45,10 @@ def show_people():
 
     return render_template("people.html", people_data=people_data)
 
+@app.route('/teams')
+def show_teams():
+    return render_template("teams.html")
+
 
 @app.route('/sponsorships')
 def show_sponsorships():
@@ -143,6 +147,8 @@ def manage_leagues():
 @app.route('/manage/people/<int:person_id>', methods=['GET', 'POST'])
 def show_person(person_id):
     pass
+
+
 
 
 @app.route('/manage/people', methods=['GET', 'POST'])
