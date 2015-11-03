@@ -490,11 +490,12 @@ def api_add_sponsorship():
     # Get json request from AJAX Handler #
     json_post_data = request.get_json()
     # print(json_post_data)
-    # Create an person object #
+    # Create a sponsor object #
     sponsorship_info = sponsorships.Sponsorship(json_post_data['sponsorship_name'],
                                                 json_post_data['sponsorship_start_date'],
-                                json_post_data['sponsorship_league'], json_post_data['sponsorship_team'],
-                                json_post_data['sponsorship_person'])
+                                                json_post_data['sponsorship_league'],
+                                                json_post_data['sponsorship_team'],
+                                                json_post_data['sponsorship_person'])
 
     # Add it to db and send result #
     result = sponsorship_info.add_to_db()
