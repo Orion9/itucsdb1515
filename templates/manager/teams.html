@@ -1,8 +1,9 @@
 {% extends "manager/layout.html" %}
-{% block title %}People{% endblock %}
-{% set active_page = 'people' %}
+{% set active_page = 'teams' %}
+{% block title %}Teams{% endblock %}
+
 {% block content %}
-<div class="panel panel-default">
+    <div class="panel panel-default">
         <div class="panel-heading">
             List of Teams registered in database
         </div>
@@ -46,7 +47,6 @@
                   Add New Data
             </button>
 
-            <button class="btn btn-primary" href="#" id="update-team">Update Selected Row</button>
             <button class="btn btn-primary" href="#" id="delete-team">Delete Selected Row(s)</button>
         </div>
     </div>
@@ -75,8 +75,8 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"></span>
-                    <input id="modal-couch-ID" type="number" name="couch_ID"
-                       class="form-control" placeholder="Couch" required>
+                    <input id="modal-team-couch" type="integer" name="team_couch"
+                       class="form-control" placeholder="Couch ID" required>
                 </div>
               </div>
 
@@ -91,13 +91,5 @@
       </div>
     </div>
     <!-- End modal form -->
-
-
-
-
-
-
-
-
 
   {% endblock %}

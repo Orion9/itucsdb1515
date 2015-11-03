@@ -1,12 +1,13 @@
 {% extends "layout.html" %}
-{% set active_page = 'teams' %}
 {% block title %}Teams{% endblock %}
-<div class="panel panel-default">
+{% set active_page = 'teams' %}
+{% block content %}
+    <div class="panel panel-default">
         <div class="panel-heading">
-            List of sponsors registered in database
+            List of teams registered in database
             <a id = "send-to-manager" class="btn btn-default"
                {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
-                    href="{% if session.logged_in %}{{ url_for('manage_sponsorships') }}{% else %}#{% endif %}">Manage</a>
+                    href="{% if session.logged_in %}{{ url_for('manage_teams') }}{% else %}#{% endif %}">Manage</a>
         </div>
         <div class="panel-body">
             <div id="log-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
@@ -19,27 +20,19 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>Sponsorship ID</th>
-                        <th>Sponsor Name</th>
-                        <th>Sponsorship Start Date</th>
-                        <th>Sponsored League</th>
-                        <th>Sponsored Team</th>
-                        <th>Sponsored Person</th>
+                        <th>Team ID</th>
+                        <th>Team Name</th>
+                        <th>Couch ID</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
-                {% if sponsorships_data %}
-                {% for sponsorship in sponsorships_data %}
+                {% for team in teams_data %}
                     <tr>
-                        <td>{{ sponsorship['id'] }}</td>
-                        <td>{{ sponsorship['name'] }}</td>
-                        <td>{{ sponsorship['start_date'] }}</td>
-                        <td>{{ sponsorship['league'] }}</td>
-                        <td>{{ sponsorship['team'] }}</td>
-                        <td>{{ sponsorship['person'] }}</td>
+                        <td>{{ team['id'] }}</td>
+                        <td>{{ team['name'] }}</td>
+                        <td>{{ team['couch'] }}</td>
                     </tr>
                 {% endfor %}
-                {% endif %}
                 </tbody>
             </table>
         </div>

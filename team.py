@@ -10,7 +10,7 @@
 from config import db_connect
 
 class Team (object):
-    def __init__(self, team_name=None, team_id=None, couch_id=None):
+    def __init__(self, team_name=None, couch_id=None, team_id=None):
         self.id = team_id
         self.name = team_name
         self.couch = couch_id
@@ -19,7 +19,7 @@ class Team (object):
         connection = db_connect()
         cursor = connection.cursor()
 
-        if get_team_by_id is not None:
+        if get_id is not None:
             query = """SELECT * FROM team
                             WHERE team_id = %s"""
             try:
@@ -74,12 +74,12 @@ class Team (object):
         connection = db_connect()
         cursor = connection.cursor()
 
-        # query to add given country tuple to database
-        query = """INSERT INTO team (team_id, team_name, couch_id)
-                        VALUES (%s, %s, %s)"""
+        # query to add given team tuple to database
+        query = """INSERT INTO team (team_name, couch_id)
+                        VALUES (%s, %s)"""
 
         try:
-            cursor.execute(query,(self.id, self.name, self.couch))
+            cursor.execute(query, (self.name, self.couch))
             connection.commit()
             status = True
 
