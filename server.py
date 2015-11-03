@@ -47,10 +47,10 @@ def show_people():
 
     return render_template("people.html", people_data=people_data)
 
-@app.route('/team')
+@app.route('/teams')
 def show_teams():
     team_obj = team.Team()
-    team_data=team_obj.get_team_by_id()
+    team_data = team_obj.get_team_by_id()
     return render_template("teams.html", team_data=team_data)
 
 
@@ -126,6 +126,18 @@ def manage_penalties():
 @app.route('/manage/penalties/<int:penalty_id>', methods=['GET', 'POST'])
 def show_penalty(penalty_id):
     pass
+
+@app.route('/manage/teams', methods=['GET', 'POST'])
+def manage_teams():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    return render_template("manager/teams.html", team_data=team_data)
+
 
 
 @app.route('/manage/cities', methods=['GET', 'POST'])
@@ -315,6 +327,13 @@ def api_get_person_all():
     # Return JSON response. #
     return Response(people_json, mimetype="application/json")
 
+@app.route('/api/team', methods=['GET'])
+def api_get_team_all():
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+    team_json = json.dumps(team_data)
+
+    return Response(team_json, mimetype="application/json")
 
 @app.route('/api/person/<int:data_id>', methods=['GET'])
 def api_get_person(data_id):
@@ -351,6 +370,22 @@ def api_add_person():
 
     return jsonify({'result': result})
 
+@app.route('/api/team/add', methods=['POST'])
+def api_add_team():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create a person type object #
+    team_info = team.Team(json_post_data['team_name'], json_post_data['couch_id'])
+    # Add it to db #
+    result = team_info.add_to_db()
+
+    return jsonify({'result': result})
+
 
 @app.route('/api/country/add', methods=['POST'])
 def api_add_country():
@@ -384,6 +419,19 @@ def api_delete_country():
 
     return jsonify({'result': status})
 
+@app.route('/api/team/delete', methods=['POST'])
+def api_delete_team():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    team_json = request.get_json()
+
+    for team_id in team_json:
+        team_obj = team.Team()
+        team_obj.get_team_by_id(team_id)
+        status = team_obj.delete_from_db()
 
 @app.route('/api/person/update', methods=['POST'])
 def api_update_person():
