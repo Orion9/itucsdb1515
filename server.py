@@ -342,6 +342,28 @@ def api_delete_country():
 
     return jsonify({'result': status})
 
+
+@app.route('/api/country/update', methods=['POST'])
+def api_update_country():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_data = request.get_json()
+
+    country_obj = country.Country()
+    country_obj.get_country_by_id(json_data['country_id'])
+
+    # Update country values #
+    country_obj.name = json_data['country_name']
+    country_obj.population = json_data['country_population']
+
+    # Update #
+    result = country_obj.update_db()
+
+    return jsonify({'result': result})
+
 ########### COUNTRY - end ###########
 
 ########### LEAGUE - start ###########

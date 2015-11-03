@@ -120,7 +120,7 @@ class Country (object):
         cursor = connection.cursor()
         
         query = """UPDATE country
-                   SET country_name=%s, county_population=%s
+                   SET country_name=%s, country_population=%s
                    WHERE country_id=%s"""
 
         try:

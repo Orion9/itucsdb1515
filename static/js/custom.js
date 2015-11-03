@@ -46,6 +46,7 @@ $(function() {
         }
     });
 
+    // Delete Person
     $('#delete-rows-button').click(function(){
 
         var data = [];
@@ -75,7 +76,7 @@ $(function() {
         console.log(data);
     });
     
-    // delete country button
+    // Delete Country
     $('#delete-country').click(function(){
 
         var data = [];
@@ -105,7 +106,7 @@ $(function() {
         console.log(data);
     });
 
-    // delete team button
+    // Delete Team
     $('#delete-rows-button-team').click(function(){
 
         var data = [];
@@ -135,6 +136,7 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Sponsorship
     $('#delete-rows-button-sponsorship').click(function(){
 
         var data = [];
@@ -164,6 +166,7 @@ $(function() {
         console.log(data);
     });
 
+    // Update Person Button
     $('#update-rows-button').click(function(){
 
         var selected_row = glorious_table.rows('.selected').data();
@@ -189,7 +192,7 @@ $(function() {
             console.log(user_data);
         }
     });
-
+    // Update Person
     $('#modal-update-form').submit(function(){
         var data = {
             person_id: $('#modal-update-person-id').val(),
@@ -201,6 +204,84 @@ $(function() {
 
        $.ajax({
            url: "/api/person/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-person').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
+    // Update Country Button
+    $('#update-country').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-country-update').modal('show');
+            var user_data = selected_row[0];
+            $('#modal-update-country-id').val(user_data[0]);
+            $('#modal-update-country-name').val(user_data[1]);
+            $('#modal-update-country-population').val(user_data[2]);
+
+            console.log(user_data);
+        }
+    });
+    // Update Country
+    $('#modal-country-update').submit(function(){
+        var data = {
+            country_id: $('#modal-update-country-id').val(),
+            country_name: $('#modal-update-country-name').val(),
+            country_population: $('#modal-update-country-population').val(),
+        };
+
+       $.ajax({
+           url: "/api/country/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-person').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
+    $('#modal-country-update').submit(function(){
+        var data = {
+            country_id: $('#modal-update-country-id').val(),
+            country_name: $('#modal-update-country-name').val(),
+            country_population: $('#modal-update-country-population').val(),
+        };
+
+       $.ajax({
+           url: "/api/country/update",
            contentType: 'application/json',
            data: JSON.stringify(data),
            type: "POST",
@@ -249,6 +330,7 @@ $(function(){
 // Add POST Handler
 // Handles add modal's POST data
 $(document).ready(function() {
+    // Person Add
     $('#modal-add-form').submit(function() {
         var user_data =
             {
@@ -282,6 +364,70 @@ $(document).ready(function() {
         return false;
     });
 
+    // Person-Type Add
+    $('#modal-add-type-form').submit(function() {
+        var user_data = {
+                person_type: $('#add-modal-person-type').val()
+            };
+
+        $.ajax({
+            url: "/api/person/type/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#add-new-person-type').hide();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-person-type').hide();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Country Add
+    $('#modal-country-add-form').submit(function() {
+        var user_data =
+            {
+                country_name: $('#modal-country-name').val(),
+                country_population: $('#modal-country-population').val()
+            };
+
+        $.ajax({
+            url: "/api/country/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-country').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Sponsorship Add
     $('#modal-add-form-sponsorship').submit(function() {
         var user_data =
             {
@@ -315,44 +461,8 @@ $(document).ready(function() {
         });
         return false;
     });
-});
 
-// Country Add Handler
-$(document).ready(function() {
-    $('#modal-country-add-form').submit(function() {
-        var user_data =
-            {
-                country_name: $('#modal-country-name').val(),
-                country_population: $('#modal-country-population').val()
-            };
-
-        $.ajax({
-            url: "/api/country/add",
-            contentType: 'application/json',
-            data: JSON.stringify(user_data),
-            type: "POST",
-            dataType : "json",
-            success: function( json ) {
-                if ( json.result ) {
-                    $('#op-main-success-alert').show();
-                    location.reload();
-                } else {
-                    $('#op-main-error-alert').show();
-                    $('#add-new-country').modal('hide');
-                }
-                console.log( json );
-            },
-            error: function( ) {
-                $('#op-main-error-alert').show();
-                console.log( "TROUBLE!" );
-            }
-        });
-        return false;
-    });
-});
-
-// Team Add Handler
-$(document).ready(function() {
+    // Team Add Form
     $('#modal-add-form-team').submit(function() {
         var user_data = {
                 team_name: $('#modal-team-name').val(),
@@ -372,40 +482,6 @@ $(document).ready(function() {
                 } else {
                     $('#op-main-error-alert').show();
                     $('#add-new-team').hide();
-                }
-                console.log( json );
-            },
-            error: function( ) {
-                $('#op-main-error-alert').show();
-                console.log( "TROUBLE!" );
-            }
-        });
-        return false;
-    });
-});
-
-// Add Type POST Handler
-// Handles add type modal's POST data
-$(document).ready(function() {
-    $('#modal-add-type-form').submit(function() {
-        var user_data = {
-                person_type: $('#add-modal-person-type').val()
-            };
-
-        $.ajax({
-            url: "/api/person/type/add",
-            contentType: 'application/json',
-            data: JSON.stringify(user_data),
-            type: "POST",
-            dataType : "json",
-            success: function( json ) {
-                if ( json.result ) {
-                    $('#op-main-success-alert').show();
-                    $('#add-new-person-type').hide();
-                    location.reload();
-                } else {
-                    $('#op-main-error-alert').show();
-                    $('#add-new-person-type').hide();
                 }
                 console.log( json );
             },
