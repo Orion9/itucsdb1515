@@ -26,7 +26,7 @@
                     <tr>
                         <th>Team ID</th>
                         <th>Team Name</th>
-                        <th>Couch ID</th>
+                        <th>Team Couch</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
@@ -47,7 +47,7 @@
                   Add New Data
             </button>
 
-            <button class="btn btn-primary" href="#" id="delete-team">Delete Selected Row(s)</button>
+            <button class="btn btn-primary" href="#" id="delete-rows-button-team">Delete Selected Row(s)</button>
         </div>
     </div>
 
@@ -61,7 +61,7 @@
                 <span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="add-new-team-title">Add New Team</h4>
           </div>
-        <form id="modal-team-add-form" action="#" method="post">
+        <form id="modal-add-form-team" action="#" method="post">
           <div class="modal-body">
 
               <div class="form-group">
@@ -76,7 +76,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"></span>
                     <input id="modal-team-couch" type="integer" name="team_couch"
-                       class="form-control" placeholder="Couch ID" required>
+                       class="form-control" placeholder="Team Couch" required>
                 </div>
               </div>
 
