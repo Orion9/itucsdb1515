@@ -356,6 +356,23 @@ def api_add_country():
     return jsonify({'result': result})
 
 
+@app.route('/api/country/delete', methods=['POST'])
+def api_delete_country():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    country_json = request.get_json()
+    
+    for country_id in country_json:
+        country_obj = country.Country()
+        country_obj.get_country_by_id(country_id)
+        status = country_obj.delete_from_db()
+
+    return jsonify({'result': status})
+
+
 @app.route('/api/person/update', methods=['POST'])
 def api_update_person():
     # Get request from AJAX #

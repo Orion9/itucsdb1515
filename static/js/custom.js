@@ -74,6 +74,36 @@ $(function() {
         });
         console.log(data);
     });
+    
+    // delete country button
+    $('#delete-country').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/country/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
 
     $('#update-rows-button').click(function(){
 
