@@ -194,6 +194,41 @@ $(document).ready(function() {
     });
 });
 
+// Country Add Handler
+$(document).ready(function() {
+    $('#modal-country-add-form').submit(function() {
+        var user_data =
+            {
+                country_name: $('#modal-country-name').val(),
+                country_population: $('#modal-country-population').val()
+            };
+
+        $.ajax({
+            url: "/api/country/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-country').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+});
+
+
 // Add Type POST Handler
 // Handles add type modal's POST data
 $(document).ready(function() {

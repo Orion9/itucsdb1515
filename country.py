@@ -10,7 +10,7 @@
 from config import db_connect
 
 class Country (object):
-    def __init__(self, country_name=None, country_id=None, country_population=None):
+    def __init__(self, country_name=None, country_population=None, country_id=None):
         self.id = country_id
         self.name = country_name
         self.population = country_population

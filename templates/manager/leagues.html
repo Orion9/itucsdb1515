@@ -19,7 +19,16 @@
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
-                
+                {% if league_data %}
+                {% for league in league_data %}
+                <tr>
+                	<td>{{ league['id'] }}</td>
+                	<td>{{ league['name'] }}</td>
+                	<td>{{ league['country'] }}</td>
+                	<td>{{ league['start_date'] }}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
          

@@ -15,6 +15,8 @@ import user
 import people
 import cities
 import sponsorships
+import country
+import league
 
 from config import *
 from flask import *
@@ -121,16 +123,22 @@ def manage_countries():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
-
-    return render_template("manager/countries.html")
+    
+    country_obj = country.Country()
+    country_data = country_obj.get_country_by_id()
+    
+    return render_template("manager/countries.html", country_data=country_data)
 
 @app.route('/manage/leagues', methods=['GET', 'POST'])
 def manage_leagues():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
+    
+    league_obj = league.League()
+    league_data = league_obj.get_league_by_id()
 
-    return render_template("manager/leagues.html")
+    return render_template("manager/leagues.html", league_data=league_data)
 
 @app.route('/manage/people/<int:person_id>', methods=['GET', 'POST'])
 def show_person(person_id):
@@ -265,6 +273,23 @@ def api_user_logout():
 def api_db_search(keywords):
     pass
 
+@app.route('/api/country', methods=['GET'])
+def api_get_country_all():
+    country_obj = country.Country()
+    country_data = country_obj.get_country_by_id()
+    country_json = json.dumps(country_data)
+
+    return Response(country_json, mimetype="application/json")
+
+
+@app.route('/api/league', methods=['GET'])
+def api_get_league_all():
+    league_obj = league.League()
+    league_data = league_obj.get_league_by_id()
+    leauge_json = json.dumps(league_data)
+
+    return Response(country_json, mimetype="application/json")
+
 
 @app.route('/api/person', methods=['GET'])
 def api_get_person_all():
@@ -310,6 +335,23 @@ def api_add_person():
 
     # Add it to db and send result #
     result = person_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/country/add', methods=['POST'])
+def api_add_country():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    
+    country_info = country.Country(json_post_data['country_name'], json_post_data['country_population'])
+
+    # Add it to db and send result #
+    result = country_info.add_to_db()
 
     return jsonify({'result': result})
 
