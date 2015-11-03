@@ -31,7 +31,6 @@
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
-                {% if sponsorship_data %}
                 {% for sponsorship in sponsorships_data %}
                     <tr>
                         <td>{{ sponsorship['id'] }}</td>
@@ -42,7 +41,6 @@
                         <td>{{ sponsorship['person'] }}</td>
                     </tr>
                 {% endfor %}
-                {% endif %}
                 </tbody>
             </table>
             <div class="btn-group">
@@ -69,7 +67,7 @@
                 <span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="add-new-sponsorship-title">Add New Sponsorship</h4>
           </div>
-        <form id="modal-sponsorship-add-form" action="#" method="post">
+        <form id="modal-add-form-sponsorship" action="#" method="post">
           <div class="modal-body">
               <div class="form-group">
 
@@ -107,11 +105,8 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <select class="form-control" id="modal-sponsorship-person">
-                        {% for person in people %}
-                        <option>{{ person[0] }}</option>
-                        {% endfor %}
-                      </select>
+                    <input id="modal-sponsorship-person" type="text" name="sponsorship_person"
+                       class="form-control" placeholder="Sponsorship Person">
                 </div>
               </div>
 

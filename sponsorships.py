@@ -11,39 +11,36 @@ from config import db_connect
 
 
 class Sponsorship(object):
-    def __init__(self, sponsor_name=None, sponsorship_start_date=None, sponsored_league=None,
-                 sponsored_team=None, sponsored_person=None, sponsor_id=None):
-        self.id = sponsor_id
-        self.name = sponsor_name
+    def __init__(self, sponsorship_name=None, sponsorship_start_date=None, sponsorship_league=None,
+                 sponsorship_team=None, sponsorship_person=None, sponsorship_id=None):
+        self.id = sponsorship_id
+        self.name = sponsorship_name
         self.start_date = sponsorship_start_date
-        self.league = sponsored_league
-        self.team = sponsored_team
-        self.person = sponsored_person
+        self.league = sponsorship_league
+        self.team = sponsorship_team
+        self.person = sponsorship_person
 
     def get_sponsorship_by_id(self, get_id=None):
-
         connection = db_connect()
         cursor = connection.cursor()
 
         if get_id is not None:
             statement = """SELECT * FROM sponsorship
-                            JOIN person ON person.person_id = sponsorship.sponsorship_person
                             WHERE sponsorship_id = %s"""
-
             try:
                 cursor.execute(statement, (get_id,))
                 connection.commit()
             except connection.Error:
                 connection.rollback()
 
-            s_data = cursor.fetchone()
-            if s_data is not None:
-                self.id = s_data[0]
-                self.name = s_data[1]
-                self.start_date = s_data[2]
-                self.league = s_data[3]
-                self.team = s_data[4]
-                self.person = s_data[5]
+            data = cursor.fetchone()
+            if data is not None:
+                self.id = data[0]
+                self.name = data[1]
+                self.start_date = data[2]
+                self.league = data[3]
+                self.team = data[4]
+                self.person = data[5]
                 cursor.close()
                 connection.close()
                 return self
@@ -53,18 +50,16 @@ class Sponsorship(object):
                 return None
 
         else:
-            statement = """SELECT * FROM sponsorship
-                            JOIN person ON person.person_id = sponsorship.sponsorship_person"""
-
+            statement = """SELECT * FROM sponsorship"""
             try:
-                cursor.execute(statement, (get_id,))
+                cursor.execute(statement)
                 connection.commit()
             except connection.Error:
                 connection.rollback()
 
             sponsorship_array = []
-            s_data = cursor.fetchall()
-            for sponsorship in s_data:
+            data = cursor.fetchall()
+            for sponsorship in data:
                 sponsorship_array.append(
                     {
                         'id': sponsorship[0],
@@ -75,7 +70,7 @@ class Sponsorship(object):
                         'person': sponsorship[5]
                     }
                 )
-            print(sponsorship_array)
+            #print(sponsorship_array)
             cursor.close()
             connection.close()
             return sponsorship_array
@@ -87,14 +82,8 @@ class Sponsorship(object):
         statement = """INSERT INTO sponsorship (sponsorship_name, sponsorship_start_date,
                         sponsorship_league, sponsorship_team, sponsorship_person )
                         VALUES (%s, %s, %s, %s, %s)"""
-        person_to_add = """SELECT person_id FROM person WHERE person_name = %s"""
-
         try:
-            cursor.execute(person_to_add, (self.person,))
-            connection.commit()
-            person_id = cursor.fetchone()
-
-            cursor.execute(statement, (self.name, self.start_date, self.league, self.team, person_id))
+            cursor.execute(statement, (self.name, self.start_date, self.league, self.team, self.person))
             connection.commit()
             status = True
         except connection.Error:

@@ -173,11 +173,6 @@ def manage_people():
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
 
 
-@app.route('/manage/sponsorships/<int:sponsorship_id>', methods=['GET', 'POST'])
-def show_sponsorship(sponsorship_id):
-    pass
-
-
 @app.route('/manage/sponsorships', methods=['GET', 'POST'])
 def manage_sponsorships():
     if not session.get('logged_in'):
@@ -186,11 +181,8 @@ def manage_sponsorships():
     # Create empty sponsorship and get all data from db #
     sponsorship = sponsorships.Sponsorship()
     sponsorships_data = sponsorship.get_sponsorship_by_id()
-    # Same for city object #
-    person_obj = people.Person()
-    people_data = person_obj.get_person()
 
-    return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, people=people_data)
+    return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data)
 
 
 @app.route('/search', methods=['POST'])
