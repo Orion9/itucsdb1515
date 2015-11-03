@@ -50,7 +50,7 @@ def show_people():
 @app.route('/team')
 def show_teams():
     team_obj = team.Team()
-    team_data=team_obj.get_team_by_id()
+    team_data = team_obj.get_team_by_id()
     return render_template("teams.html", team_data=team_data)
 
 

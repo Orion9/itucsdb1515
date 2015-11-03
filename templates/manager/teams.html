@@ -1,25 +1,24 @@
 {% extends "manager/layout.html" %}
-{% block title %}People{% endblock %}
-{% set active_page = 'people' %}
+{% block title %}Sponsorships{% endblock %}
+{% set active_page = 'sponsorships' %}
 {% block content %}
-<div class="panel panel-default">
+    <div class="panel panel-default">
         <div class="panel-heading">
-            List of Teams registered in database
+            List of teams registered in database
         </div>
         <div class="panel-body">
-        	<div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+            <div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-error-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>Shame! <i>*rings bell*</i></strong> Something went wrong and your process could not be completed.
             </div>
             <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Whoa!</strong> You choose too many people or you forgot to choose some one.
+                <strong>Whoa!</strong> You choose too many teams or you forgot to choose some one.
             </div>
             <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>BAM! </strong> Your operation successfully completed.
             </div>
-
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
@@ -31,55 +30,65 @@
                 <tbody id="glorious-table-body">
                 {% if team_data %}
                 {% for team in team_data %}
-                <tr>
-                	<td>{{ team['id'] }}</td>
-                	<td>{{ team['name'] }}</td>
-                	<td>{{ team['couch'] }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ team['id'] }}</td>
+                        <td>{{ team['name'] }}</td>
+                        <td>{{ couch['id'] }}</td>
+                    </tr>
                 {% endfor %}
                 {% endif %}
                 </tbody>
             </table>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New Data <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target="#add-new-team">Add New Team</a></li>
+                </ul>
+            </div>
 
-            <button type="button" class="btn btn-primary dropdown-toggle"
-                  data-toggle="modal" data-target="#add-new-team" aria-haspopup="true" aria-expanded="false">
-                  Add New Data
-            </button>
-
-            <button class="btn btn-primary" href="#" id="update-team">Update Selected Row</button>
-            <button class="btn btn-primary" href="#" id="delete-team">Delete Selected Row(s)</button>
+            <button class="btn btn-primary" href="#" id="delete-rows-button-sponsorship">Delete Selected Row(s)</button>
         </div>
     </div>
 
     <!-- Modal form for Add Screen -->
-    <div class="modal fade" id="add-new-team" tabindex="-1" role="dialog" aria-labelledby="add-new-team-label"
-         aria-hidden="true">
+    <div class="modal fade" id="add-new-team" tabindex="-1" role="dialog"
+         aria-labelledby="add-new-team-label" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add-new-team-title">Add New Team</h4>
+            <h4 class="modal-title" id="add-new-sponsorship-title">Add New Team</h4>
           </div>
-        <form id="modal-team-add-form" action="#" method="post">
+        <form id="modal-sponsorship-add-form" action="#" method="post">
           <div class="modal-body">
-
               <div class="form-group">
+
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input id="modal-team-name" type="text" name="team_name"
+                    <input id="modal-sponsorship-name" type="text" name="team_name"
                        class="form-control" placeholder="Team Name" required>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"></span>
-                    <input id="modal-couch-ID" type="number" name="couch_ID"
-                       class="form-control" placeholder="Couch" required>
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-team-id" type="date" name="team_id"
+                       class="form-control" placeholder="Team ID" required>
                 </div>
               </div>
 
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input id="modal-couch-id" type="text" name="couch_id"
+                       class="form-control" placeholder="Couch ID">
+                </div>
+              </div>
             </div>
 
               <div class="modal-footer">
@@ -92,12 +101,4 @@
     </div>
     <!-- End modal form -->
 
-
-
-
-
-
-
-
-
-  {% endblock %}
+{% endblock %}

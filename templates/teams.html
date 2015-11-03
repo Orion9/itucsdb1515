@@ -19,24 +19,18 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>Sponsorship ID</th>
-                        <th>Sponsor Name</th>
-                        <th>Sponsorship Start Date</th>
-                        <th>Sponsored League</th>
-                        <th>Sponsored Team</th>
-                        <th>Sponsored Person</th>
+                        <th>Team ID</th>
+                        <th>Team Name</th>
+                        <th>Couch ID</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
                 {% if sponsorships_data %}
                 {% for sponsorship in sponsorships_data %}
                     <tr>
-                        <td>{{ sponsorship['id'] }}</td>
-                        <td>{{ sponsorship['name'] }}</td>
-                        <td>{{ sponsorship['start_date'] }}</td>
-                        <td>{{ sponsorship['league'] }}</td>
-                        <td>{{ sponsorship['team'] }}</td>
-                        <td>{{ sponsorship['person'] }}</td>
+                        <td>{{ team['id'] }}</td>
+                        <td>{{ team['name'] }}</td>
+                        <td>{{ couch['id'] }}</td>
                     </tr>
                 {% endfor %}
                 {% endif %}
