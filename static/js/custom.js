@@ -355,7 +355,7 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#modal-team-add-form').submit(function() {
         var user_data = {
-                team_name: $('#add-modal-team-name').val()
+                team_name: $('#add-modal-team-name').val(),
                 couch_id: $('#add-modal-couch-id').val()
             };
 
