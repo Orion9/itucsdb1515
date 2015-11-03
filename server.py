@@ -40,52 +40,9 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/people')
-def show_people():
-    person_obj = people.Person()
-    people_data = person_obj.get_person_by_id()
-
-    return render_template("people.html", people_data=people_data)
-
-@app.route('/teams')
-def show_teams():
-    team_obj = team.Team()
-    team_data = team_obj.get_team_by_id()
-    return render_template("teams.html", team_data=team_data)
-
-
-@app.route('/sponsorships')
-def show_sponsorships():
-    sponsorship_obj = sponsorships.Sponsorship()
-    sponsorships_data = sponsorship_obj.get_sponsorship_by_id()
-
-    return render_template("sponsorships.html", sponsorships_data=sponsorships_data)
-
-
-@app.route('/countries')
-def show_countries():
-    country_obj = country.Country()
-    country_data = country_obj.get_country_by_id()
-
-    return render_template("countries.html", country_data=country_data)
-
-
-@app.route('/leagues')
-def show_leagues():
-    league_obj = league.League()
-    league_data = league_obj.get_league_by_id()
-
-    return render_template("leagues.html", league_data=league_data)
-
-
-@app.route('/penalties')
-def show_penalties():
-    return render_template("penalties.html")
-
-
-@app.route('/cities')
-def show_cities():
-    return render_template("cities.html")
+@app.route('/search', methods=['POST'])
+def search():
+    pass
 
 
 @app.route('/logout')
@@ -102,79 +59,12 @@ def manage():
     return render_template("manager/main.html")
 
 
-@app.route('/manage/users', methods=['GET', 'POST'])
-def manage_users():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-    return render_template("manager/users.html")
+@app.route('/people')
+def show_people():
+    person_obj = people.Person()
+    people_data = person_obj.get_person_by_id()
 
-
-@app.route('/manage/users/<int:user_id>', methods=['GET', 'POST'])
-def show_user(user_id):
-    pass
-
-
-@app.route('/manage/penalties', methods=['GET', 'POST'])
-def manage_penalties():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-    return render_template("manager/penalties.html")
-
-
-@app.route('/manage/penalties/<int:penalty_id>', methods=['GET', 'POST'])
-def show_penalty(penalty_id):
-    pass
-
-@app.route('/manage/teams', methods=['GET', 'POST'])
-def manage_teams():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-
-    team_obj = team.Team()
-    team_data = team_obj.get_team_by_id()
-
-    return render_template("manager/teams.html", team_data=team_data)
-
-
-
-@app.route('/manage/cities', methods=['GET', 'POST'])
-def manage_cities():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-
-    return render_template("manager/cities.html")
-
-@app.route('/manage/countries', methods=['GET', 'POST'])
-def manage_countries():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-    
-    country_obj = country.Country()
-    country_data = country_obj.get_country_by_id()
-    
-    return render_template("manager/countries.html", country_data=country_data)
-
-
-@app.route('/manage/leagues', methods=['GET', 'POST'])
-def manage_leagues():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-    
-    league_obj = league.League()
-    league_data = league_obj.get_league_by_id()
-
-    return render_template("manager/leagues.html", league_data=league_data)
-
-
-@app.route('/manage/people/<int:person_id>', methods=['GET', 'POST'])
-def show_person(person_id):
-    pass
+    return render_template("people.html", people_data=people_data)
 
 
 @app.route('/manage/people', methods=['GET', 'POST'])
@@ -195,6 +85,38 @@ def manage_people():
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
 
 
+@app.route('/manage/people/<int:person_id>', methods=['GET', 'POST'])
+def show_person(person_id):
+    pass
+
+
+@app.route('/teams')
+def show_teams():
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+    return render_template("teams.html", team_data=team_data)
+
+
+@app.route('/manage/teams', methods=['GET', 'POST'])
+def manage_teams():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    return render_template("manager/teams.html", team_data=team_data)
+
+
+@app.route('/sponsorships')
+def show_sponsorships():
+    sponsorship_obj = sponsorships.Sponsorship()
+    sponsorships_data = sponsorship_obj.get_sponsorship_by_id()
+
+    return render_template("sponsorships.html", sponsorships_data=sponsorships_data)
+
+
 @app.route('/manage/sponsorships', methods=['GET', 'POST'])
 def manage_sponsorships():
     if not session.get('logged_in'):
@@ -207,8 +129,88 @@ def manage_sponsorships():
     return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data)
 
 
-@app.route('/search', methods=['POST'])
-def search():
+@app.route('/countries')
+def show_countries():
+    country_obj = country.Country()
+    country_data = country_obj.get_country_by_id()
+
+    return render_template("countries.html", country_data=country_data)
+
+
+@app.route('/manage/countries', methods=['GET', 'POST'])
+def manage_countries():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    country_obj = country.Country()
+    country_data = country_obj.get_country_by_id()
+
+    return render_template("manager/countries.html", country_data=country_data)
+
+
+@app.route('/leagues')
+def show_leagues():
+    league_obj = league.League()
+    league_data = league_obj.get_league_by_id()
+
+    return render_template("leagues.html", league_data=league_data)
+
+
+@app.route('/manage/leagues', methods=['GET', 'POST'])
+def manage_leagues():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    league_obj = league.League()
+    league_data = league_obj.get_league_by_id()
+
+    return render_template("manager/leagues.html", league_data=league_data)
+
+
+@app.route('/penalties')
+def show_penalties():
+    return render_template("penalties.html")
+
+
+@app.route('/manage/penalties', methods=['GET', 'POST'])
+def manage_penalties():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    return render_template("manager/penalties.html")
+
+
+@app.route('/manage/penalties/<int:penalty_id>', methods=['GET', 'POST'])
+def show_penalty(penalty_id):
+    pass
+
+
+@app.route('/cities')
+def show_cities():
+    return render_template("cities.html")
+
+
+@app.route('/manage/cities', methods=['GET', 'POST'])
+def manage_cities():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    return render_template("manager/cities.html")
+
+
+@app.route('/manage/users', methods=['GET', 'POST'])
+def manage_users():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    return render_template("manager/users.html")
+
+
+@app.route('/manage/users/<int:user_id>', methods=['GET', 'POST'])
+def show_user(user_id):
     pass
 
 
@@ -297,16 +299,52 @@ def api_user_logout():
 def api_db_search(keywords):
     pass
 
-
+########### COUNTRY - start ###########
 @app.route('/api/country', methods=['GET'])
 def api_get_country_all():
+    # Creates an empty Country object
     country_obj = country.Country()
+    # Transfers All Country Rows to country_data
     country_data = country_obj.get_country_by_id()
     country_json = json.dumps(country_data)
 
     return Response(country_json, mimetype="application/json")
 
 
+@app.route('/api/country/add', methods=['POST'])
+def api_add_country():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    country_info = country.Country(json_post_data['country_name'], json_post_data['country_population'])
+    # Add it to db and send result #
+    result = country_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/country/delete', methods=['POST'])
+def api_delete_country():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    country_json = request.get_json()
+    # Deletes every object in the request from database
+    for country_id in country_json:
+        country_obj = country.Country()
+        country_obj.get_country_by_id(country_id)
+        status = country_obj.delete_from_db()
+
+    return jsonify({'result': status})
+
+########### COUNTRY - end ###########
+
+########### LEAGUE - start ###########
 @app.route('/api/league', methods=['GET'])
 def api_get_league_all():
     league_obj = league.League()
@@ -315,7 +353,9 @@ def api_get_league_all():
 
     return Response(league_json, mimetype="application/json")
 
+########### LEAGUE - end ###########
 
+########### PERSON - start ###########
 @app.route('/api/person', methods=['GET'])
 def api_get_person_all():
     # Create empty person then get all data from db #
@@ -327,13 +367,6 @@ def api_get_person_all():
     # Return JSON response. #
     return Response(people_json, mimetype="application/json")
 
-@app.route('/api/team', methods=['GET'])
-def api_get_team_all():
-    team_obj = team.Team()
-    team_data = team_obj.get_team_by_id()
-    team_json = json.dumps(team_data)
-
-    return Response(team_json, mimetype="application/json")
 
 @app.route('/api/person/<int:data_id>', methods=['GET'])
 def api_get_person(data_id):
@@ -370,71 +403,6 @@ def api_add_person():
 
     return jsonify({'result': result})
 
-@app.route('/api/team/add', methods=['POST'])
-def api_add_team():
-    # Prevent unauthorized access #
-    if not session.get('logged_in'):
-        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
-
-    # Get request #
-    json_post_data = request.get_json()
-    # print(json_post_data)
-    # Create a person type object #
-    team_info = team.Team(json_post_data['team_name'], json_post_data['team_couch'])
-    # Add it to db #
-    result = team_info.add_to_db()
-
-    return jsonify({'result': result})
-
-
-@app.route('/api/country/add', methods=['POST'])
-def api_add_country():
-    # Prevent unauthorized access from API #
-    if not session.get('logged_in'):
-        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
-
-    # Get json request from AJAX Handler #
-    json_post_data = request.get_json()
-    country_info = country.Country(json_post_data['country_name'], json_post_data['country_population'])
-
-    # Add it to db and send result #
-    result = country_info.add_to_db()
-
-    return jsonify({'result': result})
-
-
-@app.route('/api/country/delete', methods=['POST'])
-def api_delete_country():
-    # Prevent unauthorized access #
-    if not session.get('logged_in'):
-        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
-
-    # Get request #
-    country_json = request.get_json()
-    
-    for country_id in country_json:
-        country_obj = country.Country()
-        country_obj.get_country_by_id(country_id)
-        status = country_obj.delete_from_db()
-
-    return jsonify({'result': status})
-
-@app.route('/api/team/delete', methods=['POST'])
-def api_delete_team():
-    # Prevent unauthorized access #
-    if not session.get('logged_in'):
-        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
-
-    status = False
-
-    # Get request #
-    team_id_json = request.get_json()
-
-    for team_id in team_id_json:
-        team_obj = team.Team()
-        team_obj.get_team_by_id(team_id)
-        status = team_obj.delete_from_db()
-    return jsonify({'result': status})
 
 @app.route('/api/person/update', methods=['POST'])
 def api_update_person():
@@ -506,7 +474,57 @@ def api_delete_person():
 
     return jsonify({'result': status})
 
+########### PERSON - end ###########
 
+
+########### TEAM - start ###########
+@app.route('/api/team', methods=['GET'])
+def api_get_team_all():
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+    team_json = json.dumps(team_data)
+
+    return Response(team_json, mimetype="application/json")
+
+
+@app.route('/api/team/add', methods=['POST'])
+def api_add_team():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create a person type object #
+    team_info = team.Team(json_post_data['team_name'], json_post_data['team_couch'])
+    # Add it to db #
+    result = team_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/team/delete', methods=['POST'])
+def api_delete_team():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+
+    # Get request #
+    team_id_json = request.get_json()
+
+    for team_id in team_id_json:
+        team_obj = team.Team()
+        team_obj.get_team_by_id(team_id)
+        status = team_obj.delete_from_db()
+    return jsonify({'result': status})
+
+########### TEAM - end ###########
+
+
+########### SPONSORSHIP - start ###########
 @app.route('/api/sponsorship', methods=['GET'])
 def api_get_sponsorship_all():
     # Create empty sponsorship then get all data from db #
@@ -577,6 +595,8 @@ def api_delete_sponsorship():
         status = sponsorship_obj.delete_from_db()
 
     return jsonify({'result': status})
+
+########### SPONSORSHIP - end ###########
 
 
 if __name__ == '__main__':
