@@ -20,7 +20,7 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>Person ID</th>
+                        <th hidden>Person ID</th>
                         <th>Person Name</th>
                         <th>Birth Date</th>
                         <th>Birth Place</th>
@@ -30,7 +30,7 @@
                 <tbody id="glorious-table-body">
                 {% for person in people_data %}
                     <tr>
-                        <td>{{ person['id'] }}</td>
+                        <td hidden>{{ person['id'] }}</td>
                         <td>{{ person['name'] }}</td>
                         <td>{{ person['birth_date'] }}</td>
                         <td>{{ person['birth_place'] }}</td>

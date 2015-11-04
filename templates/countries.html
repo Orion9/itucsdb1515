@@ -25,7 +25,7 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>Country ID</th>
+                        <th hidden>Country ID</th>
                         <th>Country Name</th>
                         <th>Population</th>
                     </tr>
@@ -34,7 +34,7 @@
                 {% if country_data %}
                 {% for country in country_data %}
                     <tr>
-                        <td>{{ country['id'] }}</td>
+                        <td hidden>{{ country['id'] }}</td>
                         <td>{{ country['name'] }}</td>
                         <td>{{ country['population'] }}</td>
                     </tr>

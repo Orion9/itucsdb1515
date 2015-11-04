@@ -7,8 +7,13 @@
 // User Login Handler
 // Handles POST request coming from Auth API.
 $(document).ready(function() {
+    // Login Form Handler
     $('#modal-submit-form').submit(function() {
-        var user_data = {user_email: $('#modal-login-email').val(), user_password: $('#modal-login-password').val()};
+        var user_data = {
+            user_email: $('#modal-login-email').val(),
+            user_password: $('#modal-login-password').val()
+        };
+
         $.ajax({
             url: "/api/login",
             contentType: 'application/json',
@@ -243,36 +248,8 @@ $(function() {
             console.log(user_data);
         }
     });
+
     // Update Country
-    $('#modal-country-update').submit(function(){
-        var data = {
-            country_id: $('#modal-update-country-id').val(),
-            country_name: $('#modal-update-country-name').val(),
-            country_population: $('#modal-update-country-population').val(),
-        };
-
-       $.ajax({
-           url: "/api/country/update",
-           contentType: 'application/json',
-           data: JSON.stringify(data),
-           type: "POST",
-           dataType : "json",
-           success: function( json ) {
-                if ( json.result ) {
-                    $('#op-main-success-alert').show();
-                    $('#modal-update-person').modal('hide');
-                    location.reload();
-                } else {
-                    $('#op-main-error-alert').show();
-                }
-                console.log( json );
-            },
-           error: function( ) {
-                console.log( "TROUBLE!" );
-           }
-       });
-    });
-
     $('#modal-country-update').submit(function(){
         var data = {
             country_id: $('#modal-update-country-id').val(),
@@ -415,7 +392,40 @@ $(document).ready(function() {
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();
-                    $('#add-new-country').modal('hide');
+                    $('#modal-country-add').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // League Add
+    $('#modal-league-add-form').submit(function() {
+        var user_data =
+            {
+                league_name: $('#modal-league-name').val(),
+                league_start_date: $('#modal-league-start-date').val(),
+                league_country: $('#modal-league-country').val()
+            };
+
+        $.ajax({
+            url: "/api/league/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#modal-league-add').modal('hide');
                 }
                 console.log( json );
             },

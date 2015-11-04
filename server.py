@@ -166,7 +166,10 @@ def manage_leagues():
     league_obj = league.League()
     league_data = league_obj.get_league_by_id()
 
-    return render_template("manager/leagues.html", league_data=league_data)
+    country_obj = country.Country()
+    country_data = country_obj.get_country_by_id()
+
+    return render_template("manager/leagues.html", league_data=league_data, country_data=country_data)
 
 
 @app.route('/penalties')
@@ -374,6 +377,23 @@ def api_get_league_all():
     league_json = json.dumps(league_data)
 
     return Response(league_json, mimetype="application/json")
+
+
+@app.route('/api/league/add', methods=['POST'])
+def api_add_league():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    league_info = league.League(json_post_data['league_name'], json_post_data['league_country'],
+                                json_post_data['league_start_date'])
+
+    # Add it to db and send result #
+    result = league_info.add_to_db()
+
+    return jsonify({'result': result})
 
 ########### LEAGUE - end ###########
 
