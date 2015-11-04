@@ -111,6 +111,36 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Country
+    $('#delete-league').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/league/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     // Delete Team
     $('#delete-rows-button-team').click(function(){
 
@@ -197,6 +227,7 @@ $(function() {
             console.log(user_data);
         }
     });
+
     // Update Person
     $('#modal-update-form').submit(function(){
         var data = {
@@ -250,7 +281,7 @@ $(function() {
     });
 
     // Update Country
-    $('#modal-country-update').submit(function(){
+    $('#modal-country-update-form').submit(function(){
         var data = {
             country_id: $('#modal-update-country-id').val(),
             country_name: $('#modal-update-country-name').val(),
@@ -266,7 +297,59 @@ $(function() {
            success: function( json ) {
                 if ( json.result ) {
                     $('#op-main-success-alert').show();
-                    $('#modal-update-person').modal('hide');
+                    $('#modal-update-country').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
+    // Update League Button
+    $('#update-league').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-league-update').modal('show');
+            var user_data = selected_row[0];
+            $('#modal-update-league-id').val(user_data[0]);
+            $('#modal-update-league-name').val(user_data[1]);
+            $('#modal-update-league-country').val(user_data[2]);
+            $('#modal-update-league-start-date').val(user_data[2]);
+
+            console.log(user_data);
+        }
+    });
+
+    // Update Country
+    $('#modal-league-update-form').submit(function(){
+        var data = {
+            league_id: $('#modal-update-league-id').val(),
+            league_name: $('#modal-update-league-name').val(),
+            league_country: $('#modal-update-league-country').val(),
+            league_start_date: $('#modal-update-league-start-date').val()
+        };
+
+       $.ajax({
+           url: "/api/league/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-league').modal('hide');
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();

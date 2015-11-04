@@ -395,6 +395,46 @@ def api_add_league():
 
     return jsonify({'result': result})
 
+
+@app.route('/api/league/delete', methods=['POST'])
+def api_delete_league():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    league_json = request.get_json()
+    # Deletes every object in the request from database
+    for league_id in league_json:
+        league_obj = league.League()
+        league_obj.get_league_by_id(league_id)
+        status = league_obj.delete_from_db()
+
+    return jsonify({'result': status})
+
+
+@app.route('/api/league/update', methods=['POST'])
+def api_update_league():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_data = request.get_json()
+
+    league_obj = league.League()
+    league_obj.get_league_by_id(json_data['league_id'])
+
+    # Update values #
+    league_obj.name = json_data['league_name']
+    league_obj.country = json_data['league_country']
+    league_obj.start_date = json_data['league_start_date']
+
+    # Update db #
+    result = league_obj.update_db()
+
+    return jsonify({'result': result})
+
 ########### LEAGUE - end ###########
 
 ########### PERSON - start ###########

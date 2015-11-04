@@ -132,7 +132,7 @@ class League (object):
 
         query_country = """SELECT country_id FROM country WHERE country_name=%s"""
         query = """UPDATE league
-                   SET league_name=%s, league_start_date=%s, league_country=%s
+                   SET league_name=%s, league_country=%s, league_start_date=%s
                    WHERE league_id=%s"""
 
         try:
@@ -140,7 +140,7 @@ class League (object):
             connection.commit()
             country_id = cursor.fetchone()
 
-            cursor.execute(query, (self.name, self.start_date, country_id, self.id,))
+            cursor.execute(query, (self.name, country_id, self.start_date, self.id,))
             connection.commit()
             status = True
         except connection.Error as error:

@@ -112,5 +112,66 @@
       </div>
     </div>
     <!-- End modal form -->
+
+    <!-- Start Update Modal Form -->
+    <div class="modal fade" id="modal-league-update" tabindex="-1" role="dialog" aria-labelledby="update-league-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal" id="close-update-league" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+
+            <h4 class="modal-title" id="update-league-title">Update League</h4>
+
+          </div>
+
+        <form id="modal-league-update-form" action="#" method="post">
+          <div class="modal-body">
+
+
+
+              <div class="form-group">
+                <input type="hidden" id="modal-update-league-id">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input id="modal-update-league-name" type="text" name="league_name"
+                       class="form-control" placeholder="League Name" required>
+                </div>
+              </div>
+
+               <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-update-league-start-date" type="date" name="league_start_date"
+                       class="form-control" placeholder="Start Date" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-update-league-country" required>
+                        {% if country_data %}
+                        {% for country in country_data %}
+                        <option>{{ country.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button-update" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!--- End Update Modal Form -->
     
     {% endblock %}
