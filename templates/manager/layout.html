@@ -1,13 +1,13 @@
 {% set navigation_bar = [
         ('/manage', 'main', 'Main'),
         ('/manage/users', 'users', 'Users'),
-        ('/manage/countries', 'countries', 'Countries'),
-        ('/manage/leagues', 'leagues', 'Leagues'),
         ('/manage/people', 'people', 'People'),
         ('/manage/penalties', 'penalties', 'Penalties'),
         ('/manage/cities', 'cities', 'Cities'),
         ('/manage/teams', 'teams', 'Teams'),
-        ('/manage/sponsorships', 'sponsorships', 'Sponsorships')] -%}
+        ('/manage/sponsorships', 'sponsorships', 'Sponsorships'),
+        ('/manage/countries', 'countries', 'Countries'),
+        ('/manage/leagues', 'leagues', 'Leagues')] -%}
 {% set active_page = active_page|default('main') -%}
 
 <!DOCTYPE html>

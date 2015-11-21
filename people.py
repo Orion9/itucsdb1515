@@ -166,41 +166,6 @@ class Person(object):
             conn.close()
             return status
 
-    def get_person(self, name=None):
-        conn = db_connect()
-        cursor = conn.cursor()
-
-        if name is None:
-            query = """SELECT person_name FROM person"""
-            try:
-                cursor.execute(query)
-                conn.commit()
-            except conn.Error as error:
-                print(error)
-
-            data = cursor.fetchall()
-
-            cursor.close()
-            conn.close()
-
-            return data
-
-        else:
-            query = """SELECT * FROM person WHERE person_name = %s"""
-
-            try:
-                cursor.execute(query, (name, ))
-                conn.commit()
-            except conn.Error as error:
-                print(error)
-
-            data = cursor.fetchone()
-
-            self.id = data[0]
-            self.name = data[1]
-
-            return self
-
 
 class PersonType(object):
     def __init__(self, type_name=None, type_id=None):
