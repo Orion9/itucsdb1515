@@ -6,8 +6,8 @@
 # Furkan Akgun 150130106      #
 # Emine Oyku Bozkir 150120017 #
 ###############################
-
 from config import db_connect
+
 
 class Country (object):
     def __init__(self, country_name=None, country_population=None, country_id=None):
@@ -69,8 +69,6 @@ class Country (object):
             except connection.Error as error:
                 print(error)
                 connection.rollback()
-
-            
 
     def add_to_db(self):
         connection = db_connect()
@@ -134,4 +132,5 @@ class Country (object):
         finally:
             cursor.close()
             connection.close()
-            return status
+
+        return status

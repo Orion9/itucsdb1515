@@ -64,12 +64,15 @@ def manage_people():
     # Create empty person and get all data from db #
     person = people.Person()
     people_data = person.get_person_by_id()
+
     # Same for types and city objects #
     types_obj = people.PersonType()
     types_data = types_obj.get_person_type()
 
     city_obj = cities.City()
-    cities_data = city_obj.get_city()
+    cities_data = city_obj.get_city_by_id()
+
+    print(people_data)
 
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
 
@@ -171,7 +174,9 @@ def manage_penalties():
 
 @app.route('/cities')
 def show_cities():
-    return render_template("cities.html")
+    city_obj = cities.City()
+    cities_data = city_obj.get_city_by_id()
+    return render_template("cities.html", cities_data=cities_data)
 
 
 @app.route('/manage/cities', methods=['GET', 'POST'])
@@ -180,7 +185,9 @@ def manage_cities():
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
 
-    return render_template("manager/cities.html")
+    city_obj = cities.City()
+    cities_data = city_obj.get_city_by_id()
+    return render_template("manager/cities.html", cities_data=cities_data)
 
 
 @app.route('/manage/users', methods=['GET', 'POST'])
@@ -239,7 +246,7 @@ def api_user_login():
     json_user_data = request.get_json()
 
     # Get user object #
-    user_info = user.User(None, None, None, None)
+    user_info = user.User()
     user_info.get_user(json_user_data['user_email'])
 
     # Check user credentials #
@@ -248,6 +255,7 @@ def api_user_login():
             # Create session for user #
             session['logged_in'] = True
             session['email'] = json_user_data['user_email']
+            session['alias'] = user_info.alias
 
             status = True
         else:
@@ -263,6 +271,7 @@ def api_user_logout():
     # Pop session #
     session.pop('email', None)
     session.pop('logged_in', None)
+    session.pop('alias', None)
 
     return jsonify({'result': 'success'})
 
@@ -401,6 +410,80 @@ def api_delete_person():
 
     return jsonify({'result': status})
 # PERSON - end #
+
+
+# Cities Begin #
+@app.route('/api/city/<int:city_id>', methods=['GET'])
+def api_get_city(city_id):
+    # Create empty city and fill it from db #
+    city_obj = cities.City()
+    city_obj.get_city_by_id(city_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': city_obj.id,
+        'city_name': city_obj.name,
+        'city_coordinates': city_obj.name,
+        'city_population': city_obj.name
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/city/add', methods=['POST'])
+def api_add_city():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+
+    city_info = cities.City(json_post_data['city_name'],
+                            json_post_data['city_population'])
+    # Add it to db #
+    result = city_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/city/update', methods=['POST'])
+def api_update_city():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get city from db #
+    city_obj = cities.City()
+    city_obj.get_city_by_id(json_data['city_id'])
+
+    # Update city object's values #
+    city_obj.name = json_data['city_name']
+    city_obj.population = json_data['city_population']
+
+    # Update db #
+    result = city_obj.update_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/city/delete', methods=['POST'])
+def api_delete_city():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+
+    # Get request #
+    city_id_json = request.get_json()
+
+    for city_id in city_id_json:
+        city_obj = cities.City()
+        city_obj.get_city_by_id(city_id)
+        status = city_obj.delete_from_db()
+
+    return jsonify({'result': status})
+# Cities end #
 
 
 # TEAM - start #

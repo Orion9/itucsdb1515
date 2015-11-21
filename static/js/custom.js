@@ -80,6 +80,36 @@ $(function() {
         });
         console.log(data);
     });
+
+    // Delete City
+    $('#delete-cities-button').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/city/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
     
     // Delete Country
     $('#delete-country').click(function(){
@@ -260,6 +290,57 @@ $(function() {
        });
     });
 
+    // Update City Button
+    $('#update-cities-button').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-city-update').modal('show');
+
+            var user_data = selected_row[0];
+            $('#modal-update-city-id').val(user_data[0]);
+            $('#modal-update-city-name').val(user_data[1]);
+            $('#modal-update-city-population').val(user_data[2]);
+
+            console.log(user_data);
+        }
+    });
+
+     // Update City
+    $('#modal-city-update-form').submit(function(){
+        var data = {
+            city_id: $('#modal-update-city-id').val(),
+            city_name: $('#modal-update-city-name').val(),
+            city_population: $('#modal-update-city-population').val()
+        };
+
+       $.ajax({
+           url: "/api/city/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-city').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+           },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
     // Update Country Button
     $('#update-country').click(function(){
 
@@ -285,7 +366,7 @@ $(function() {
         var data = {
             country_id: $('#modal-update-country-id').val(),
             country_name: $('#modal-update-country-name').val(),
-            country_population: $('#modal-update-country-population').val(),
+            country_population: $('#modal-update-country-population').val()
         };
 
        $.ajax({
@@ -455,6 +536,38 @@ $(document).ready(function() {
         return false;
     });
 
+    // City Add
+    $('#modal-city-add-form').submit(function() {
+        var user_data =
+            {
+                city_name: $('#modal-city-name').val(),
+                city_population: $('#modal-city-population').val()
+            };
+
+        $.ajax({
+            url: "/api/city/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-person').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
     // Country Add
     $('#modal-country-add-form').submit(function() {
         var user_data =
@@ -584,5 +697,39 @@ $(document).ready(function() {
             }
         });
         return false;
+    });
+});
+
+$(function(){
+    var google_map;
+
+    function initialize(coordinates) {
+        var marker = new google.maps.Marker({
+            position: coordinates
+        });
+
+      var mapProp = {
+            center: coordinates,
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        google_map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
+        marker.setMap(google_map);
+    }
+
+    $('#map-button').click(function(){
+        var header = $( this).parent().parent().find("td:nth-child(2)").text();
+        var coordinates = $( this ).parent().parent().find("td:nth-child(4)").text();
+
+        var loc = coordinates.split(",");
+
+        var lat = loc[0];
+        var long = loc[1];
+        $('#map-modal-header').append(header);
+        $('#map-modal').on('shown.bs.modal', function(){
+            initialize(new google.maps.LatLng(lat,long));
+            google.maps.event.trigger(google_map, 'resize');
+        });
     });
 });
