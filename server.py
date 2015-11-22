@@ -718,6 +718,26 @@ def api_add_stadium():
     return jsonify({'result': result})
 
 
+@app.route('/api/stadium/update', methods=['POST'])
+def api_update_stadium():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get stadium from db #
+    stadium_obj = stadiums.Stadium()
+    stadium_obj.get_stadium_by_id(json_data['stadium_id'])
+
+    # Update stadium object's values #
+    stadium_obj.name = json_data['stadium_name']
+    stadium_obj.team = json_data['stadium_team']
+    stadium_obj.location = json_data['stadium_location']
+    stadium_obj.capacity = json_data['stadium_capacity']
+
+    # Update db #
+    result = stadium_obj.update_db()
+
+    return jsonify({'result': result})
+
+
 @app.route('/api/stadium/delete', methods=['POST'])
 def api_delete_stadium():
     # Prevent unauthorized access #

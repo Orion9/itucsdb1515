@@ -107,7 +107,6 @@ class Stadium(object):
             connection.commit()
             new_location = cursor.fetchone()
 
-
             cursor.execute(statement, (self.name, new_team, new_location, self.capacity))
             connection.commit()
             status = True
@@ -138,4 +137,32 @@ class Stadium(object):
         connection.close()
         return status
 
+    def update_db(self):
+        connection = db_connect()
+        cursor = connection.cursor()
 
+        select_team = """SELECT team_id FROM team WHERE team_name = %s"""
+        select_location = """SELECT city_id FROM city WHERE city_name = %s"""
+
+        statement = """UPDATE stadium
+                       SET stadium_name=%s, stadium_team=%s, stadium_location=%s, stadium_capacity=%s
+                       WHERE stadium_id=%s"""
+        try:
+            cursor.execute(select_team, (self.team,))
+            connection.commit()
+            new_team = cursor.fetchone()
+
+            cursor.execute(select_location, (self.location,))
+            connection.commit()
+            new_location = cursor.fetchone()
+
+            cursor.execute(statement, (self.name, new_team, new_location, self.capacity, self.id))
+            connection.commit()
+            status = True
+        except connection.Error:
+            connection.rollback()
+            status = False
+
+        cursor.close()
+        connection.close()
+        return status

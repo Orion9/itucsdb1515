@@ -177,13 +177,6 @@ class Sponsorship(object):
             connection.commit()
             new_person = cursor.fetchone()
 
-            print(self.id)
-            print(self.name)
-            print(self.start_date)
-            print(new_league)
-            print(new_team)
-            print(new_person)
-
             cursor.execute(statement, (self.name, self.start_date, new_league, new_team, new_person, self.id))
             connection.commit()
             status = True

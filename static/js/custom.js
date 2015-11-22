@@ -566,6 +566,62 @@ $(function() {
            }
        });
        });
+
+       // Update Stadium Button
+    $('#update-rows-button-stadium').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-stadium-update').modal('show');
+
+            var user_data = selected_row[0];
+            $('#modal-update-stadium-id').val(user_data[0]);
+            $('#modal-update-stadium-name').val(user_data[1]);
+            $('#modal-update-stadium-team').val(user_data[2]);
+            $('#modal-update-stadium-location').val(user_data[3]);
+            $('#modal-update-stadium-capacity').val(user_data[4]);
+
+            console.log(user_data);
+        }
+    });
+
+     // Update Stadium
+    $('#modal-update-form-stadium').submit(function(event){
+        event.preventDefault();
+        var data = {
+            stadium_id: $('#modal-update-stadium-id').val(),
+            stadium_name: $('#modal-update-stadium-name').val(),
+            stadium_team: $('#modal-update-stadium-team').val(),
+            stadium_location: $('#modal-update-stadium-location').val(),
+            stadium_capacity: $('#modal-update-stadium-capacity').val()
+        };
+
+       $.ajax({
+           url: "/api/stadium/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-stadium').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+           },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+       });
 } );
 
 // Hides alert. Prevents them to be destroyed from DOM.
