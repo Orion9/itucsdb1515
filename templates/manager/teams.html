@@ -79,7 +79,9 @@
                         <option value="none">None</option>
                         {% if people %}
                             {% for person in people %}
+                            {% if (person['type'] == "Coach" or person['type'] == "Couch")  %}
                             <option>{{ person['name'] }}</option>
+                            {% endif %}
                             {% endfor %}
                         {% endif %}
                     </select>
