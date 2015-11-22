@@ -51,6 +51,34 @@ $(function() {
         }
     });
 
+    $('#map-button').click(function(){
+        var element = $('#map-modal');
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0) {
+            $('#op-update-error-alert').show();
+        } else {
+            element.modal('show');
+            var user_data = selected_row[0];
+
+            var coordinates = user_data[3];
+            element.on('shown.bs.modal', function (){
+                var iframes = $('iframe');
+                for (var i = 0; i < iframes.length; i++) {
+                    iframes[i].parentNode.removeChild(iframes[i]);
+                }
+
+                var innerHtml = '<iframe width="560" height="450" frameborder="0" style="border:0" ' +
+                    'src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCZGB4LyytNSiSk3hsmIrgM0ikaOO3NMUs&q=' +
+                    coordinates + '&zoom=8" allowfullscreen> </iframe>';
+                var map_element = document.getElementById("map-canvas");
+                map_element.insertAdjacentHTML('beforeend', innerHtml)
+            });
+
+            console.log(user_data[3]);
+        }
+    });
+
     // Delete Person
     $('#delete-rows-button').click(function(){
 
@@ -700,45 +728,3 @@ $(document).ready(function() {
     });
 });
 
-$(function(){
-    var google_map;
-
-    function initialize(coordinates) {
-        var marker = new google.maps.Marker({
-            position: coordinates
-        });
-
-      var mapProp = {
-            center: coordinates,
-            zoom: 10,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        google_map = new google.maps.Map(document.getElementById("map-canvas"), mapProp);
-        marker.setMap(google_map);
-    }
-
-    $('#map-button').click(function(){
-        var header = $( this).parent().parent().find("td:nth-child(2)").text();
-        var coordinates = $( this ).parent().parent().find("td:nth-child(4)").text();
-
-        var loc = coordinates.split(",");
-
-        var lat = loc[0];
-        var long = loc[1];
-
-        var element = $('#map-modal');
-        var head = $('#map-modal-header');
-
-        head.append(header);
-
-        element.on('shown.bs.modal', function(){
-            initialize(new google.maps.LatLng(lat,long));
-            google.maps.event.trigger(google_map, 'resize');
-        });
-
-        element.on('hide.bs.modal', function(){
-            head.find("h4").remove();
-        });
-    });
-});
