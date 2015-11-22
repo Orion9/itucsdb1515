@@ -25,9 +25,9 @@ class Sponsorship(object):
         cursor = connection.cursor()
 
         if get_id is not None:
-            statement = """SELECT s.sponsorship_id, s.sponsorship_name, s.sponsorship_start_date,
-                            s.sponsorship_league, s.sponsorship_team, s.sponsorship_person,
-                            person.person_name FROM sponsorship AS s
+            statement = """SELECT sponsorship.sponsorship_id, sponsorship.sponsorship_name, sponsorship.sponsorship_start_date,
+                            sponsorship.sponsorship_league, sponsorship.sponsorship_team, sponsorship.sponsorship_person,
+                            person.person_name FROM sponsorship
                             LEFT OUTER JOIN league ON league.league_id = sponsorship.sponsorship_league
                             LEFT OUTER JOIN team ON team.team_id = sponsorship.sponsorship_team
                             LEFT OUTER JOIN person ON person.person_id = sponsorship.sponsorship_person
@@ -146,4 +146,52 @@ class Sponsorship(object):
         connection.close()
         return status
 
+    def update_db(self):
+        connection = db_connect()
+        cursor = connection.cursor()
+        status = False
+
+        new_league = None
+        new_team = None
+        new_person = None
+
+        select_league = """SELECT league_id FROM league WHERE league_name = %s"""
+        select_team = """SELECT team_id FROM team WHERE team_name = %s"""
+        select_person = """SELECT person_id FROM person WHERE person_name = %s"""
+
+        statement = """UPDATE sponsorship
+                       SET sponsorship_name=%s, sponsorship_start_date=%s, sponsorship_league=%s,
+                       sponsorship_team=%s, sponsorship_person=%s
+                       WHERE sponsorship_id=%s"""
+
+        try:
+            cursor.execute(select_league, (self.league,))
+            connection.commit()
+            new_league = cursor.fetchone()
+
+            cursor.execute(select_team, (self.team,))
+            connection.commit()
+            new_team = cursor.fetchone()
+
+            cursor.execute(select_person, (self.person,))
+            connection.commit()
+            new_person = cursor.fetchone()
+
+            print(self.id)
+            print(self.name)
+            print(self.start_date)
+            print(new_league)
+            print(new_team)
+            print(new_person)
+
+            cursor.execute(statement, (self.name, self.start_date, new_league, new_team, new_person, self.id))
+            connection.commit()
+            status = True
+        except connection.Error:
+            connection.rollback()
+            status = False
+
+        cursor.close()
+        connection.close()
+        return status
 

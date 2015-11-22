@@ -504,6 +504,68 @@ $(function() {
            }
        });
     });
+
+    // Update Sponsorship Button
+    $('#update-rows-button-sponsorship').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-sponsorship-update').modal('show');
+
+            var user_data = selected_row[0];
+            $('#modal-update-sponsorship-id').val(user_data[0]);
+            $('#modal-update-sponsorship-name').val(user_data[1]);
+
+            var date_array = user_data[2].split('/');
+            var date = date_array[2] + "-" + date_array[1] + "-" + date_array[0];
+
+            $('#modal-update-sponsorship-start-date').val(date);
+            $('#modal-update-sponsorship-league').val(user_data[3]);
+            $('#modal-update-sponsorship-team').val(user_data[4]);
+            $('#modal-update-sponsorship-person').val(user_data[5]);
+
+            console.log(user_data);
+        }
+    });
+
+     // Update Sponsorship
+    $('#modal-update-form-sponsorship').submit(function(event){
+        event.preventDefault();
+        var data = {
+            sponsorship_id: $('#modal-update-sponsorship-id').val(),
+            sponsorship_name: $('#modal-update-sponsorship-name').val(),
+            sponsorship_start_date: $('#modal-update-sponsorship-start-date').val(),
+            sponsorship_league: $('#modal-update-sponsorship-league').val(),
+            sponsorship_team: $('#modal-update-sponsorship-team').val(),
+            sponsorship_person: $('#modal-update-sponsorship-person').val()
+        };
+
+       $.ajax({
+           url: "/api/sponsorship/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-sponsorship').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+           },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+       });
 } );
 
 // Hides alert. Prevents them to be destroyed from DOM.

@@ -52,7 +52,7 @@
                     <li><a href="#" data-toggle="modal" data-target="#add-new-sponsorship">Add New Sponsorship</a></li>
                 </ul>
             </div>
-
+            <button class="btn btn-primary" href="#" id="update-rows-button-sponsorship">Update Selected Row</button>
             <button class="btn btn-primary" href="#" id="delete-rows-button-sponsorship">Delete Selected Row(s)</button>
         </div>
     </div>
@@ -139,5 +139,93 @@
       </div>
     </div>
     <!-- End modal form -->
+
+    <!-- Start Update Modal Form -->
+    <div class="modal fade" id="modal-sponsorship-update" tabindex="-1" role="dialog" aria-labelledby="update-sponsorship-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal" id="close-update-sponsorship" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+
+            <h4 class="modal-title" id="update-sponsorship-title">Update Sponsorship</h4>
+
+          </div>
+
+        <form id="modal-update-form-sponsorship" action="#" method="post">
+          <div class="modal-body">
+
+                <div class="form-group">
+                    <input type="hidden" id="modal-update-sponsorship-id">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input id="modal-update-sponsorship-name" type="text" name="sponsorship_name"
+                           class="form-control" placeholder="Sponsorship Name" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input id="modal-update-sponsorship-start-date" type="date" name="sponsorship_tart_date"
+                           class="form-control" placeholder="Sponsorship Start Date" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <select id="modal-update-sponsorship-league" class="form-control">
+                            <option value="none">None</option>
+                            {% if leagues %}
+                                {% for league in leagues %}
+                                <option>{{ league['name'] }}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <select id="modal-update-sponsorship-team" class="form-control">
+                            <option value="none">None</option>
+                            {% if teams %}
+                                {% for team in teams %}
+                                <option>{{ team['name'] }}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <select id="modal-update-sponsorship-person" class="form-control">
+                            <option value="none">None</option>
+                            {% if people %}
+                                {% for person in people %}
+                                <option>{{ person['name'] }}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button-update" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!--- End Update Modal Form -->
 
 {% endblock %}

@@ -625,6 +625,27 @@ def api_add_sponsorship():
     return jsonify({'result': result})
 
 
+@app.route('/api/sponsorship/update', methods=['POST'])
+def api_update_sponsorship():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get sponsorship from db #
+    sponsorship_obj = sponsorships.Sponsorship()
+    sponsorship_obj.get_sponsorship_by_id(json_data['sponsorship_id'])
+
+    # Update sponsorship object's values #
+    sponsorship_obj.name = json_data['sponsorship_name']
+    sponsorship_obj.start_date = json_data['sponsorship_start_date']
+    sponsorship_obj.league = json_data['sponsorship_league']
+    sponsorship_obj.team = json_data['sponsorship_team']
+    sponsorship_obj.person = json_data['sponsorship_person']
+
+    # Update db #
+    result = sponsorship_obj.update_db()
+
+    return jsonify({'result': result})
+
+
 @app.route('/api/sponsorship/delete', methods=['POST'])
 def api_delete_sponsorship():
     # Prevent unauthorized access #

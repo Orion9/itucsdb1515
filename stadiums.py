@@ -24,11 +24,11 @@ class Stadium(object):
         cursor = connection.cursor()
 
         if get_id is not None:
-            statement = """SELECT s.stadium_id, s.stadium_name, s.stadium_team,
-                            s.stadium_location, s.stadium_capacity,
+            statement = """SELECT stadium.stadium_id, stadium.stadium_name, stadium.stadium_team,
+                            stadium.stadium_location, stadium.stadium_capacity,
                             team.team_id, team.team_name,
-                            city.league_id, city.city_name
-                            FROM stadium AS s
+                            city.city_id, city.city_name
+                            FROM stadium
                             LEFT OUTER JOIN team ON team.team_id = stadium.stadium_team
                             LEFT OUTER JOIN city ON city.city_id = stadium.stadium_location
                             WHERE stadium_id = %s"""
