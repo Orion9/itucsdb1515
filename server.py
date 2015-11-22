@@ -110,10 +110,20 @@ def manage_sponsorships():
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
     # Create empty sponsorship and get all data from db #
+    sponsorship = sponsorships.Sponsorship()
+    sponsorships_data = sponsorship.get_sponsorship_by_id()
+
+    league_obj = league.League()
+    league_data = league_obj.get_league_by_id()
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
     person_obj = people.Person()
     people_data = person_obj.get_person_by_id()
 
-    return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, people=people_data)
+
+    return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, leagues=league_data, teams= team_data, people=people_data)
 
 
 @app.route('/countries')
