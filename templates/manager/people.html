@@ -91,7 +91,7 @@
                     <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
                     <select class="form-control" id="modal-person-bplace" required>
                         {% for city in cities %}
-                        <option>{{ city[0] }}</option>
+                        <option>{{ city['name'] }}</option>
                         {% endfor %}
                       </select>
                 </div>

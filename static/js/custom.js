@@ -726,10 +726,19 @@ $(function(){
 
         var lat = loc[0];
         var long = loc[1];
-        $('#map-modal-header').append(header);
-        $('#map-modal').on('shown.bs.modal', function(){
+
+        var element = $('#map-modal');
+        var head = $('#map-modal-header');
+
+        head.append(header);
+
+        element.on('shown.bs.modal', function(){
             initialize(new google.maps.LatLng(lat,long));
             google.maps.event.trigger(google_map, 'resize');
+        });
+
+        element.on('hide.bs.modal', function(){
+            head.find("h4").remove();
         });
     });
 });

@@ -41,7 +41,7 @@ class City(object):
                         'population':  city[3]
                     }
                 )
-            print(data)
+            # print(data)
 
             cursor.close()
             conn.close()
@@ -128,12 +128,12 @@ class City(object):
         # Get geocode using Google Maps API #
         url = "https://maps.googleapis.com/maps/api/geocode/json"
         params = {'sensor': 'false', 'address': self.name, 'key': 'AIzaSyCZGB4LyytNSiSk3hsmIrgM0ikaOO3NMUs'}
-        print(params)
+        # print(params)
 
         respond = requests.get(url, params=params)
 
         respond_data = respond.json()
-        print(respond_data)
+        # print(respond_data)
 
         result_data = respond_data['results']
         location = result_data[0]['geometry']['location']
