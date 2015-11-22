@@ -80,8 +80,8 @@ $(function() {
     });
 
     // Delete Person
-    $('#delete-rows-button').click(function(){
-
+    $('#delete-rows-button').click(function(event){
+        event.preventDefault();
         var data = [];
         var selected_rows = glorious_table.rows('.selected').data();
         for (var i = 0; i < selected_rows.length; ++i) {
@@ -110,8 +110,8 @@ $(function() {
     });
 
     // Delete City
-    $('#delete-cities-button').click(function(){
-
+    $('#delete-cities-button').click(function(event){
+        event.preventDefault();
         var data = [];
         var selected_rows = glorious_table.rows('.selected').data();
         for (var i = 0; i < selected_rows.length; ++i) {
@@ -290,8 +290,8 @@ $(function() {
     });
 
     // Update Person Button
-    $('#update-rows-button').click(function(){
-
+    $('#update-rows-button').click(function(event){
+        event.preventDefault();
         var selected_row = glorious_table.rows('.selected').data();
         if (selected_row.length > 1 || selected_row.length === 0)
         {
@@ -317,7 +317,8 @@ $(function() {
     });
 
     // Update Person
-    $('#modal-update-form').submit(function(){
+    $('#modal-update-form').submit(function(event){
+        event.preventDefault();
         var data = {
             person_id: $('#modal-update-person-id').val(),
             person_name: $('#modal-update-person-name').val(),
@@ -336,13 +337,14 @@ $(function() {
                 if ( json.result ) {
                     $('#op-main-success-alert').show();
                     $('#modal-update-person').modal('hide');
+
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();
                 }
                 console.log( json );
             },
-           error: function( ) {
+           error: function() {
                 console.log( "TROUBLE!" );
            }
        });
@@ -370,7 +372,8 @@ $(function() {
     });
 
      // Update City
-    $('#modal-city-update-form').submit(function(){
+    $('#modal-city-update-form').submit(function(event){
+        event.preventDefault();
         var data = {
             city_id: $('#modal-update-city-id').val(),
             city_name: $('#modal-update-city-name').val(),
@@ -400,8 +403,8 @@ $(function() {
     });
 
     // Update Country Button
-    $('#update-country').click(function(){
-
+    $('#update-country').click(function(event){
+        event.preventDefault();
         var selected_row = glorious_table.rows('.selected').data();
         if (selected_row.length > 1 || selected_row.length === 0)
         {
@@ -420,7 +423,8 @@ $(function() {
     });
 
     // Update Country
-    $('#modal-country-update-form').submit(function(){
+    $('#modal-country-update-form').submit(function(event){
+        event.preventDefault();
         var data = {
             country_id: $('#modal-update-country-id').val(),
             country_name: $('#modal-update-country-name').val(),
