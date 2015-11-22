@@ -10,8 +10,8 @@
 from config import db_connect
 
 class League (object):
-    def __init__(self, league_name=None, league_country=None, league_start_date=None, 
-                league_id=None):
+    def __init__(self, league_name=None, league_country=None,
+                 league_start_date=None, league_id=None):
         self.id = league_id
         self.name = league_name
         self.start_date = league_start_date
@@ -23,7 +23,7 @@ class League (object):
 
         if get_id is not None:
             query = """SELECT * FROM league
-                                JOIN country ON country.country_id = leauge.league_country
+                                JOIN country ON country.country_id = league.league_country
                                 WHERE league_id = %s"""
             try:
                 cursor.execute(query, (get_id,))
@@ -60,13 +60,13 @@ class League (object):
 
             array = []
             data = cursor.fetchall()
-            for person in data:
+            for league in data:
                 array.append(
                     {
                         'id': league[0],
                         'name': league[1],
-                        'start_date': person[3].strftime('%d/%m/%Y'),
-                        'country': person[5]                     
+                        'start_date': league[3].strftime('%d/%m/%Y'),
+                        'country': league[5]
                     }
                 )
 
@@ -80,19 +80,19 @@ class League (object):
         cursor = connection.cursor()
         
         # query to get referenced country by its id
-        query_country = """SELECT id FROM country
+        query_country = """SELECT country_id FROM country
                                 WHERE country_name = %s"""
                              
         # query to add given league tuple to database                     
-        query = """INSERT INTO league (league_name, league_start_date, league_country, league_team_number)
-                        VALUES (%s, %s, %s, %s)""" 
+        query = """INSERT INTO league (league_name, league_country, league_start_date)
+                        VALUES (%s, %s, %s)"""
 
         try:
-            cursor.execute(query_country, (self.country))
+            cursor.execute(query_country, (self.country,))
             connection.commit()
             country_id = cursor.fetchone()
             
-            cursor.execute(query,(self.name, self.start_date, country_id, self.team_count))
+            cursor.execute(query, (self.name, country_id, self.start_date,))
             connection.commit()
             status = True
 
@@ -132,7 +132,7 @@ class League (object):
 
         query_country = """SELECT country_id FROM country WHERE country_name=%s"""
         query = """UPDATE league
-                   SET league_name=%s, league_start_date=%s, league_country=%s
+                   SET league_name=%s, league_country=%s, league_start_date=%s
                    WHERE league_id=%s"""
 
         try:
@@ -140,7 +140,7 @@ class League (object):
             connection.commit()
             country_id = cursor.fetchone()
 
-            cursor.execute(query, (self.name, self.start_date, country_id, self.id,))
+            cursor.execute(query, (self.name, country_id, self.start_date, self.id,))
             connection.commit()
             status = True
         except connection.Error as error:

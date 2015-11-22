@@ -13,7 +13,7 @@ from passlib.hash import bcrypt
 
 
 class User(object):
-    def __init__(self, user_alias, user_email, user_pass, is_admin=False, user_id=None):
+    def __init__(self, user_alias=None, user_email=None, user_pass=None, is_admin=False, user_id=None):
         self.id = user_id
         self.alias = user_alias
         self.email = user_email

@@ -6,8 +6,8 @@
 # Furkan Akgun 150130106      #
 # Emine Oyku Bozkir 150120017 #
 ###############################
-
 from config import db_connect
+
 
 class Country (object):
     def __init__(self, country_name=None, country_population=None, country_id=None):
@@ -70,8 +70,6 @@ class Country (object):
                 print(error)
                 connection.rollback()
 
-            
-
     def add_to_db(self):
         connection = db_connect()
         cursor = connection.cursor()
@@ -120,7 +118,7 @@ class Country (object):
         cursor = connection.cursor()
         
         query = """UPDATE country
-                   SET country_name=%s, county_population=%s
+                   SET country_name=%s, country_population=%s
                    WHERE country_id=%s"""
 
         try:
@@ -134,4 +132,5 @@ class Country (object):
         finally:
             cursor.close()
             connection.close()
-            return status
+
+        return status

@@ -20,7 +20,7 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>Sponsorship ID</th>
+                        <th hidden>Sponsorship ID</th>
                         <th>Sponsor Name</th>
                         <th>Sponsorship Start Date</th>
                         <th>Sponsored League</th>
@@ -31,7 +31,7 @@
                 <tbody id="glorious-table-body">
                 {% for sponsorship in sponsorships_data %}
                     <tr>
-                        <td>{{ sponsorship['id'] }}</td>
+                        <td hidden>{{ sponsorship['id'] }}</td>
                         <td>{{ sponsorship['name'] }}</td>
                         <td>{{ sponsorship['start_date'] }}</td>
                         <td>{{ sponsorship['league'] }}</td>

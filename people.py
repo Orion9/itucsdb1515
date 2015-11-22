@@ -40,7 +40,7 @@ class Person(object):
                 self.name = data[1]
                 self.birth_date = data[2]
                 self.birth_place = data[6]
-                self.type = data[9]
+                self.type = data[10]
 
                 cursor.close()
                 conn.close()
@@ -73,7 +73,7 @@ class Person(object):
                         'name': person[1],
                         'birth_date': person[2].strftime('%d/%m/%Y'),
                         'birth_place': person[6],
-                        'type':  person[9]
+                        'type':  person[10]
                     }
                 )
 
@@ -93,11 +93,11 @@ class Person(object):
                             VALUES (%s, %s, %s, %s)"""
 
         try:
-            cursor.execute(query_type,(self.type,))
+            cursor.execute(query_type, (self.type,))
             conn.commit()
             type_id = cursor.fetchone()
 
-            cursor.execute(query_city,(self.birth_place,))
+            cursor.execute(query_city, (self.birth_place,))
             conn.commit()
             city_id = cursor.fetchone()
 
@@ -165,41 +165,6 @@ class Person(object):
             cursor.close()
             conn.close()
             return status
-
-    def get_person(self, name=None):
-        conn = db_connect()
-        cursor = conn.cursor()
-
-        if name is None:
-            query = """SELECT person_name FROM person"""
-            try:
-                cursor.execute(query)
-                conn.commit()
-            except conn.Error as error:
-                print(error)
-
-            data = cursor.fetchall()
-
-            cursor.close()
-            conn.close()
-
-            return data
-
-        else:
-            query = """SELECT * FROM person WHERE person_name = %s"""
-
-            try:
-                cursor.execute(query, (name, ))
-                conn.commit()
-            except conn.Error as error:
-                print(error)
-
-            data = cursor.fetchone()
-
-            self.id = data[0]
-            self.name = data[1]
-
-            return self
 
 
 class PersonType(object):

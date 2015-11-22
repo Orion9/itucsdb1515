@@ -25,7 +25,7 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>League ID</th>
+                        <th hidden>League ID</th>
                         <th>League Name</th>
                         <th>League Country</th>
                         <th>League Start Date</th>
@@ -35,7 +35,7 @@
                 {% if league_data %}
                 {% for league in league_data %}
                     <tr>
-                        <td>{{ league['id'] }}</td>
+                        <td hidden>{{ league['id'] }}</td>
                         <td>{{ league['name'] }}</td>
                         <td>{{ league['country'] }}</td>
                         <td>{{ league['start_date'] }}</td>

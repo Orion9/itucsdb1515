@@ -20,7 +20,7 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>Team ID</th>
+                        <th hidden>Team ID</th>
                         <th>Team Name</th>
                         <th>Couch ID</th>
                     </tr>
@@ -28,7 +28,7 @@
                 <tbody id="glorious-table-body">
                 {% for team in team_data %}
                     <tr>
-                        <td>{{ team['id'] }}</td>
+                        <td hidden>{{ team['id'] }}</td>
                         <td>{{ team['name'] }}</td>
                         <td>{{ team['couch'] }}</td>
                     </tr>
