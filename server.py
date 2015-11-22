@@ -72,7 +72,7 @@ def manage_people():
     city_obj = cities.City()
     cities_data = city_obj.get_city_by_id()
 
-    print(people_data)
+    print(cities_data)
 
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
 
