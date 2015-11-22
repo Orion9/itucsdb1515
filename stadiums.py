@@ -27,7 +27,7 @@ class Stadium(object):
             statement = """SELECT s.stadium_id, s.stadium_name, s.stadium_team,
                             s.stadium_location, s.stadium_capacity,
                             team.team_id, team.team_name,
-                            city.league_id, city.city_name,
+                            city.league_id, city.city_name
                             FROM stadium AS s
                             LEFT OUTER JOIN team ON team.team_id = stadium.stadium_team
                             LEFT OUTER JOIN city ON city.city_id = stadium.stadium_location
@@ -55,11 +55,11 @@ class Stadium(object):
                 return None
 
         else:
-            statement = """SELECT s.stadium_id, s.stadium_name, s.stadium_team,
-                            s.stadium_location, s.stadium_capacity,
+            statement = """SELECT stadium.stadium_id, stadium.stadium_name, stadium.stadium_team,
+                            stadium.stadium_location, stadium.stadium_capacity,
                             team.team_id, team.team_name,
-                            city.city_id, city.city_name,
-                            FROM stadium AS s
+                            city.city_id, city.city_name
+                            FROM stadium
                             LEFT OUTER JOIN team ON team.team_id = stadium.stadium_team
                             LEFT OUTER JOIN city ON city.city_id = stadium.stadium_location"""
             try:
@@ -97,7 +97,7 @@ class Stadium(object):
 
         statement = """INSERT INTO stadium (stadium_name, stadium_team,
                         stadium_location, stadium_capacity )
-                        VALUES (%s, %s, %s, %s, %s)"""
+                        VALUES (%s, %s, %s, %s)"""
         try:
             cursor.execute(select_team, (self.team,))
             connection.commit()

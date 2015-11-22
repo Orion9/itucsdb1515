@@ -685,9 +685,9 @@ def api_add_stadium():
     # print(json_post_data)
     # Create a sponsor object #
     stadium_info = stadiums.Stadium(json_post_data['stadium_name'],
-                                                json_post_data['stadium_team'],
-                                                json_post_data['stadium_location'],
-                                                json_post_data['stadium_capacity'])
+                                    json_post_data['stadium_team'],
+                                    json_post_data['stadium_location'],
+                                    json_post_data['stadium_capacity'])
 
     # Add it to db and send result #
     result = stadium_info.add_to_db()

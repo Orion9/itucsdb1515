@@ -93,7 +93,7 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <select id="modal-stadium-city" class="form-control">
+                    <select id="modal-stadium-location" class="form-control">
                         <option value="none">None</option>
                         {% if cities %}
                             {% for city in cities %}
@@ -106,8 +106,8 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input id="modal-stadium-capacity" type="date" name="stadium_capacity"
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input id="modal-stadium-capacity" type="integer" name="stadium_capacity"
                        class="form-control" placeholder="Stadium Capacity" required>
                 </div>
               </div>
