@@ -11,6 +11,7 @@ import user
 import people
 import cities
 import sponsorships
+import stadiums
 import country
 import league
 import team
@@ -125,6 +126,32 @@ def manage_sponsorships():
 
     return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, leagues=league_data, teams= team_data, people=people_data)
 
+
+@app.route('/stadiums')
+def show_stadiums():
+    stadium_obj = stadiums.Stadium()
+    stadiums_data = stadium_obj.get_stadium_by_id()
+
+    return render_template("stadiums.html", stadiums_data=stadiums_data)
+
+
+@app.route('/manage/stadiums', methods=['GET', 'POST'])
+def manage_stadiums():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    # Create empty stadium and get all data from db #
+    stadium = stadiums.Stadium()
+    stadiums_data = stadium.get_stadium_by_id()
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    city_obj = cities.City()
+    cities_data = city_obj.get_city_by_id()
+
+
+    return render_template("manager/stadiums.html", stadiums_data=stadiums_data, teams= team_data, cities=cities_data)
 
 @app.route('/countries')
 def show_countries():
@@ -614,6 +641,78 @@ def api_delete_sponsorship():
 
     return jsonify({'result': status})
 # SPONSORSHIP - end #
+
+
+# STADIUM - start #
+@app.route('/api/stadium', methods=['GET'])
+def api_get_stadium_all():
+    # Create empty stadium then get all data from db #
+    stadium = stadiums.Stadium()
+    stadiums_data = stadium.get_stadium_by_id()
+    # jsonify function does not work for arrays #
+    stadiums_json = json.dumps(stadiums_data)
+
+    # Return JSON response. #
+    return Response(stadiums_json, mimetype="application/json")
+
+
+@app.route('/api/stadium/<int:data_id>', methods=['GET'])
+def api_get_stadium(data_id):
+    # Create empty stadium and fill it from db #
+    stadium_obj = stadiums.Stadium()
+    stadium_obj.get_stadium_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': stadium_obj.id,
+        'name': stadium_obj.name,
+        'team': stadium_obj.team,
+        'location': stadium_obj.location,
+        'capacity': stadium_obj.capacity
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/stadium/add', methods=['POST'])
+def api_add_stadium():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create a sponsor object #
+    stadium_info = stadiums.Stadium(json_post_data['stadium_name'],
+                                                json_post_data['stadium_team'],
+                                                json_post_data['stadium_location'],
+                                                json_post_data['stadium_capacity'])
+
+    # Add it to db and send result #
+    result = stadium_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/stadium/delete', methods=['POST'])
+def api_delete_stadium():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+    # Get request #
+    stadium_id_json = request.get_json()
+    # print(stadium_id_json)
+    # Delete every requested id #
+    for stadium_id in stadium_id_json:
+        stadium_obj = stadiums.Stadium()
+        stadium_obj.get_stadium_by_id(stadium_id)
+        status = stadium_obj.delete_from_db()
+
+    return jsonify({'result': status})
+# STADIUM - end #
 
 
 # COUNTRY - start #

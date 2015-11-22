@@ -259,6 +259,36 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Stadium
+    $('#delete-rows-button-stadium').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/stadium/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     // Update Person Button
     $('#update-rows-button').click(function(){
 
@@ -685,6 +715,40 @@ $(document).ready(function() {
                 } else {
                     $('#op-main-error-alert').show();
                     $('#add-new-sponsorship').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Stadium Add
+    $('#modal-add-form-stadium').submit(function() {
+        var user_data =
+            {
+                stadium_name: $('#modal-stadium-name').val(),
+                stadium_team: $('#modal-stadium-team').val(),
+                stadium_location: $('#modal-stadium-location').val(),
+                stadium_capacity: $('#modal-stadium-capacity').val()
+            };
+
+        $.ajax({
+            url: "/api/stadium/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-stadium').modal('hide');
                 }
                 console.log( json );
             },
