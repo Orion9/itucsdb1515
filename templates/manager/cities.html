@@ -14,12 +14,13 @@
             </div>
             <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Whoa!</strong> You choose too many people or you forgot to choose some one.
+                <strong>Whoa!</strong> You choose too many city or you forgot to choose some one.
             </div>
             <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>BAM! </strong> Your operation successfully completed.
             </div>
+
 
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
@@ -27,21 +28,19 @@
                         <th hidden>City ID</th>
                         <th>City Name</th>
                         <th>City Population</th>
-                        <th>City Location</th>
+                        <th hidden>City Coordinates</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
                 {% if cities_data %}
-                {% for city in cities_data %}
-                <tr>
-                	<td hidden>{{ city['id'] }}</td>
-                	<td id="city-name">{{ city['name'] }}</td>
-                	<td>{{ city['population'] }}</td>
-                    <td><a id="map-button" class="btn btn-default btn-xs" href="#">
-                        <span class="fa fa-map-marker"></span> Show Location
-                    </a> </td>
-                </tr>
-                {% endfor %}
+                    {% for city in cities_data %}
+                    <tr>
+                        <td hidden>{{ city['id'] }}</td>
+                        <td>{{ city['name'] }}</td>
+                        <td>{{ city['population'] }}</td>
+                        <td hidden>{{ city['coordinates'] }}</td>
+                    </tr>
+                    {% endfor %}
                 {% endif %}
                 </tbody>
             </table>
@@ -53,6 +52,9 @@
 
             <button class="btn btn-primary" href="#" id="update-cities-button">Update Selected Row</button>
             <button class="btn btn-primary" href="#" id="delete-cities-button">Delete Selected Row(s)</button>
+            <button class="btn btn-primary" href="#" id="map-button">
+                <span class="fa fa-map-marker"></span> Show Location
+            </button>
         </div>
     </div>
 
@@ -155,10 +157,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Location</h4>
+            <h4 class="modal-title" id="map-modal-header">Location</h4>
           </div>
-          <div class="modal-body">
-            <p>Let there will be light</p>
+          <div id="map-modal-body" class="modal-body">
+            <div id="map-canvas"></div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -167,6 +169,5 @@
 
       </div>
     </div>
-    <!-- End Map Modal -->
 
   {% endblock %}

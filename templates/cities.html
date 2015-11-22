@@ -11,6 +11,10 @@
             <a id = "send-to-manager" class="btn btn-default"
                {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
                     href="{% if session.logged_in %}{{ url_for('manage_cities') }}{% else %}#{% endif %}">Manage</a>
+
+            <button id="map-button" class="btn btn-default">
+                <span class="fa fa-map-marker"></span> Show Location
+            </button>
         </div>
 
         <div class="panel-body">
@@ -29,7 +33,6 @@
                         <th>City Name</th>
                         <th>City Population</th>
                         <th hidden>City Coordinates</th>
-                        <th>City Location</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
@@ -40,10 +43,6 @@
                         <td>{{ city['name'] }}</td>
                         <td>{{ city['population'] }}</td>
                         <td hidden>{{ city['coordinates'] }}</td>
-                        <td><button id="map-button" class="btn btn-default btn-xs"
-                                    data-toggle="modal" data-target="#map-modal">
-                            <span class="fa fa-map-marker"></span> Show Location
-                        </button> </td>
                     </tr>
                     {% endfor %}
                 {% endif %}
@@ -60,7 +59,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title" id="map-modal-header"></h4>
+            <h4 class="modal-title" id="map-modal-header">Location</h4>
           </div>
           <div id="map-modal-body" class="modal-body">
             <div id="map-canvas"></div>
