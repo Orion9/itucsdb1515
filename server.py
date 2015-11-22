@@ -94,7 +94,10 @@ def manage_teams():
     team_obj = team.Team()
     team_data = team_obj.get_team_by_id()
 
-    return render_template("manager/teams.html", team_data=team_data)
+    person_obj = people.Person()
+    people_data = person_obj.get_person_by_id()
+
+    return render_template("manager/teams.html", team_data=team_data, people=people_data)
 
 
 @app.route('/sponsorships')
@@ -123,7 +126,6 @@ def manage_sponsorships():
     person_obj = people.Person()
     people_data = person_obj.get_person_by_id()
 
-
     return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, leagues=league_data, teams= team_data, people=people_data)
 
 
@@ -150,8 +152,8 @@ def manage_stadiums():
     city_obj = cities.City()
     cities_data = city_obj.get_city_by_id()
 
-
     return render_template("manager/stadiums.html", stadiums_data=stadiums_data, teams= team_data, cities=cities_data)
+
 
 @app.route('/countries')
 def show_countries():

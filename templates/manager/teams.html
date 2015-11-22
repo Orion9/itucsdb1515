@@ -74,9 +74,15 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"></span>
-                    <input id="modal-team-couch" type="integer" name="team_couch"
-                       class="form-control" placeholder="Team Couch" required>
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select id="modal-team-couch" class="form-control">
+                        <option value="none">None</option>
+                        {% if people %}
+                            {% for person in people %}
+                            <option>{{ person['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
               </div>
 

@@ -20,8 +20,10 @@ class Team (object):
         cursor = connection.cursor()
 
         if get_id is not None:
-            query = """SELECT * FROM team
-                            WHERE team_id = %s"""
+            query = """SELECT t.team_id, t.team_name, t.team_couch,person.person_name
+                       FROM team AS t
+                       LEFT OUTER JOIN person ON person.person_id = t.team_couch
+                       WHERE team_id = %s"""
             try:
                 cursor.execute(query, (get_id,))
                 connection.commit()
@@ -45,9 +47,10 @@ class Team (object):
                 connection.rollback()
 
         else:
-            query = """SELECT * FROM team"""
+            query = """SELECT team.team_id, team.team_name,team.team_couch,person.person_id,person.person_name FROM team
+                       LEFT OUTER JOIN person ON person.person_id = team.team_couch"""
             try:
-                cursor.execute(query)
+                cursor.execute(query, (get_id,))
                 connection.commit()
 
                 array = []
@@ -57,9 +60,11 @@ class Team (object):
                         {
                             'id': team[0],
                             'name': team[1],
-                            'couch': team[2]
+                            'couch': team[4]
                         }
                         )
+
+                print(array)
 
                 cursor.close()
                 connection.close()
@@ -74,12 +79,20 @@ class Team (object):
         connection = db_connect()
         cursor = connection.cursor()
 
+        select_person = """SELECT person_id FROM person WHERE person_name = %s"""
+
+
+
         # query to add given team tuple to database
         query = """INSERT INTO team (team_name, team_couch)
                         VALUES (%s, %s)"""
 
         try:
-            cursor.execute(query,(self.name, self.couch))
+            cursor.execute(select_person, (self.couch,))
+            connection.commit()
+            new_person = cursor.fetchone()
+
+            cursor.execute(query, (self.name, new_person))
             connection.commit()
             status = True
 
