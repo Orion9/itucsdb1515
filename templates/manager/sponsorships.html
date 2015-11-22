@@ -91,8 +91,8 @@
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <select id="modal-sponsorship-league" class="form-control">
                         <option value="none">None</option>
-                        {% if league_data %}
-                            {% for league in league_data %}
+                        {% if leagues %}
+                            {% for league in leagues %}
                             <option>{{ league['name'] }}</option>
                             {% endfor %}
                         {% endif %}
@@ -105,8 +105,8 @@
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <select id="modal-sponsorship-team" class="form-control">
                         <option value="none">None</option>
-                        {% if team_data %}
-                            {% for team in team_data %}
+                        {% if teams %}
+                            {% for team in teams %}
                             <option>{{ team['name'] }}</option>
                             {% endfor %}
                         {% endif %}
