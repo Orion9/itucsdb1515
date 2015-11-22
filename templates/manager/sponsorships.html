@@ -89,24 +89,42 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                    <input id="modal-sponsorship-league" type="integer" name="sponsorship_league"
-                       class="form-control" placeholder="Sponsorship League" required>
+                    <select id="modal-sponsorship-league" class="form-control">
+                        <option value="none">None</option>
+                        {% if league_data %}
+                            {% for league in league_data %}
+                            <option>{{ league['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                    <input id="modal-sponsorship-team" type="integer" name="sponsorship_team"
-                       class="form-control" placeholder="Sponsorship Team" required>
+                    <select id="modal-sponsorship-team" class="form-control">
+                        <option value="none">None</option>
+                        {% if team_data %}
+                            {% for team in team_data %}
+                            <option>{{ team['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input id="modal-sponsorship-person" type="integer" name="sponsorship_person"
-                       class="form-control" placeholder="Sponsorship Person" required>
+                    <select id="modal-sponsorship-person" class="form-control">
+                        <option value="none">None</option>
+                        {% if people %}
+                            {% for person in people %}
+                            <option>{{ person['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
               </div>
 

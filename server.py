@@ -72,7 +72,7 @@ def manage_people():
     city_obj = cities.City()
     cities_data = city_obj.get_city_by_id()
 
-    print(cities_data)
+    #print(cities_data)
 
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
 
@@ -110,10 +110,10 @@ def manage_sponsorships():
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
     # Create empty sponsorship and get all data from db #
-    sponsorship = sponsorships.Sponsorship()
-    sponsorships_data = sponsorship.get_sponsorship_by_id()
+    person_obj = people.Person()
+    people_data = person_obj.get_person_by_id()
 
-    return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data)
+    return render_template("manager/sponsorships.html", sponsorships_data=sponsorships_data, people=people_data)
 
 
 @app.route('/countries')

@@ -25,7 +25,12 @@ class Sponsorship(object):
         cursor = connection.cursor()
 
         if get_id is not None:
-            statement = """SELECT * FROM sponsorship
+            statement = """SELECT s.sponsorship_id, s.sponsorship_name, s.sponsorship_start_date,
+                            s.sponsorship_league, s.sponsorship_team, s.sponsorship_person,
+                            person.person_name FROM sponsorship AS s
+                            LEFT OUTER JOIN league ON league.league_id = sponsorship.sponsorship_league
+                            LEFT OUTER JOIN team ON team.team_id = sponsorship.sponsorship_team
+                            LEFT OUTER JOIN person ON person.person_id = sponsorship.sponsorship_person
                             WHERE sponsorship_id = %s"""
             try:
                 cursor.execute(statement, (get_id,))
@@ -50,9 +55,17 @@ class Sponsorship(object):
                 return None
 
         else:
-            statement = """SELECT * FROM sponsorship"""
+            statement = """SELECT sponsorship.sponsorship_id, sponsorship.sponsorship_name,
+                            sponsorship.sponsorship_start_date, sponsorship.sponsorship_league,
+                            sponsorship.sponsorship_team, sponsorship.sponsorship_person,
+                            league.league_id, league.league_name,
+                            team.team_id, team.team_name,
+                            person.person_id, person.person_name FROM sponsorship
+                            LEFT OUTER JOIN league ON league.league_id = sponsorship.sponsorship_league
+                            LEFT OUTER JOIN team ON team.team_id = sponsorship.sponsorship_team
+                            LEFT OUTER JOIN person ON person.person_id = sponsorship.sponsorship_person"""
             try:
-                cursor.execute(statement)
+                cursor.execute(statement, (get_id,))
                 connection.commit()
             except connection.Error:
                 connection.rollback()
@@ -65,12 +78,12 @@ class Sponsorship(object):
                         'id': sponsorship[0],
                         'name': sponsorship[1],
                         'start_date': sponsorship[2].strftime('%d/%m/%Y'),
-                        'league': sponsorship[3],
-                        'team': sponsorship[4],
-                        'person': sponsorship[5]
+                        'league': sponsorship[7],
+                        'team': sponsorship[9],
+                        'person': sponsorship[11]
                     }
                 )
-            #print(sponsorship_array)
+            print(sponsorship_array)
             cursor.close()
             connection.close()
             return sponsorship_array
@@ -79,11 +92,31 @@ class Sponsorship(object):
         connection = db_connect()
         cursor = connection.cursor()
 
+        new_league = None
+        new_team = None
+        new_person = None
+
+        select_league = """SELECT league_id FROM league WHERE league_name = %s"""
+        select_team = """SELECT team_id FROM team WHERE team_name = %s"""
+        select_person = """SELECT person_id FROM person WHERE person_name = %s"""
+
         statement = """INSERT INTO sponsorship (sponsorship_name, sponsorship_start_date,
                         sponsorship_league, sponsorship_team, sponsorship_person )
                         VALUES (%s, %s, %s, %s, %s)"""
         try:
-            cursor.execute(statement, (self.name, self.start_date, self.league, self.team, self.person))
+            cursor.execute(select_league, (self.league,))
+            connection.commit()
+            new_league = cursor.fetchone()
+
+            cursor.execute(select_team, (self.team,))
+            connection.commit()
+            new_team = cursor.fetchone()
+
+            cursor.execute(select_person, (self.person,))
+            connection.commit()
+            new_person = cursor.fetchone()
+
+            cursor.execute(statement, (self.name, self.start_date, new_league, new_team, new_person))
             connection.commit()
             status = True
         except connection.Error:
