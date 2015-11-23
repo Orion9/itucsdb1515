@@ -26,12 +26,6 @@ app = Flask(__name__)
 app.secret_key = 'come_on_dude_it_is_a_secret'
 
 
-@app.before_first_request
-def new_test_user():
-    test = user.User("test", "test@test.com", "test")
-    test.add_user_to_db()
-
-
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('home.html')
