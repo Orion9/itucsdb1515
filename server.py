@@ -113,7 +113,7 @@ def show_sponsorships():
 def show_players():
     player_obj = player.Player()
     player_data = player_obj.get_player_by_id()
-    return render_template("players.html", team_data=player_data)
+    return render_template("players.html", player_data=player_data)
 
 
 @app.route('/manage/players', methods=['GET', 'POST'])
@@ -125,7 +125,16 @@ def manage_players():
     player_obj = player.Player()
     player_data = player_obj.get_player_by_id()
 
-    return render_template("manager/players.html", team_data=player_data, people=player_data)
+    person_obj = people.Person()
+    people_data = person_obj.get_person_by_id()
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    country_obj = country.Country()
+    country_data = country_obj.get_country_by_id()
+
+    return render_template("manager/players.html", player_data=player_data, people=people_data, team=team_data, country=country_data)
 
 
 @app.route('/manage/sponsorships', methods=['GET', 'POST'])
