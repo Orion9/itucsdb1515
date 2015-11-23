@@ -350,6 +350,58 @@ $(function() {
        });
     });
 
+    // Update Team Button
+    $('#update-teams-button').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-team-update').modal('show');
+
+            var user_data = selected_row[0];
+            $('#modal-update-team-id').val(user_data[0]);
+            $('#modal-update-team-name').val(user_data[1]);
+            $('#modal-update-team-couch').val(user_data[2]);
+
+            console.log(user_data);
+        }
+    });
+
+     // Update Team
+    $('#modal-team-update-form').submit(function(event){
+        event.preventDefault();
+        var data = {
+            team_id: $('#modal-update-team-id').val(),
+            team_name: $('#modal-update-team-name').val(),
+            team_couch: $('#modal-update-team-couch').val()
+        };
+
+       $.ajax({
+           url: "/api/team/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-team').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+           },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
     // Update City Button
     $('#update-cities-button').click(function(){
 

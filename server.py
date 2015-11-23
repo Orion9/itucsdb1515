@@ -535,6 +535,22 @@ def api_get_team_all():
     return Response(team_json, mimetype="application/json")
 
 
+@app.route('/api/team/<int:team_id>', methods=['GET'])
+def api_get_team(team_id):
+    # Create empty team and fill it from db #
+    team_obj = team.Team()
+    team_obj.get_team_by_id(team_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': team_obj.id,
+        'team_name': team_obj.name,
+        'team_couch': team_obj.couch,
+    }
+
+    return jsonify(data)
+
+
 @app.route('/api/team/add', methods=['POST'])
 def api_add_team():
     # Prevent unauthorized access #
@@ -544,7 +560,7 @@ def api_add_team():
     # Get request #
     json_post_data = request.get_json()
     # print(json_post_data)
-    # Create a person type object #
+    # Create a team type object #
     team_info = team.Team(json_post_data['team_name'], json_post_data['team_couch'])
     # Add it to db #
     result = team_info.add_to_db()
@@ -568,6 +584,24 @@ def api_delete_team():
         team_obj.get_team_by_id(team_id)
         status = team_obj.delete_from_db()
     return jsonify({'result': status})
+
+
+@app.route('/api/team/update', methods=['POST'])
+def api_update_team():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get team from db #
+    team_obj = team.Team()
+    team_obj.get_team_by_id(json_data['team_id'])
+
+    # Update team object's data values #
+    team_obj.name = json_data['team_name']
+    team_obj.couch = json_data['team_couch']
+
+    # Update db #
+    result = team_obj.update_db()
+
+    return jsonify({'result': result})
 # TEAM - end #
 
 

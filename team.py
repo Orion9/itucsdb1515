@@ -125,3 +125,30 @@ class Team (object):
         connection.close()
         return status
 
+    def update_db(self):
+        connection = db_connect()
+        cursor = connection.cursor()
+
+        select_person = """SELECT person_id FROM person WHERE person_name = %s"""
+
+        query = """UPDATE team
+                   SET team_name=%s, team_couch=%s
+                   WHERE team_id=%s"""
+
+        try:
+            cursor.execute(select_person, (self.couch,))
+            connection.commit()
+            person_id = cursor.fetchone()
+
+            cursor.execute(query, (self.name, person_id, self.id))
+            connection.commit()
+            status = True
+        except connection.Error as error:
+            print(error)
+            connection.rollback()
+            status = False
+
+        cursor.close()
+        connection.close()
+        return status
+

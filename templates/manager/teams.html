@@ -47,6 +47,7 @@
                   Add New Data
             </button>
 
+            <button class="btn btn-primary" href="#" id="update-teams-button">Update Selected Row</button>
             <button class="btn btn-primary" href="#" id="delete-rows-button-team">Delete Selected Row(s)</button>
         </div>
     </div>
@@ -98,6 +99,60 @@
         </div>
       </div>
     </div>
-    <!-- End modal form -->
+    <!-- End Add modal form -->
+
+    <!-- Modal Form For Update Screen -->
+    <div class="modal fade" id="modal-team-update" tabindex="-1" role="dialog" aria-labelledby="update-team-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal" id="close-update-team" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+
+            <h4 class="modal-title" id="update-team-title">Update Team</h4>
+
+          </div>
+
+        <form id="modal-team-update-form" action="#" method="post">
+          <div class="modal-body">
+
+              <div class="form-group">
+                <input type="hidden" id="modal-update-team-id">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input id="modal-update-team-name" type="text" name="team_name"
+                       class="form-control" placeholder="Team Name" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select class="form-control" id="modal-update-team-couch" required>
+                        <option value="none">None</option>
+                        {% if people %}
+                            {% for person in people %}
+                            {% if (person['type'] == "Coach" or person['type'] == "Couch")  %}
+                            <option>{{ person['name'] }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button-update" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!--- End Update Modal Form -->
 
   {% endblock %}
