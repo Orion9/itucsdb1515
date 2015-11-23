@@ -64,6 +64,8 @@ class Team (object):
                         }
                         )
 
+                print(array)
+
                 cursor.close()
                 connection.close()
 

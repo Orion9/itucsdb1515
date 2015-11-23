@@ -1,61 +1,62 @@
 {% extends "manager/layout.html" %}
-{% block title %}Players{% endblock %}
 {% set active_page = 'players' %}
+{% block title %}Players{% endblock %}
+
 {% block content %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            List of players registered in database
+            List of Players registered in database
         </div>
         <div class="panel-body">
-            <div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+        	<div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-error-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>Shame! <i>*rings bell*</i></strong> Something went wrong and your process could not be completed.
             </div>
             <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Whoa!</strong> You choose too many players or you forgot to choose some one.
+                <strong>Whoa!</strong> You choose too many people or you forgot to choose some one.
             </div>
             <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <strong>BAM! </strong> Your operation successfully completed.
             </div>
+
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th hidden>Player ID</th>
+                        <th>Player ID</th>
                         <th>Player Name</th>
                         <th>Player Team</th>
-                        <th>Player Goals</th>
+                        <th>Player Country</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
-                {% for player in players_data %}
-                    <tr>
-                        <td hidden>{{ player['id'] }}</td>
-                        <td>{{ player['name'] }}</td>
-                        <td>{{ player['team'] }}</td>
-                        <td>{{ player['goals'] }}</td>
-                    </tr>
+                {% if player_data %}
+                {% for player in player_data %}
+                <tr>
+                	<td>{{ player['id'] }}</td>
+                	<td>{{ player['name'] }}</td>
+                	<td>{{ player['team'] }}</td>
+                	<td>{{ player['country'] }}</td>
+                </tr>
                 {% endfor %}
+                {% endif %}
                 </tbody>
             </table>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Add New Data <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#" data-toggle="modal" data-target="#add-new-player">Add New Player</a></li>
-                </ul>
-            </div>
-            <button class="btn btn-primary" href="#" id="update-rows-button-player">Update Selected Row</button>
+
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                  data-toggle="modal" data-target="#add-new-player" aria-haspopup="true" aria-expanded="false">
+                  Add New Data
+            </button>
+
+            <button class="btn btn-primary" href="#" id="update-players-button">Update Selected Row</button>
             <button class="btn btn-primary" href="#" id="delete-rows-button-player">Delete Selected Row(s)</button>
         </div>
     </div>
 
     <!-- Modal form for Add Screen -->
-    <div class="modal fade" id="add-new-player" tabindex="-1" role="dialog"
-         aria-labelledby="add-new-player-label" aria-hidden="true">
+    <div class="modal fade" id="add-new-player" tabindex="-1" role="dialog" aria-labelledby="add-new-player-label"
+         aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -65,19 +66,28 @@
           </div>
         <form id="modal-add-form-player" action="#" method="post">
           <div class="modal-body">
-              <div class="form-group">
 
+              <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input id="modal-player-name" type="text" name="player_name"
-                       class="form-control" placeholder="Player Name" required>
+                    <select id="modal-player-name" class="form-control">
+                        <option value="none">Add New Player</option>
+                        {% if people %}
+                            {% for person in people %}
+                            {% if (person['type'] == "Player")  %}
+                            <option>{{ person['name'] }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
                     <select id="modal-player-team" class="form-control">
+                        <option value="none">Add Team</option>
                         {% if teams %}
                             {% for team in teams %}
                             <option>{{ team['name'] }}</option>
@@ -90,12 +100,18 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input id="modal-player-goals" type="integer" name="player_goals"
-                       class="form-control" placeholder="Player Goals" required>
+                    <select id="modal-player-country" class="form-control">
+                        <option value="none">Add Country</option>
+                        {% if countries %}
+                            {% for country in countries %}
+                            <option>{{ country['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
               </div>
 
-          </div>
+            </div>
 
               <div class="modal-footer">
                   <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
@@ -105,9 +121,9 @@
         </div>
       </div>
     </div>
-    <!-- End modal form -->
+    <!-- End Add modal form -->
 
-    <!-- Start Update Modal Form -->
+    <!-- Modal Form For Update Screen -->
     <div class="modal fade" id="modal-player-update" tabindex="-1" role="dialog" aria-labelledby="update-player-label"
          aria-hidden="true">
       <div class="modal-dialog">
@@ -121,42 +137,55 @@
 
           </div>
 
-        <form id="modal-update-form-player" action="#" method="post">
+        <form id="modal-player-update-form" action="#" method="post">
           <div class="modal-body">
 
-                <div class="form-group">
-                    <input type="hidden" id="modal-update-player-id">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <input id="modal-update-player-name" type="text" name="player_name"
-                           class="form-control" placeholder="Player Name" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                        <select id="modal-update-player-team" class="form-control">
-                            {% if teams %}
-                                {% for team in teams %}
-                                <option>{{ team['name'] }}</option>
-                                {% endfor %}
+              <div class="form-group">
+                <input type="hidden" id="modal-update-player-id">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <select id="modal-update-player-name" class="form-control">
+                        <option value="none">Change Player</option>
+                        {% if people %}
+                            {% for person in people %}
+                            {% if (person['type'] == "Player")  %}
+                            <option>{{ person['name'] }}</option>
                             {% endif %}
-                        </select>
-                    </div>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
+              </div>
 
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                        <input id="modal-update-player-goals" type="integer" name="player-goals"
-                           class="form-control" placeholder="Player Goals" required>
-                    </div>
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select class="form-control" id="modal-update-player-team" required>
+                        <option value="none">Change Team</option>
+                        {% if teams %}
+                            {% for team in teams %}
+                            <option>{{ team['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
                 </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select class="form-control" id="modal-update-player-country" required>
+                        <option value="none">Change Country</option>
+                        {% if countries %}
+                            {% for country in countries %}
+                            <option>{{ country['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+              </div>
 
             </div>
-
-
 
               <div class="modal-footer">
                   <button type="submit" id="form-submit-button-update" class="btn btn-default">Submit</button>
@@ -168,4 +197,4 @@
     </div>
     <!--- End Update Modal Form -->
 
-{% endblock %}
+  {% endblock %}
