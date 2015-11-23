@@ -9,22 +9,21 @@
 
 from config import db_connect
 
+
 class Player (object):
-    def __init__(self, player_name=None, player_team=None, player_country=None, player_age=None, player_id=None):
+    def __init__(self, player_name=None, player_team=None, player_country=None, player_id=None):
         self.id = player_id
         self.name = player_name
         self.team = player_team
         self.country = player_country
-        self.age = player_age
 
     def get_player_by_id(self, get_id=None):
         connection = db_connect()
         cursor = connection.cursor()
 
         if get_id is not None:
-            query = """SELECT p.player_id, p.player_name, p.player_team, p.player=country, p.player_age,
-                       person.person_name, team.team_name, country.country_name
-                       FROM player AS p
+            query = """SELECT p.player_id, p.player_name, p.player_team, p.player=country,
+                       person.person_name, team.team_name, country.country_name FROM player AS p
                        LEFT OUTER JOIN person ON person.person_id = p.player_name
                        LEFT OUTER JOIN team ON team.team_name = p.player_team
                        LEFT OUTER JOIN country ON country_name = p.player_country
@@ -39,7 +38,6 @@ class Player (object):
                     self.name = data[1]
                     self.team = data[2]
                     self.country = data[3]
-                    self.age = data[4]
                     cursor.close()
                     connection.close()
                     return self
@@ -54,7 +52,7 @@ class Player (object):
                 connection.rollback()
 
         else:
-            query = """SELECT player.player_id, player.player_name,player.player_team,player.player_country,player.player_age,
+            query = """SELECT player.player_id, player.player_name,player.player_team,player.player_country,
                        person.person_name, team.team_name, country.country_name
                        FROM team
                        LEFT OUTER JOIN person ON person.person_id = p.player_name
@@ -74,7 +72,6 @@ class Player (object):
                             'name': player[1],
                             'team': player[2],
                             'country': player[3],
-                            'age': player[4],
                         }
                         )
 
@@ -100,8 +97,8 @@ class Player (object):
 
 
         # query to add given team tuple to database
-        query = """INSERT INTO team (player_name, player_team, player_country, player_age)
-                        VALUES (%s, %s, %s, %s)"""
+        query = """INSERT INTO team (player_name, player_team, player_country)
+                        VALUES (%s, %s, %s)"""
 
         try:
             cursor.execute(select_person, (self.name,))
@@ -116,7 +113,7 @@ class Player (object):
             connection.commit()
             country_id = cursor.fetchone()
 
-            cursor.execute(query, (person_id, team_id, country_id, self.age, self.id))
+            cursor.execute(query, (person_id, team_id, country_id, self.id))
             connection.commit()
 
             status = True
@@ -160,7 +157,7 @@ class Player (object):
 
         query = """UPDATE player
                    SET player_name=%s, player_team=%s,
-                   player_country=%s, player_age=%s
+                   player_country=%s
                    WHERE team_id=%s"""
 
         try:
@@ -176,7 +173,7 @@ class Player (object):
             connection.commit()
             country_id = cursor.fetchone()
 
-            cursor.execute(query, (person_id, team_id, country_id, self.age, self.id))
+            cursor.execute(query, (person_id, team_id, country_id, self.id))
             connection.commit()
 
             status = True
