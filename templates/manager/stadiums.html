@@ -80,7 +80,6 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <select id="modal-stadium-team" class="form-control">
-                        <option value="none">None</option>
                         {% if teams %}
                             {% for team in teams %}
                             <option>{{ team['name'] }}</option>
@@ -94,7 +93,6 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                     <select id="modal-stadium-location" class="form-control">
-                        <option value="none">None</option>
                         {% if cities %}
                             {% for city in cities %}
                             <option>{{ city['name'] }}</option>
