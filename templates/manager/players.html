@@ -71,7 +71,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                     <select id="modal-player-name" class="form-control">
-                        <option value="none">None</option>
+                        <option value="none">Add New Player</option>
                         {% if people %}
                             {% for person in people %}
                             {% if (person['type'] == "Player")  %}
@@ -87,7 +87,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                     <select id="modal-player-team" class="form-control">
-                        <option value="none">None</option>
+                        <option value="none">Add Team</option>
                         {% if teams %}
                             {% for team in teams %}
                             <option>{{ team['name'] }}</option>
@@ -101,7 +101,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                     <select id="modal-player-country" class="form-control">
-                        <option value="none">None</option>
+                        <option value="none">Add Country</option>
                         {% if countries %}
                             {% for country in countries %}
                             <option>{{ country['name'] }}</option>
@@ -145,7 +145,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
                     <select id="modal-update-player-name" class="form-control">
-                        <option value="none">None</option>
+                        <option value="none">Change Player</option>
                         {% if people %}
                             {% for person in people %}
                             {% if (person['type'] == "Player")  %}
@@ -161,7 +161,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <select class="form-control" id="modal-update-player-team" required>
-                        <option value="none">None</option>
+                        <option value="none">Change Team</option>
                         {% if teams %}
                             {% for team in teams %}
                             <option>{{ team['name'] }}</option>
@@ -175,7 +175,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <select class="form-control" id="modal-update-player-country" required>
-                        <option value="none">None</option>
+                        <option value="none">Change Country</option>
                         {% if countries %}
                             {% for country in countries %}
                             <option>{{ country['name'] }}</option>

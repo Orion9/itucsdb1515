@@ -77,7 +77,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <select id="modal-team-couch" class="form-control">
-                        <option value="none">None</option>
+                        <option value="none">Choose Team Couch</option>
                         {% if people %}
                             {% for person in people %}
                             {% if (person['type'] == "Coach" or person['type'] == "Couch")  %}
@@ -131,7 +131,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
                     <select class="form-control" id="modal-update-team-couch" required>
-                        <option value="none">None</option>
+                        <option value="none">Change Couch</option>
                         {% if people %}
                             {% for person in people %}
                             {% if (person['type'] == "Coach" or person['type'] == "Couch")  %}
