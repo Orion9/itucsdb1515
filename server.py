@@ -15,7 +15,7 @@ import stadiums
 import country
 import league
 import team
-import player
+import players
 
 
 from config import *
@@ -111,9 +111,9 @@ def show_sponsorships():
 
 @app.route('/players')
 def show_players():
-    player_obj = player.Player()
-    player_data = player_obj.get_player_by_id()
-    return render_template("players.html", player_data=player_data)
+    player_obj = players.Player()
+    players_data = player_obj.get_player_by_id()
+    return render_template("players.html", players_data=players_data)
 
 
 @app.route('/manage/players', methods=['GET', 'POST'])
@@ -122,19 +122,13 @@ def manage_players():
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
 
-    player_obj = player.Player()
-    player_data = player_obj.get_player_by_id()
-
-    person_obj = people.Person()
-    people_data = person_obj.get_person_by_id()
+    player = players.Player()
+    players_data = player.get_player_by_id()
 
     team_obj = team.Team()
     team_data = team_obj.get_team_by_id()
 
-    country_obj = country.Country()
-    country_data = country_obj.get_country_by_id()
-
-    return render_template("manager/players.html", player_data=player_data, people=people_data, team=team_data, country=country_data)
+    return render_template("manager/players.html", players_data=players_data, teams=team_data)
 
 
 @app.route('/manage/sponsorships', methods=['GET', 'POST'])
@@ -638,26 +632,25 @@ def api_update_team():
 
 @app.route('/api/player', methods=['GET'])
 def api_get_player_all():
-    player_obj = player.Player()
-    player_data = player_obj.get_player_by_id()
-    player_json = json.dumps(player_data)
+    player = players.Player()
+    players_data = player.get_player_by_id()
+    players_json = json.dumps(players_data)
 
-    return Response(player_json, mimetype="application/json")
+    return Response(players_json, mimetype="application/json")
 
 
 @app.route('/api/player/<int:player_id>', methods=['GET'])
-def api_get_player(player_id):
+def api_get_player(data_id):
     # Create empty team and fill it from db #
-    player_obj = player.Player()
-    player_obj.get_player_by_id(player_id)
+    player_obj = players.Player()
+    player_obj.get_player_by_id(data_id)
 
     # Create a dict for jsonify #
     data = {
         'id': player_obj.id,
         'player_name': player_obj.name,
         'player_team': player_obj.team,
-        'player_country': player_obj.country,
-        'player_age': player_obj.age,
+        'player_goals': player_obj.goals,
     }
 
     return jsonify(data)
@@ -673,8 +666,8 @@ def api_add_player():
     json_post_data = request.get_json()
     # print(json_post_data)
     # Create a player type object #
-    player_info = player.Player(json_post_data['player_name'], json_post_data['player_team'],
-                                json_post_data['player_country'], json_post_data['player_age'])
+    player_info = players.Player(json_post_data['player_name'], json_post_data['player_team'],
+                                 json_post_data['player_goals'])
     # Add it to db #
     result = player_info.add_to_db()
 
@@ -682,7 +675,7 @@ def api_add_player():
 
 
 @app.route('/api/player/delete', methods=['POST'])
-def api_player_team():
+def api_delete_player():
     # Prevent unauthorized access #
     if not session.get('logged_in'):
         return jsonify({"result": "Unauthorized Access. Please identify yourself"})
@@ -693,7 +686,7 @@ def api_player_team():
     player_id_json = request.get_json()
 
     for player_id in player_id_json:
-        player_obj = player.Player()
+        player_obj = players.Player()
         player_obj.get_player_by_id(player_id)
         status = player_obj.delete_from_db()
     return jsonify({'result': status})
@@ -704,14 +697,13 @@ def api_update_player():
     # Get request from AJAX #
     json_data = request.get_json()
     # Get team from db #
-    player_obj = player.Player()
+    player_obj = players.Player()
     player_obj.get_player_by_id(json_data['player_id'])
 
     # Update team object's data values #
     player_obj.name = json_data['player_name']
     player_obj.team = json_data['player_team']
-    player_obj.country = json_data['player_country']
-    player_obj.age = json_data['player_age']
+    player_obj.goals = json_data['player_goals']
 
     # Update db #
     result = player_obj.update_db()

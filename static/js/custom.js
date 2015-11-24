@@ -289,6 +289,36 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Player
+    $('#delete-rows-button-player').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/player/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     // Update Person Button
     $('#update-rows-button').click(function(event){
         event.preventDefault();
@@ -618,6 +648,62 @@ $(function() {
            }
        });
        });
+       // Update Player Button
+    $('#update-rows-button-player').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-stadium-update').modal('show');
+
+            var user_data = selected_row[0];
+            $('#modal-update-player-id').val(user_data[0]);
+            $('#modal-update-player-name').val(user_data[1]);
+            $('#modal-update-player-team').val(user_data[2]);
+            $('#modal-update-player-goals').val(user_data[3]);
+
+            console.log(user_data);
+        }
+    });
+
+     // Update Player
+    $('#modal-update-form-player').submit(function(event){
+        event.preventDefault();
+        var data = {
+            player_id: $('#modal-update-player-id').val(),
+            player_name: $('#modal-update-player-name').val(),
+            player_team: $('#modal-update-player-team').val(),
+            player_goals: $('#modal-update-player-goals').val(),
+
+        };
+
+       $.ajax({
+           url: "/api/player/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-player').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+           },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+       });
+} );
+
 
        // Update Stadium Button
     $('#update-rows-button-stadium').click(function(){
@@ -923,6 +1009,39 @@ $(document).ready(function() {
                 } else {
                     $('#op-main-error-alert').show();
                     $('#add-new-stadium').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Player Add
+    $('#modal-add-form-player').submit(function() {
+        var user_data =
+            {
+                player_name: $('#modal-player-name').val(),
+                player_team: $('#modal-player-team').val(),
+                player_goals: $('#modal-player-goals').val(),
+            };
+
+        $.ajax({
+            url: "/api/player/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-player').modal('hide');
                 }
                 console.log( json );
             },
