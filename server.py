@@ -109,34 +109,6 @@ def show_sponsorships():
     return render_template("sponsorships.html", sponsorships_data=sponsorships_data)
 
 
-@app.route('/players')
-def show_players():
-    player_obj = player.Player()
-    player_data = player_obj.get_player_by_id()
-    return render_template("players.html", player_data=player_data)
-
-
-@app.route('/manage/players', methods=['GET', 'POST'])
-def manage_players():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-
-    player_obj = player.Player()
-    player_data = player_obj.get_player_by_id()
-
-    person_obj = people.Person()
-    people_data = person_obj.get_person_by_id()
-
-    team_obj = team.Team()
-    team_data = team_obj.get_team_by_id()
-
-    country_obj = country.Country()
-    country_data = country_obj.get_country_by_id()
-
-    return render_template("manager/players.html", player_data=player_data, people=people_data, team=team_data, country=country_data)
-
-
 @app.route('/manage/sponsorships', methods=['GET', 'POST'])
 def manage_sponsorships():
     if not session.get('logged_in'):
@@ -202,6 +174,29 @@ def manage_countries():
     country_data = country_obj.get_country_by_id()
 
     return render_template("manager/countries.html", country_data=country_data)
+
+
+@app.route('/players')
+def show_players():
+    player_obj = player.Player()
+    player_data = player_obj.get_player_by_id()
+
+    return render_template("players.html", player_data=player_data)
+
+
+@app.route('/manage/players', methods=['GET', 'POST'])
+def manage_players():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    player_obj = player.Player()
+    player_data = player_obj.get_player_by_id()
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    return render_template("manager/players.html", player_data=player_data, team_data=team_data)
 
 
 @app.route('/leagues')
@@ -633,91 +628,6 @@ def api_update_team():
     return jsonify({'result': result})
 # TEAM - end #
 
-# PLAYER - start #
-
-
-@app.route('/api/player', methods=['GET'])
-def api_get_player_all():
-    player_obj = player.Player()
-    player_data = player_obj.get_player_by_id()
-    player_json = json.dumps(player_data)
-
-    return Response(player_json, mimetype="application/json")
-
-
-@app.route('/api/player/<int:player_id>', methods=['GET'])
-def api_get_player(player_id):
-    # Create empty team and fill it from db #
-    player_obj = player.Player()
-    player_obj.get_player_by_id(player_id)
-
-    # Create a dict for jsonify #
-    data = {
-        'id': player_obj.id,
-        'player_name': player_obj.name,
-        'player_team': player_obj.team,
-        'player_country': player_obj.country,
-        'player_age': player_obj.age,
-    }
-
-    return jsonify(data)
-
-
-@app.route('/api/player/add', methods=['POST'])
-def api_add_player():
-    # Prevent unauthorized access #
-    if not session.get('logged_in'):
-        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
-
-    # Get request #
-    json_post_data = request.get_json()
-    # print(json_post_data)
-    # Create a player type object #
-    player_info = player.Player(json_post_data['player_name'], json_post_data['player_team'],
-                                json_post_data['player_country'], json_post_data['player_age'])
-    # Add it to db #
-    result = player_info.add_to_db()
-
-    return jsonify({'result': result})
-
-
-@app.route('/api/player/delete', methods=['POST'])
-def api_player_team():
-    # Prevent unauthorized access #
-    if not session.get('logged_in'):
-        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
-
-    status = False
-
-    # Get request #
-    player_id_json = request.get_json()
-
-    for player_id in player_id_json:
-        player_obj = player.Player()
-        player_obj.get_player_by_id(player_id)
-        status = player_obj.delete_from_db()
-    return jsonify({'result': status})
-
-
-@app.route('/api/player/update', methods=['POST'])
-def api_update_player():
-    # Get request from AJAX #
-    json_data = request.get_json()
-    # Get team from db #
-    player_obj = player.Player()
-    player_obj.get_player_by_id(json_data['player_id'])
-
-    # Update team object's data values #
-    player_obj.name = json_data['player_name']
-    player_obj.team = json_data['player_team']
-    player_obj.country = json_data['player_country']
-    player_obj.age = json_data['player_age']
-
-    # Update db #
-    result = player_obj.update_db()
-
-    return jsonify({'result': result})
-# PLAYER - end #
 
 # SPONSORSHIP - start #
 
@@ -1044,6 +954,73 @@ def api_update_league():
     return jsonify({'result': result})
 # LEAGUE - end #
 
+# Players - start #
+@app.route('/api/player', methods=['GET'])
+def api_get_player_all():
+    player_obj = player.Player()
+    player_data = player_obj.get_player_by_id()
+    player_json = json.dumps(player_data)
+
+    return Response(player_json, mimetype="application/json")
+
+
+@app.route('/api/player/add', methods=['POST'])
+def api_add_player():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    player_info = player.Player(json_post_data['player_name'], json_post_data['player_team'],
+                                json_post_data['player_goals'])
+
+    # Add it to db and send result #
+    result = player_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/player/delete', methods=['POST'])
+def api_delete_player():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    player_json = request.get_json()
+    # Deletes every object in the request from database
+    status = False
+    for player_id in player_json:
+        player_obj = player.Player()
+        player_obj.get_player_by_id(player_id)
+        status = player_obj.delete_from_db()
+
+    return jsonify({'result': status})
+
+
+@app.route('/api/player/update', methods=['POST'])
+def api_update_player():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_data = request.get_json()
+
+    player_obj = player.Player()
+    player_obj.get_player_by_id(json_data['player_id'])
+
+    # Update values #
+    player_obj.name = json_data['player_name']
+    player_obj.team = json_data['player_team']
+    player_obj.goals = json_data['player_goals']
+
+    # Update db #
+    result = player_obj.update_db()
+
+    return jsonify({'result': result})
+# Players end #
 
 if __name__ == '__main__':
     VCAP_SERVICES = os.getenv('VCAP_SERVICES')

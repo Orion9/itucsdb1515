@@ -69,6 +69,7 @@ class League (object):
                         'country': league[5]
                     }
                 )
+            print(array)
 
             cursor.close()
             connection.close()

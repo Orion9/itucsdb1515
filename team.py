@@ -63,9 +63,6 @@ class Team (object):
                             'couch': team[4]
                         }
                         )
-
-                print(array)
-
                 cursor.close()
                 connection.close()
 
