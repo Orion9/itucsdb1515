@@ -23,16 +23,16 @@
                         <th hidden>Player ID</th>
                         <th>Player Name</th>
                         <th>Player Team</th>
-                        <th>Player Goals</th>
+                        <th>Player Country</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
-                {% for player in players_data %}
+                {% for player in player_data %}
                     <tr>
                         <td hidden>{{ player['id'] }}</td>
                         <td>{{ player['name'] }}</td>
                         <td>{{ player['team'] }}</td>
-                        <td>{{ player['goals'] }}</td>
+                        <td>{{ player['country'] }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
