@@ -559,7 +559,9 @@ def api_add_penalty():
     # Add it to db and send result #
     result = penalty_info.add_to_db()
 
-    description = "Added penalty for" + json_post_data['person_name'] + " to Penalties"
+
+    log_person = people.Person().get_person_by_id(json_post_data['person_name'])
+    description = "Added penalty for" + log_person.name + " to Penalties"
     log_info = log.Log(description, session['alias'], datetime.datetime.now())
     log_status = log_info.add_to_db()
 
@@ -637,7 +639,8 @@ def api_delete_penalty():
         # print(person_id)
         status = penalty_obj.delete_from_db()
 
-        description = "Deleted penalty for " + penalty_obj.person + " from Penalties"
+        log_person = people.Person().get_person_by_id(penalty_obj.person)
+        description = "Deleted penalty for " + log_person.name + " from Penalties"
         log_info = log.Log(description, session['alias'], datetime.datetime.now())
         log_status = log_info.add_to_db()
 
