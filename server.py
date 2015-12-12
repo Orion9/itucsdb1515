@@ -450,6 +450,10 @@ def api_update_person():
     # Update db #
     result = person_obj.update_db()
 
+    description = "Updated element with id=" + json_data['person_id'] + " in Persons"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -559,9 +563,8 @@ def api_add_penalty():
     # Add it to db and send result #
     result = penalty_info.add_to_db()
 
-
     log_person = people.Person().get_person_by_id(json_post_data['person_name'])
-    description = "Added penalty for" + log_person.name + " to Penalties"
+    description = "Added penalty for " + log_person.name + " to Penalties"
     log_info = log.Log(description, session['alias'], datetime.datetime.now())
     log_status = log_info.add_to_db()
 
@@ -583,6 +586,10 @@ def api_update_penalty():
 
     # Update db #
     result = penalty_obj.update_db()
+
+    description = "Updated element with id=" + json_data['penalty_id'] + " in Penalties"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -703,6 +710,10 @@ def api_update_city():
     # Update db #
     result = city_obj.update_db()
 
+    description = "Updated element with id=" + json_data['city_id'] + " in Cities"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -815,6 +826,10 @@ def api_update_team():
     # Update db #
     result = team_obj.update_db()
 
+    description = "Updated element with id=" + json_data['team_id'] + " in Teams"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 # TEAM - end #
 
@@ -896,6 +911,10 @@ def api_update_sponsorship():
 
     # Update db #
     result = sponsorship_obj.update_db()
+
+    description = "Updated element with id=" + json_data['sponsorship_id'] + " in Sponsorships"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -997,6 +1016,10 @@ def api_update_stadium():
     # Update db #
     result = stadium_obj.update_db()
 
+    description = "Updated element with id=" + json_data['stadium_id'] + " in Stadiums"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -1096,6 +1119,10 @@ def api_update_country():
     # Update #
     result = country_obj.update_db()
 
+    description = "Updated element with id=" + json_data['country_id'] + " in Countries"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 # COUNTRY - end #
 
@@ -1173,6 +1200,10 @@ def api_update_league():
     # Update db #
     result = league_obj.update_db()
 
+    description = "Updated element with id=" + json_data['league_id'] + " in Leagues"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 # LEAGUE - end #
 
@@ -1248,6 +1279,10 @@ def api_update_player():
 
     # Update db #
     result = player_obj.update_db()
+
+    description = "Updated element with id=" + json_data['player_id'] + " in Players"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 # Players end #
