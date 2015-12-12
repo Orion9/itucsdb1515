@@ -739,7 +739,7 @@ $(function() {
 
     // Update Player Button
     $('#update-player').click(function(){
-
+        event.preventDefault();
         var selected_row = glorious_table.rows('.selected').data();
         if (selected_row.length > 1 || selected_row.length === 0)
         {
