@@ -15,6 +15,7 @@ import stadiums
 import country
 import league
 import team
+import team_stats
 import player
 import penalties
 import log
@@ -184,6 +185,32 @@ def manage_stadiums():
     cities_data = city_obj.get_city_by_id()
 
     return render_template("manager/stadiums.html", stadiums_data=stadiums_data, teams= team_data, cities=cities_data)
+
+
+@app.route('/team_stats')
+def show_team_stats():
+    team_stat_obj = team_stats.Team_stat()
+    team_stats_data = team_stat_obj.get_team_stat_by_id()
+
+    return render_template("team_stats.html", team_stats_data=team_stats_data)
+
+
+@app.route('/manage/team_stats', methods=['GET', 'POST'])
+def manage_team_stats():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+    # Create empty team_stat and get all data from db #
+    team_stat = team_stats.Team_stat()
+    team_stats_data = team_stat.get_team_stat_by_id()
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    city_obj = cities.City()
+    cities_data = city_obj.get_city_by_id()
+
+    return render_template("manager/team_stats.html", team_stats_data=team_stats_data, teams= team_data, cities=cities_data)
 
 
 @app.route('/countries')
@@ -1120,6 +1147,113 @@ def api_delete_stadium():
 
     return jsonify({'result': status})
 # STADIUM - end #
+
+
+# TEAM_STAT - start #
+@app.route('/api/team_stat', methods=['GET'])
+def api_get_team_stat_all():
+    # Create empty team_stat then get all data from db #
+    team_stat = team_stats.Team_stat()
+    team_stats_data = team_stat.get_team_stat_by_id()
+    # jsonify function does not work for arrays #
+    team_stats_json = json.dumps(team_stats_data)
+
+    # Return JSON response. #
+    return Response(team_stats_json, mimetype="application/json")
+
+
+@app.route('/api/team_stat/<int:data_id>', methods=['GET'])
+def api_get_team_stat(data_id):
+    # Create empty team_stat and fill it from db #
+    team_stat_obj = team_stats.Team_stat()
+    team_stat_obj.get_team_stat_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': team_stat_obj.id,
+        'name': team_stat_obj.name,
+        'team': team_stat_obj.team,
+        'location': team_stat_obj.location,
+        'capacity': team_stat_obj.capacity
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/team_stat/add', methods=['POST'])
+def api_add_team_stat():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create a sponsor object #
+    team_stat_info = team_stats.Team_stat(json_post_data['team_stat_name'],
+                                    json_post_data['team_stat_team'],
+                                    json_post_data['team_stat_location'],
+                                    json_post_data['team_stat_capacity'])
+
+    # Add it to db and send result #
+    result = team_stat_info.add_to_db()
+
+    if result:
+        description = "Added " + json_post_data['team_stat_name'] + " to Team_stats"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/team_stat/update', methods=['POST'])
+def api_update_team_stat():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get team_stat from db #
+    team_stat_obj = team_stats.Team_stat()
+    team_stat_obj.get_team_stat_by_id(json_data['team_stat_id'])
+
+    # Update team_stat object's values #
+    team_stat_obj.name = json_data['team_stat_name']
+    team_stat_obj.team = json_data['team_stat_team']
+    team_stat_obj.location = json_data['team_stat_location']
+    team_stat_obj.capacity = json_data['team_stat_capacity']
+
+    # Update db #
+    result = team_stat_obj.update_db()
+
+    if result:
+        description = "Updated Element With id=" + json_data['team_stat_id'] + " in Team_stats"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/team_stat/delete', methods=['POST'])
+def api_delete_team_stat():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+    # Get request #
+    team_stat_id_json = request.get_json()
+    # print(team_stat_id_json)
+    # Delete every requested id #
+    for team_stat_id in team_stat_id_json:
+        team_stat_obj = team_stats.Team_stat()
+        team_stat_obj.get_team_stat_by_id(team_stat_id)
+        status = team_stat_obj.delete_from_db()
+
+        if status:
+            description = "Deleted " + team_stat_obj.name + " from Team_stats"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
+
+    return jsonify({'result': status})
+# TEAM_STAT - end #
 
 
 # COUNTRY - start #
