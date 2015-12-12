@@ -1197,12 +1197,35 @@ def api_add_match():
     # Add it to db and send result #
     result = match_info.add_to_db()
 
-    description = "Added match between " + json_post_data['match_team_1'] + "and " + \
+    description = "Added Match Between " + json_post_data['match_team_1'] + " and " + \
                   json_post_data['match_team_2'] + " to Matches"
     log_info = log.Log(description, session['alias'], datetime.datetime.now())
     log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
+
+
+@app.route('/api/match/delete', methods=['POST'])
+def api_delete_match():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    match_json = request.get_json()
+    # Deletes every object in the request from database
+    status = False
+    for match_id in match_json:
+        match_obj = matches.Match()
+        match_obj.get_match_by_id(match_id)
+        status = match_obj.delete_from_db()
+
+        description = "Deleted Match Between " + match_obj.name1 + " and " + match_obj.name2 + " from Matches"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': status})
+
 
 
 # LEAGUE - start #

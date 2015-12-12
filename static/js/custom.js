@@ -169,6 +169,36 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Matches
+    $('#delete-match').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/match/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     // Delete League
     $('#delete-league').click(function(){
 
