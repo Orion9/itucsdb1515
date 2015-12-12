@@ -1006,9 +1006,9 @@ def api_delete_sponsorship():
         status = sponsorship_obj.delete_from_db()
 
         if status:
-        description = "Deleted " + sponsorship_obj.name + " from Sponsorships"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+            description = "Deleted " + sponsorship_obj.name + " from Sponsorships"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 # SPONSORSHIP - end #
