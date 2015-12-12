@@ -482,9 +482,10 @@ def api_add_person():
     # Add it to db and send result #
     result = person_info.add_to_db()
 
-    description = "Added " + json_post_data['person_name'] + " to Persons"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['person_name'] + " to Persons"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -506,9 +507,10 @@ def api_update_person():
     # Update db #
     result = person_obj.update_db()
 
-    description = "Updated element with id=" + json_data['person_id'] + " in Persons"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['person_id'] + " in Persons"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -541,9 +543,10 @@ def api_add_person_type():
     # Add it to db #
     result = type_info.add_to_db()
 
-    description = "Added " + json_post_data['person_type'] + " to Person Types"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['person_type'] + " to Person Types"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -565,9 +568,10 @@ def api_delete_person():
         # print(person_id)
         status = person_obj.delete_from_db()
 
-        description = "Deleted " + person_obj.name + " from Persons"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted " + person_obj.name + " from Persons"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 # PERSON - end #
@@ -619,10 +623,11 @@ def api_add_penalty():
     # Add it to db and send result #
     result = penalty_info.add_to_db()
 
-    log_person = people.Person().get_person_by_id(json_post_data['person_name'])
-    description = "Added penalty for " + log_person.name + " to Penalties"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        log_person = people.Person().get_person_by_id(json_post_data['person_name'])
+        description = "Added Penalty For " + log_person.name + " to Penalties"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -643,9 +648,10 @@ def api_update_penalty():
     # Update db #
     result = penalty_obj.update_db()
 
-    description = "Updated element with id=" + json_data['penalty_id'] + " in Penalties"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['penalty_id'] + " in Penalties"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -678,9 +684,10 @@ def api_add_penalty_type():
     # Add it to db #
     result = type_info.add_to_db()
 
-    description = "Added " + json_post_data['penalty_type'] + " to Penalty Types"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['penalty_type'] + " to Penalty Types"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -702,10 +709,11 @@ def api_delete_penalty():
         # print(person_id)
         status = penalty_obj.delete_from_db()
 
-        log_person = people.Person().get_person_by_id(penalty_obj.person)
-        description = "Deleted penalty for " + log_person.name + " from Penalties"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            log_person = people.Person().get_person_by_id(penalty_obj.person)
+            description = "Deleted Penalty For " + log_person.name + " from Penalties"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 # Penalties API - End  #
@@ -744,9 +752,10 @@ def api_add_city():
     # Add it to db #
     result = city_info.add_to_db()
 
-    description = "Added " + json_post_data['city_name'] + " to Cities"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['city_name'] + " to Cities"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -766,9 +775,10 @@ def api_update_city():
     # Update db #
     result = city_obj.update_db()
 
-    description = "Updated element with id=" + json_data['city_id'] + " in Cities"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['city_id'] + " in Cities"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -789,9 +799,10 @@ def api_delete_city():
         city_obj.get_city_by_id(city_id)
         status = city_obj.delete_from_db()
 
-        description = "Deleted " + city_obj.name + " from Cities"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted " + city_obj.name + " from Cities"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 # Cities end #
@@ -837,9 +848,10 @@ def api_add_team():
     # Add it to db #
     result = team_info.add_to_db()
 
-    description = "Added " + json_post_data['team_name'] + " to Teams"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['team_name'] + " to Teams"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -860,9 +872,10 @@ def api_delete_team():
         team_obj.get_team_by_id(team_id)
         status = team_obj.delete_from_db()
 
-        description = "Deleted " + team_obj.name + " from Teams"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted " + team_obj.name + " from Teams"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 
@@ -882,17 +895,16 @@ def api_update_team():
     # Update db #
     result = team_obj.update_db()
 
-    description = "Updated element with id=" + json_data['team_id'] + " in Teams"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['team_id'] + " in Teams"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 # TEAM - end #
 
 
 # SPONSORSHIP - start #
-
-
 @app.route('/api/sponsorship', methods=['GET'])
 def api_get_sponsorship_all():
     # Create empty sponsorship then get all data from db #
@@ -943,9 +955,10 @@ def api_add_sponsorship():
     # Add it to db and send result #
     result = sponsorship_info.add_to_db()
 
-    description = "Added " + json_post_data['sponsorship_name'] + " to Sponsorships"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['sponsorship_name'] + " to Sponsorships"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -968,9 +981,10 @@ def api_update_sponsorship():
     # Update db #
     result = sponsorship_obj.update_db()
 
-    description = "Updated element with id=" + json_data['sponsorship_id'] + " in Sponsorships"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated element with id=" + json_data['sponsorship_id'] + " in Sponsorships"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -991,6 +1005,7 @@ def api_delete_sponsorship():
         sponsorship_obj.get_sponsorship_by_id(sponsorship_id)
         status = sponsorship_obj.delete_from_db()
 
+        if status:
         description = "Deleted " + sponsorship_obj.name + " from Sponsorships"
         log_info = log.Log(description, session['alias'], datetime.datetime.now())
         log_status = log_info.add_to_db()
@@ -1048,9 +1063,10 @@ def api_add_stadium():
     # Add it to db and send result #
     result = stadium_info.add_to_db()
 
-    description = "Added " + json_post_data['stadium_name'] + " to Stadiums"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['stadium_name'] + " to Stadiums"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -1072,9 +1088,10 @@ def api_update_stadium():
     # Update db #
     result = stadium_obj.update_db()
 
-    description = "Updated element with id=" + json_data['stadium_id'] + " in Stadiums"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['stadium_id'] + " in Stadiums"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -1095,9 +1112,10 @@ def api_delete_stadium():
         stadium_obj.get_stadium_by_id(stadium_id)
         status = stadium_obj.delete_from_db()
 
-        description = "Deleted " + stadium_obj.name + " from Stadiums"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted " + stadium_obj.name + " from Stadiums"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 # STADIUM - end #
@@ -1127,9 +1145,10 @@ def api_add_country():
     # Add it to db and send result #
     result = country_info.add_to_db()
 
-    description = "Added " + json_post_data['country_name'] + " to Countries"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['country_name'] + " to Countries"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -1149,9 +1168,10 @@ def api_delete_country():
         country_obj.get_country_by_id(country_id)
         status = country_obj.delete_from_db()
 
-        description = "Deleted " + country_obj.name + " from Countries"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted " + country_obj.name + " from Countries"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 
@@ -1175,9 +1195,10 @@ def api_update_country():
     # Update #
     result = country_obj.update_db()
 
-    description = "Updated element with id=" + json_data['country_id'] + " in Countries"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['country_id'] + " in Countries"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 # COUNTRY - end #
@@ -1197,10 +1218,11 @@ def api_add_match():
     # Add it to db and send result #
     result = match_info.add_to_db()
 
-    description = "Added Match Between " + json_post_data['match_team_1'] + " and " + \
-                  json_post_data['match_team_2'] + " to Matches"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added Match Between " + json_post_data['match_team_1'] + " and " + \
+                        json_post_data['match_team_2'] + " to Matches"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -1220,12 +1242,12 @@ def api_delete_match():
         match_obj.get_match_by_id(match_id)
         status = match_obj.delete_from_db()
 
-        description = "Deleted Match Between " + match_obj.name1 + " and " + match_obj.name2 + " from Matches"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted Match Between " + match_obj.name1 + " and " + match_obj.name2 + " from Matches"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
-
 
 
 # LEAGUE - start #
@@ -1252,9 +1274,10 @@ def api_add_league():
     # Add it to db and send result #
     result = league_info.add_to_db()
 
-    description = "Added " + json_post_data['league_name'] + " to Leagues"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['league_name'] + " to Leagues"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -1274,9 +1297,10 @@ def api_delete_league():
         league_obj.get_league_by_id(league_id)
         status = league_obj.delete_from_db()
 
-        description = "Deleted " + league_obj.name + " from Leagues"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted " + league_obj.name + " from Leagues"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 
@@ -1301,9 +1325,10 @@ def api_update_league():
     # Update db #
     result = league_obj.update_db()
 
-    description = "Updated element with id=" + json_data['league_id'] + " in Leagues"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['league_id'] + " in Leagues"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 # LEAGUE - end #
@@ -1332,9 +1357,10 @@ def api_add_player():
     # Add it to db and send result #
     result = player_info.add_to_db()
 
-    description = "Added " + json_post_data['player_name'] + " to Players"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Added " + json_post_data['player_name'] + " to Players"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -1354,9 +1380,10 @@ def api_delete_player():
         player_obj.get_player_by_id(player_id)
         status = player_obj.delete_from_db()
 
-        description = "Deleted " + player_obj.name + " from Players"
-        log_info = log.Log(description, session['alias'], datetime.datetime.now())
-        log_status = log_info.add_to_db()
+        if status:
+            description = "Deleted " + player_obj.name + " from Players"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 
@@ -1381,9 +1408,10 @@ def api_update_player():
     # Update db #
     result = player_obj.update_db()
 
-    description = "Updated element with id=" + json_data['player_id'] + " in Players"
-    log_info = log.Log(description, session['alias'], datetime.datetime.now())
-    log_status = log_info.add_to_db()
+    if result:
+        description = "Updated Element With id=" + json_data['player_id'] + " in Players"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 # Players end #
