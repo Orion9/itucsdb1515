@@ -112,8 +112,8 @@ class Match (object):
 
         # query to add given match tuple to database
         query = """INSERT INTO matches (match_team_1, match_team_2, match_league,
-                                        match_referee, match_date)
-                        VALUES (%s, %s, %s, %s, %s)"""
+                                        match_stadium, match_referee, match_date)
+                        VALUES (%s, %s, %s, %s, %s, %s)"""
 
         try:
             cursor.execute(query_team, (self.name1,))
