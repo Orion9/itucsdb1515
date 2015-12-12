@@ -34,7 +34,7 @@ class Penalty(object):
                 conn.rollback()
 
             data = cursor.fetchone()
-            print(data)
+            # print(data)
             if data is not None:
                 self.id = data[0]
                 self.person = data[5]

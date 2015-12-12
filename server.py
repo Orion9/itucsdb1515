@@ -701,17 +701,15 @@ def api_delete_penalty():
     status = False
     # Get request #
     penalty_id_json = request.get_json()
-    # print(person_id_json)
     # Delete every requested id #
     for penalty_id in penalty_id_json:
         penalty_obj = penalties.Penalty()
         penalty_obj.get_penalty_by_id(penalty_id)
-        # print(person_id)
+        # print(penalty_id)
         status = penalty_obj.delete_from_db()
 
         if status:
-            log_person = people.Person().get_person_by_id(penalty_obj.person)
-            description = "Deleted Penalty For " + log_person.name + " from Penalties"
+            description = "Deleted Penalty For " + penalty_obj.person + " from Penalties"
             log_info = log.Log(description, session['alias'], datetime.datetime.now())
             log_status = log_info.add_to_db()
 
