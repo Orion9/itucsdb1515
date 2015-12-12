@@ -1258,7 +1258,7 @@ def api_update_match():
     json_data = request.get_json()
 
     match_obj = matches.Match()
-    match_obj.get_match_by_id(json_data['league_id'])
+    match_obj.get_match_by_id(json_data['match_id'])
 
     # Update values #
     match_obj.name1 = json_data['match_team_1']
