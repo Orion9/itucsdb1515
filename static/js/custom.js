@@ -683,8 +683,8 @@ $(function() {
         event.preventDefault();
         var data = {
             match_id: $('#modal-update-match-id').val(),
-            match_team_1: $('#modal-update-match-name1').val(),
-            match_team_2: $('#modal-update-match-name2').val(),
+            match_team_1: $('#modal-update-match-team1').val(),
+            match_team_2: $('#modal-update-match-team2').val(),
             match_league: $('#modal-update-match-league').val(),
             match_stadium: $('#modal-update-match-stadium').val(),
             match_referee: $('#modal-update-match-referee').val(),
