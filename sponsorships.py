@@ -83,7 +83,6 @@ class Sponsorship(object):
                         'person': sponsorship[11]
                     }
                 )
-            print(sponsorship_array)
             cursor.close()
             connection.close()
             return sponsorship_array

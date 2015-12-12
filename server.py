@@ -20,6 +20,7 @@ import penalties
 import log
 import datetime
 import matches
+import tournament
 import cgi
 import os
 
@@ -204,6 +205,29 @@ def manage_countries():
     country_data = country_obj.get_country_by_id()
 
     return render_template("manager/countries.html", country_data=country_data)
+
+
+@app.route('/tournaments')
+def show_tournaments():
+    tournament_obj = tournament.Tournament()
+    tournament_data = tournament_obj.get_tournament_by_id()
+
+    return render_template("tournaments.html", tournament_data=tournament_data)
+
+
+@app.route('/manage/tournaments', methods=['GET', 'POST'])
+def manage_tournaments():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    tournament_obj = tournament.Tournament()
+    tournament_data = tournament_obj.get_tournament_by_id()
+
+    country_obj = country.Country()
+    country_data = country_obj.get_country_by_id()
+
+    return render_template("manager/tournaments.html", tournament_data=tournament_data, country_data=country_data)
 
 
 @app.route('/players')
@@ -900,6 +924,110 @@ def api_update_team():
 
     return jsonify({'result': result})
 # TEAM - end #
+
+# TOURNAMENT - start #
+
+
+@app.route('/api/tournament', methods=['GET'])
+def api_get_tournament_all():
+    tournament_obj = tournament.Tournament()
+    tournament_data = tournament_obj.get_tournament_by_id()
+    tournament_json = json.dumps(tournament_data)
+
+    return Response(tournament_json, mimetype="application/json")
+
+
+@app.route('/api/tournament/<int:tournament_id>', methods=['GET'])
+def api_get_tournament(tournament_id):
+    # Create empty tournament and fill it from db #
+    tournament_obj = tournament.Tournament()
+    tournament_obj.get_tournament_by_id(tournament_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': tournament_obj.id,
+        'tournament_name': tournament_obj.name,
+        'tournament_start_date': tournament_obj.start_date,
+        'tournament_end_date': tournament_obj.end_date,
+        'tournament_country': tournament_obj.country,
+        'tournament_prize': tournament_obj.prize
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/tournament/add', methods=['POST'])
+def api_add_tournament():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create a tournament type object #
+    tournament_info = tournament.Tournament(json_post_data['tournament_name'], json_post_data['tournament_matches'], json_post_data['tournament_start_date'], json_post_data['tournament_end_date'], json_post_data['tournament_country'], json_post_data['tournament_prize'])
+    # Add it to db #
+    result = tournament_info.add_to_db()
+
+    if result:
+        description = "Added " + json_post_data['tournament_name'] + " to Tournaments"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/tournament/delete', methods=['POST'])
+def api_delete_tournament():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+
+    # Get request #
+    tournament_id_json = request.get_json()
+
+    for tournament_id in tournament_id_json:
+        tournament_obj = tournament.Tournament()
+        tournament_obj.get_tournament_by_id(tournament_id)
+        status = tournament_obj.delete_from_db()
+
+        if status:
+            description = "Deleted " + tournament_obj.name + " from Tournaments"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
+
+    return jsonify({'result': status})
+
+
+@app.route('/api/tournament/update', methods=['POST'])
+def api_update_tournament():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get tournament from db #
+    tournament_obj = tournament.Tournament()
+    tournament_obj.get_tournament_by_id(json_data['tournament_id'])
+
+    # Update tournament object's data values #
+    tournament_obj.name = json_data['tournament_name']
+    tournament_obj.matches = json_data['tournament_matches']
+    tournament_obj.start_date = json_data['tournament_start_date']
+    tournament_obj.end_date = json_data['tournament_end_date']
+    tournament_obj.country = json_data['tournament_country']
+    tournament_obj.prize = json_data['tournament_prize']
+
+    # Update db #
+    result = tournament_obj.update_db()
+
+    if result:
+        description = "Updated Element With id=" + json_data['tournament_id'] + " in Tournaments"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
+# TOURNAMENT - end #
 
 
 # SPONSORSHIP - start #
