@@ -6,11 +6,11 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            List of cities registered in database
+            List of penalties registered in database
 
             <a id = "send-to-manager" class="btn btn-default"
                {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
-                    href="{% if session.logged_in %}{{ url_for('manage_cities') }}{% else %}#{% endif %}">Manage</a>
+                    href="{% if session.logged_in %}{{ url_for('manage_penalties') }}{% else %}#{% endif %}">Manage</a>
         </div>
 
         <div class="panel-body">
