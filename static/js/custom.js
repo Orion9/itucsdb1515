@@ -739,7 +739,7 @@ $(function() {
 
     // Update Player Button
     $('#update-player').click(function(){
-        event.preventDefault();
+
         var selected_row = glorious_table.rows('.selected').data();
         if (selected_row.length > 1 || selected_row.length === 0)
         {
@@ -760,6 +760,7 @@ $(function() {
 
     // Update Player
     $('#modal-player-update-form').submit(function(){
+        event.preventDefault();
         var data = {
             player_id: $('#modal-update-player-id').val(),
             player_name: $('#modal-update-player-name').val(),
