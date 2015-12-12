@@ -76,7 +76,7 @@ class City(object):
         respond = requests.get(url, params=params)
 
         respond_data = respond.json()
-        print(respond_data)
+        # print(respond_data)
 
         result_data = respond_data['results']
         location = result_data[0]['geometry']['location']

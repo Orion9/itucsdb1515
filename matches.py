@@ -212,7 +212,7 @@ class Match (object):
             connection.commit()
             referee_id = cursor.fetchone()
 
-            cursor.execute(query, (team1_id, team2_id, league_id, stadium_id, referee_id, self.date,))
+            cursor.execute(query, (team1_id, team2_id, league_id, stadium_id, referee_id, self.date, self.id,))
             connection.commit()
             status = True
         except connection.Error as error:
@@ -222,5 +222,6 @@ class Match (object):
         finally:
             cursor.close()
             connection.close()
-            return status
+
+        return status
 
