@@ -1,0 +1,268 @@
+{% extends "manager/layout.html" %}
+{% set active_page = 'matches' %}
+{% block title %}Matches{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of Matches registered in database
+        </div>
+        <div class="panel-body">
+            <div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-error-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Shame! <i>*rings bell*</i></strong> Something went wrong and your process could not be completed.
+            </div>
+            <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Whoa!</strong> You choose too many option or you forgot to choose one.
+            </div>
+            <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>BAM! </strong> Your operation successfully completed.
+            </div>
+
+             <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th hidden>Match ID</th>
+                        <th>Match Team 1</th>
+                        <th>Match Team 2</th>
+                        <th>Match League</th>
+                        <th>Match Stadium</th>
+                        <th>Match Referee</th>
+                        <th>Match Date</th>
+                    </tr>
+                </thead>
+                <tbody id="glorious-table-body">
+                {% if match_data %}
+                {% for match in match_data %}
+                    <tr>
+                        <td hidden>{{ match['id'] }}</td>
+                        <td>{{ match['name1'] }}</td>
+                        <td>{{ match['name2'] }}</td>
+                        <td>{{ match['league'] }}</td>
+                        <td>{{ match['stadium'] }}</td>
+                        <td>{{ match['referee'] }}</td>
+                        <td>{{ match['date'] }}</td>
+                    </tr>
+                {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-primary dropdown-toggle"
+                  data-toggle="modal" data-target="#modal-match-add" aria-haspopup="true" aria-expanded="false">
+                  Add New Data
+            </button>
+
+            <button class="btn btn-primary" href="#" id="update-match">Update Selected Row</button>
+            <button class="btn btn-primary" href="#" id="delete-match">Delete Selected Row(s)</button>
+        </div>
+    </div>
+
+    <!-- Modal form for Add Screen -->
+    <div class="modal fade" id="modal-match-add" tabindex="-1" role="dialog" aria-labelledby="add-new-match-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal" id="close-add-match" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+
+            <h4 class="modal-title" id="add-new-match-title">Add New Match</h4>
+
+          </div>
+
+        <form id="modal-match-add-form" action="#" method="post">
+          <div class="modal-body">
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-match-team1" required>
+                        {% if team_data %}
+                        {% for team in team_data %}
+                        <option>{{ team.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-match-team2" required>
+                        {% if team_data %}
+                        {% for team in team_data %}
+                        <option>{{ team.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-match-league" required>
+                        {% if league_data %}
+                        {% for league in league_data %}
+                        <option>{{ league.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-match-stadium" required>
+                        {% if stadium_data %}
+                        {% for stadium in stadium_data %}
+                        <option>{{ stadium.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-match-referee" required>
+                        {% if referee_data %}
+                        {% for referee in referee_data %}
+                        <option>{{ referee.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-match-date" type="date" name="match_date"
+                       class="form-control" placeholder="Date" required>
+                </div>
+              </div>
+
+          </div>
+
+            <div class="modal-footer">
+                  <button type="submit" id="form-submit-button-add" class="btn btn-default">Submit</button>
+            </div>
+
+            </form>
+
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+    <!-- Start Update Modal Form -->
+    <div class="modal fade" id="modal-match-update" tabindex="-1" role="dialog" aria-labelledby="update-match-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+
+            <button type="button" class="close" data-dismiss="modal" id="close-update-match" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+
+            <h4 class="modal-title" id="update-match-title">Update Match</h4>
+
+          </div>
+
+        <form id="modal-match-update-form" action="#" method="post">
+          <div class="modal-body">
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-update-match-team1" required>
+                        {% if team_data %}
+                        {% for team in team_data %}
+                        <option>{{ team.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-ıpdate-match-team2" required>
+                        {% if team_data %}
+                        {% for team in team_data %}
+                        <option>{{ team.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-ıpdate-match-league" required>
+                        {% if league_data %}
+                        {% for league in league_data %}
+                        <option>{{ league.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-ıpdate-match-stadium" required>
+                        {% if stadium_data %}
+                        {% for stadium in stadium_data %}
+                        <option>{{ stadium.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-ıpdate-match-referee" required>
+                        {% if referee_data %}
+                        {% for referee in referee_data %}
+                        <option>{{ referee.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-update-match-date" type="date" name="match_date"
+                       class="form-control" placeholder="Date" required>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button-update" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!--- End Update Modal Form -->
+
+    {% endblock %}

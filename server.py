@@ -19,6 +19,7 @@ import player
 import penalties
 import log
 import datetime
+import matches
 import cgi
 import os
 
@@ -294,6 +295,37 @@ def manage_cities():
     city_obj = cities.City()
     cities_data = city_obj.get_city_by_id()
     return render_template("manager/cities.html", cities_data=cities_data)
+
+
+@app.route('/matches')
+def show_matches():
+    match_obj = matches.Match()
+    match_data = match_obj.get_match_by_id()
+    return render_template("matches.html", match_data=match_data)
+
+
+@app.route('/manage/matches')
+def manage_matches():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    league_obj = league.League()
+    league_data = league_obj.get_league_by_id()
+
+    stadium_obj = stadiums.Stadium()
+    stadium_data = stadium_obj.get_stadium_by_id()
+
+    referee_obj = people.Person()
+    referee_data = referee_obj.get_person_by_id()
+
+    match_obj = matches.Match()
+    match_data = match_obj.get_match_by_id()
+    return render_template("manager/matches.html", match_data = match_data, team_data=team_data,
+                                    league_data=league_data, stadium_data=stadium_data, referee_data=referee_data)
 
 
 @app.route('/manage/users', methods=['GET', 'POST'])
@@ -1149,6 +1181,28 @@ def api_update_country():
 
     return jsonify({'result': result})
 # COUNTRY - end #
+
+
+@app.route('/api/match/add', methods=['POST'])
+def api_add_match():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    match_info = matches.Match(json_post_data['match_team_1'], json_post_data['match_team_2'],
+                               json_post_data['match_league'], json_post_data['match_stadium'],
+                               json_post_data['match_referee'], json_post_data['match_date'],)
+    # Add it to db and send result #
+    result = match_info.add_to_db()
+
+    description = "Added match between " + json_post_data['match_team_1'] + "and " + \
+                  json_post_data['match_team_2'] + " to Matches"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
 
 
 # LEAGUE - start #

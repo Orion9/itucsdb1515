@@ -1067,6 +1067,42 @@ $(document).ready(function() {
         return false;
     });
 
+    // Match
+    $('#modal-match-add-form').submit(function() {
+        var user_data =
+            {
+                match_team_1: $('#modal-match-team1').val(),
+                match_team_2: $('#modal-match-team2').val(),
+                match_league: $('#modal-match-league').val(),
+                match_stadium: $('#modal-match-stadium').val(),
+                match_referee: $('#modal-match-referee').val(),
+                match_date: $('#modal-match-date').val()
+            };
+
+        $.ajax({
+            url: "/api/match/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#modal-country-add').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
     // League Add
     $('#modal-league-add-form').submit(function() {
         var user_data =
