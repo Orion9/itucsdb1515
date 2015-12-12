@@ -33,7 +33,31 @@ app.secret_key = 'come_on_dude_it_is_a_secret'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    conn = db_connect()
+    cursor = conn.cursor()
+
+    query = """ SELECT * FROM log
+                        JOIN users ON log.log_author = users.user_id
+                        ORDER BY log_id DESC
+                        LIMIT 6"""
+
+    cursor.execute(query,)
+    conn.commit()
+
+    array = []
+    data = cursor.fetchall()
+    for log in data:
+        array.append(
+            {
+            'id': log[0],
+            'description': log[1],
+            'author': log[5],
+            'time': log[3]
+            }
+        )
+
+
+    return render_template('home.html', log_data = array)
 
 
 @app.route('/search', methods=['POST'])
