@@ -654,6 +654,65 @@ $(function() {
        });
     });
 
+    // Update Match Button
+    $('#update-match').click(function(event){
+        event.preventDefault();
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-match-update').modal('show');
+            var user_data = selected_row[0];
+            $('#modal-update-match-id').val(user_data[0]);
+            $('#modal-update-match-name1').val(user_data[1]);
+            $('#modal-update-match-name2').val(user_data[2]);
+            $('#modal-update-match-league').val(user_data[3]);
+            $('#modal-update-match-stadium').val(user_data[4]);
+            $('#modal-update-match-referee').val(user_data[5]);
+            $('#modal-update-match-date').val(user_data[6]);
+
+            console.log(user_data);
+        }
+    });
+
+    // Update Match
+    $('#modal-match-update-form').submit(function(event){
+        event.preventDefault();
+        var data = {
+            match_id: $('#modal-update-match-id').val(),
+            match_team_1: $('#modal-update-match-name1').val(),
+            match_team_2: $('#modal-update-match-name2').val(),
+            match_league: $('#modal-update-match-league').val(),
+            match_stadium: $('#modal-update-match-stadium').val(),
+            match_referee: $('#modal-update-match-referee').val(),
+            match_date: $('#modal-update-match-date').val()
+        };
+
+       $.ajax({
+           url: "/api/match/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-match').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
     // Update League Button
     $('#update-league').click(function(){
 

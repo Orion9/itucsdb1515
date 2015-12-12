@@ -1248,6 +1248,37 @@ def api_delete_match():
     return jsonify({'result': status})
 
 
+@app.route('/api/match/update', methods=['POST'])
+def api_update_match():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_data = request.get_json()
+
+    match_obj = matches.Match()
+    match_obj.get_match_by_id(json_data['league_id'])
+
+    # Update values #
+    match_obj.name1 = json_data['match_team_1']
+    match_obj.name2 = json_data['match_team_2']
+    match_obj.league = json_data['match_league']
+    match_obj.stadium = json_data['match_stadium']
+    match_obj.referee = json_data['match_referee']
+    match_obj.date = json_data['match_date']
+
+    # Update db #
+    result = match_obj.update_db()
+
+    if result:
+        description = "Updated Element With id=" + json_data['match_id'] + " in Matches"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
 # LEAGUE - start #
 @app.route('/api/league', methods=['GET'])
 def api_get_league_all():
