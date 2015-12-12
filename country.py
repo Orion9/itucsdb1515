@@ -10,10 +10,11 @@ from config import db_connect
 
 
 class Country (object):
-    def __init__(self, country_name=None, country_population=None, country_id=None):
+    def __init__(self, country_name=None, country_population=None, capital=None, country_id=None):
         self.id = country_id
         self.name = country_name
         self.population = country_population
+        self.capital = capital
         
     def get_country_by_id(self, get_id=None):
         connection = db_connect()
@@ -21,8 +22,13 @@ class Country (object):
 
         if get_id is not None:
             query = """SELECT * FROM country
+                            JOIN city ON country.capital=city.city_id
                             WHERE country_id = %s"""
             try:
+                cursor.execute(query, (self.capital,))
+                connection.commit()
+                city_id = cursor.fetchone()
+
                 cursor.execute(query, (get_id,))
                 connection.commit()
                 
@@ -31,6 +37,7 @@ class Country (object):
                     self.id = data[0]
                     self.name = data[1]
                     self.population = data[2]
+                    self.capital = data[5]
                     cursor.close()
                     connection.close()
                     return self
@@ -45,7 +52,8 @@ class Country (object):
                 connection.rollback()
 
         else:
-            query = """SELECT * FROM country"""
+            query = """SELECT * FROM country
+                            JOIN city ON country.capital = city.city_id"""
             try:
                 cursor.execute(query)
                 connection.commit()
@@ -57,7 +65,8 @@ class Country (object):
                         {
                             'id': country[0],
                             'name': country[1],
-                            'population': country[2]
+                            'population': country[2],
+                            'capital': country[5]
                             }
                         )
 
@@ -73,13 +82,19 @@ class Country (object):
     def add_to_db(self):
         connection = db_connect()
         cursor = connection.cursor()
-                             
+
+        query_capital = """SELECT city_id FROM city
+                                    WHERE city_name = %s"""
         # query to add given country tuple to database                     
-        query = """INSERT INTO country (country_name, country_population)
-                        VALUES (%s, %s)""" 
+        query = """INSERT INTO country (country_name, country_population, capital)
+                        VALUES (%s, %s, %s)"""
 
         try:
-            cursor.execute(query,(self.name, self.population,))
+            cursor.execute(query_capital,(self.capital,))
+            connection.commit()
+            capital_id = cursor.fetchone()
+
+            cursor.execute(query,(self.name, self.population, capital_id))
             connection.commit()
             status = True
 
@@ -116,13 +131,20 @@ class Country (object):
     def update_db(self):
         connection = db_connect()
         cursor = connection.cursor()
+
+        query_capital = """ SELECT city_id FROM city
+                                WHERE city_name = %s"""
         
         query = """UPDATE country
-                   SET country_name=%s, country_population=%s
+                   SET country_name=%s, country_population=%s, capital=%s
                    WHERE country_id=%s"""
 
         try:
-            cursor.execute(query, (self.name, self.population, self.id,))
+            cursor.execute(query_capital, (self.capital,))
+            connection.commit()
+            capital_id = cursor.fetchone()
+
+            cursor.execute(query, (self.name, self.population, capital_id, self.id,))
             connection.commit()
             status = True
         except connection.Error as error:

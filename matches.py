@@ -11,7 +11,8 @@ from config import db_connect
 
 class Match (object):
     def __init__(self, match_team_1=None, match_team_2=None, match_league=None,
-                 match_stadium=None, match_referee=None, match_date=None, match_id=None):
+                 match_stadium=None, match_referee=None, match_date=None,
+                 match_team1_score=None, match_team2_score=None, match_id=None):
         self.id = match_id
         self.name1 = match_team_1
         self.name2 = match_team_2
@@ -19,6 +20,8 @@ class Match (object):
         self.stadium = match_stadium
         self.referee = match_referee
         self.date = match_date
+        self.score1 = match_team1_score
+        self.score2 = match_team2_score
 
     def get_match_by_id(self, get_id=None):
         connection = db_connect()
@@ -38,11 +41,13 @@ class Match (object):
                 data = cursor.fetchone()
                 if data is not None:
                     self.id = data[0]
-                    self.name1 = data[8]
-                    self.name2 = data[11]
-                    self.league = data[14]
-                    self.stadium = data[18]
-                    self.referee = data[23]
+                    self.name1 = data[10]
+                    self.name2 = data[13]
+                    self.league = data[16]
+                    self.stadium = data[20]
+                    self.referee = data[25]
+                    self.score1 = data[7]
+                    self.score2 = data[8]
                     self.date = data[6]
 
                     cursor.close()
@@ -78,11 +83,13 @@ class Match (object):
                 array.append(
                     {
                         'id': match[0],
-                        'name1': match[8],
-                        'name2': match[11],
-                        'league': match[14],
-                        'stadium': match[18],
-                        'referee': match[23],
+                        'name1': match[10],
+                        'name2': match[13],
+                        'league': match[16],
+                        'stadium': match[20],
+                        'referee': match[25],
+                        'score1': match[7],
+                        'score2': match[8],
                         'date': match[6]
                     }
                 )
@@ -112,8 +119,9 @@ class Match (object):
 
         # query to add given match tuple to database
         query = """INSERT INTO matches (match_team_1, match_team_2, match_league,
-                                        match_stadium, match_referee, match_date)
-                        VALUES (%s, %s, %s, %s, %s, %s)"""
+                                        match_stadium, match_referee, match_date,
+                                        match_team1_score, match_team2_score)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
 
         try:
             cursor.execute(query_team, (self.name1,))
@@ -136,7 +144,8 @@ class Match (object):
             connection.commit()
             referee_id = cursor.fetchone()
 
-            cursor.execute(query, (team1_id, team2_id, league_id, stadium_id, referee_id, self.date,))
+            cursor.execute(query, (team1_id, team2_id, league_id, stadium_id,
+                                   referee_id, self.date, self.score1, self.score2,))
             connection.commit()
             status = True
 
@@ -188,7 +197,8 @@ class Match (object):
 
         query = """UPDATE matches
                    SET match_team_1=%s, match_team_2=%s, match_league=%s,
-                            match_stadium=%s, match_referee=%s, match_date=%s
+                            match_stadium=%s, match_referee=%s, match_date=%s,
+                            match_team1_score=%s, match_team2_score=%s
                    WHERE match_id=%s"""
 
         try:
@@ -212,7 +222,8 @@ class Match (object):
             connection.commit()
             referee_id = cursor.fetchone()
 
-            cursor.execute(query, (team1_id, team2_id, league_id, stadium_id, referee_id, self.date, self.id,))
+            cursor.execute(query, (team1_id, team2_id, league_id, stadium_id,
+                                   referee_id, self.date, self.score1, self.score2, self.id,))
             connection.commit()
             status = True
         except connection.Error as error:

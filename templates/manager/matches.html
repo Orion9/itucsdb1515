@@ -24,22 +24,26 @@
              <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th hidden>Match ID</th>
-                        <th>Match Team 1</th>
-                        <th>Match Team 2</th>
-                        <th>Match League</th>
-                        <th>Match Stadium</th>
-                        <th>Match Referee</th>
-                        <th>Match Date</th>
+                        <th>ID</th>
+                        <th>Team 1</th>
+                        <th>Score</th>
+                        <th>Team 2</th>
+                        <th>Score</th>
+                        <th>League</th>
+                        <th>Stadium</th>
+                        <th>Referee</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
                 {% if match_data %}
                 {% for match in match_data %}
                     <tr>
-                        <td hidden>{{ match['id'] }}</td>
+                        <td>{{ match['id'] }}</td>
                         <td>{{ match['name1'] }}</td>
+                        <td>{{ match['score1'] }}</td>
                         <td>{{ match['name2'] }}</td>
+                        <td>{{ match['score2'] }}</td>
                         <td>{{ match['league'] }}</td>
                         <td>{{ match['stadium'] }}</td>
                         <td>{{ match['referee'] }}</td>
@@ -79,8 +83,8 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-match-team1" required>
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select class="form-control" id="modal-match-team1" placeholder="Team 1" required>
                         {% if team_data %}
                         {% for team in team_data %}
                         <option>{{ team.name }}</option>
@@ -92,8 +96,16 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-match-team2" required>
+                    <span class="input-group-addon"><i class="fa fa-futbol-o"></i></span>
+                    <input id="modal-match-team1-score" type="number" name="match_team1-score"
+                       class="form-control" placeholder="Score" min="0" max="100" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select class="form-control" id="modal-match-team2" placeholder="Team 2"required>
                         {% if team_data %}
                         {% for team in team_data %}
                         <option>{{ team.name }}</option>
@@ -105,8 +117,16 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-match-league" required>
+                    <span class="input-group-addon"><i class="fa fa-futbol-o"></i></span>
+                    <input id="modal-match-team2-score" type="number" name="match_team2-score"
+                       class="form-control" placeholder="Score" min="0" max="100" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+                    <select class="form-control" id="modal-match-league" placeholder="League" required>
                         {% if league_data %}
                         {% for league in league_data %}
                         <option>{{ league.name }}</option>
@@ -119,7 +139,7 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-match-stadium" required>
+                    <select class="form-control" id="modal-match-stadium" placeholder="Stadium" required>
                         {% if stadium_data %}
                         {% for stadium in stadium_data %}
                         <option>{{ stadium.name }}</option>
@@ -131,8 +151,8 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-match-referee" required>
+                    <span class="input-group-addon"><i class="fa fa-bullhorn"></i></i></span>
+                    <select class="form-control" id="modal-match-referee" placeholder="Referee" required>
                         {% if referee_data %}
                         {% for referee in referee_data %}
                         <option>{{ referee.name }}</option>
@@ -183,8 +203,8 @@
               <div class="form-group">
                   <input type="hidden" id="modal-update-match-id">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-update-match-team1" required>
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select class="form-control" id="modal-update-match-team1" placeholder="Team 1" required>
                         {% if team_data %}
                         {% for team in team_data %}
                         <option>{{ team.name }}</option>
@@ -196,8 +216,16 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-update-match-team2" required>
+                    <span class="input-group-addon"><i class="fa fa-futbol-o"></i></span>
+                    <input id="modal-update-match-team1-score" type="number" name="match_team1-score"
+                       class="form-control" placeholder="Score" min="0" max="100" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <select class="form-control" id="modal-update-match-team2" placeholder="Team 2" required>
                         {% if team_data %}
                         {% for team in team_data %}
                         <option>{{ team.name }}</option>
@@ -209,8 +237,16 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-update-match-league" required>
+                    <span class="input-group-addon"><i class="fa fa-futbol-o"></i></span>
+                    <input id="modal-update-match-team2-score" type="number" name="match_team2-score"
+                       class="form-control" placeholder="Score" min="0" max="100" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+                    <select class="form-control" id="modal-update-match-league" placeholder="League" required>
                         {% if league_data %}
                         {% for league in league_data %}
                         <option>{{ league.name }}</option>
@@ -223,7 +259,7 @@
               <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-update-match-stadium" required>
+                    <select class="form-control" id="modal-update-match-stadium" placeholder="Stadium" required>
                         {% if stadium_data %}
                         {% for stadium in stadium_data %}
                         <option>{{ stadium.name }}</option>
@@ -235,8 +271,8 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                    <select class="form-control" id="modal-update-match-referee" required>
+                    <span class="input-group-addon"><i class="fa fa-bullhorn"></i></span>
+                    <select class="form-control" id="modal-update-match-referee" placeholder="Referee" required>
                         {% if referee_data %}
                         {% for referee in referee_data %}
                         <option>{{ referee.name }}</option>

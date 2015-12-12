@@ -629,6 +629,7 @@ $(function() {
         var data = {
             country_id: $('#modal-update-country-id').val(),
             country_name: $('#modal-update-country-name').val(),
+            capital: $('#modal-update-country-capital').val(),
             country_population: $('#modal-update-country-population').val()
         };
 
@@ -688,7 +689,9 @@ $(function() {
             match_league: $('#modal-update-match-league').val(),
             match_stadium: $('#modal-update-match-stadium').val(),
             match_referee: $('#modal-update-match-referee').val(),
-            match_date: $('#modal-update-match-date').val()
+            match_date: $('#modal-update-match-date').val(),
+            match_team1_score : $('#modal-update-match-team1-score').val(),
+            match_team2_score : $('#modal-update-match-team2-score').val()
         };
 
        $.ajax({
@@ -1129,6 +1132,7 @@ $(document).ready(function() {
         var user_data =
             {
                 country_name: $('#modal-country-name').val(),
+                capital: $('#modal-country-capital').val(),
                 country_population: $('#modal-country-population').val()
             };
 
@@ -1165,7 +1169,9 @@ $(document).ready(function() {
                 match_league: $('#modal-match-league').val(),
                 match_stadium: $('#modal-match-stadium').val(),
                 match_referee: $('#modal-match-referee').val(),
-                match_date: $('#modal-match-date').val()
+                match_date: $('#modal-match-date').val(),
+                match_team1_score: $('#modal-match-team1-score').val(),
+                match_team2_score: $('#modal-match-team2-score').val()
             };
 
         $.ajax({
@@ -1180,7 +1186,7 @@ $(document).ready(function() {
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();
-                    $('#modal-country-add').modal('hide');
+                    $('#modal-match-add').modal('hide');
                 }
                 console.log( json );
             },

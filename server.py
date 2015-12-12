@@ -200,10 +200,13 @@ def manage_countries():
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
 
+    city_obj = cities.City()
+    city_data = city_obj.get_city_by_id()
+
     country_obj = country.Country()
     country_data = country_obj.get_country_by_id()
 
-    return render_template("manager/countries.html", country_data=country_data)
+    return render_template("manager/countries.html", country_data=country_data, city_data=city_data)
 
 
 @app.route('/players')
@@ -1139,7 +1142,8 @@ def api_add_country():
 
     # Get json request from AJAX Handler #
     json_post_data = request.get_json()
-    country_info = country.Country(json_post_data['country_name'], json_post_data['country_population'])
+    country_info = country.Country(json_post_data['country_name'],
+                                   json_post_data['country_population'], json_post_data['capital'])
     # Add it to db and send result #
     result = country_info.add_to_db()
 
@@ -1189,6 +1193,7 @@ def api_update_country():
     # Update country values #
     country_obj.name = json_data['country_name']
     country_obj.population = json_data['country_population']
+    country_obj.capital = json_data['capital']
 
     # Update #
     result = country_obj.update_db()
@@ -1212,7 +1217,8 @@ def api_add_match():
     json_post_data = request.get_json()
     match_info = matches.Match(json_post_data['match_team_1'], json_post_data['match_team_2'],
                                json_post_data['match_league'], json_post_data['match_stadium'],
-                               json_post_data['match_referee'], json_post_data['match_date'],)
+                               json_post_data['match_referee'], json_post_data['match_date'],
+                               json_post_data['match_team1_score'], json_post_data['match_team2_score'])
     # Add it to db and send result #
     result = match_info.add_to_db()
 
@@ -1266,6 +1272,8 @@ def api_update_match():
     match_obj.league = json_data['match_league']
     match_obj.stadium = json_data['match_stadium']
     match_obj.referee = json_data['match_referee']
+    match_obj.score1 = json_data['match_team1_score']
+    match_obj.score2 = json_data['match_team2_score']
     match_obj.date = json_data['match_date']
 
     # Update db #

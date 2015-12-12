@@ -24,9 +24,10 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th>Country ID</th>
-                        <th>Country Name</th>
-                        <th>Country Population</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Capital</th>
+                        <th>Population</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
@@ -35,6 +36,7 @@
                 <tr>
                 	<td>{{ country['id'] }}</td>
                 	<td>{{ country['name'] }}</td>
+                    <td>{{ country['capital'] }}</td>
                 	<td>{{ country['population'] }}</td>
                 </tr>
                 {% endfor %}
@@ -71,7 +73,7 @@
               
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
                     <input id="modal-country-name" type="text" name="country_name"
                        class="form-control" placeholder="Country Name" required>
                 </div>
@@ -79,7 +81,20 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"></span>
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-country-capital" placeholder="Capital" required>
+                        {% if city_data %}
+                        {% for city in city_data %}
+                        <option>{{ city.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-bar-chart"></i></span>
                     <input id="modal-country-population" type="number" name="country_population"
                        class="form-control" placeholder="Population" required>
                 </div>
@@ -126,7 +141,20 @@
 
               <div class="form-group">
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                    <select class="form-control" id="modal-update-country-capital" placeholder="Capital" required>
+                        {% if city_data %}
+                        {% for city in city_data %}
+                        <option>{{ city.name }}</option>
+                        {% endfor %}
+                        {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-bar-chart"></i></span>
                     <input id="modal-update-country-population" type="number" name="country_population"
                        class="form-control" placeholder="Country Population" required>
                 </div>
