@@ -1,0 +1,27 @@
+{% extends "manager/layout.html" %}
+{% set active_page = 'logs' %}
+{% block title %}Logs{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Logs registered in database
+        </div>
+        <div class="panel-body">
+
+            {% if log_data %}
+            {% for log in log_data %}
+            <div class="log">
+
+                <p id="description">{{log['description']}} by <b>{{log['author']}}</b> at {{log['time']}}</p>
+                <div class="closelog"><i id="closeLog" class="fa fa-times"></i></div>
+                <div style="clear: both"></div>
+
+            </div>
+            {% endfor %}
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% endblock %}

@@ -17,6 +17,10 @@ import league
 import team
 import player
 import penalties
+import log
+import datetime
+import cgi
+import os
 
 
 from config import *
@@ -276,6 +280,13 @@ def manage_users():
     return render_template("manager/users.html")
 
 
+@app.route('/manage/log')
+def show_logs():
+    log_obj = log.Log()
+    log_data = log_obj.get_log_by_id()
+    return render_template("manager/log.html", log_data=log_data)
+
+
 @app.route('/manage/users/<int:user_id>', methods=['GET', 'POST'])
 def show_user(user_id):
     pass
@@ -415,6 +426,10 @@ def api_add_person():
     # Add it to db and send result #
     result = person_info.add_to_db()
 
+    description = "Added " + json_post_data['person_name'] + " to Persons"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -465,6 +480,10 @@ def api_add_person_type():
     type_info = people.PersonType(json_post_data['person_type'])
     # Add it to db #
     result = type_info.add_to_db()
+
+    description = "Added " + json_post_data['person_type'] + " to Person Types"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -536,6 +555,10 @@ def api_add_penalty():
     # Add it to db and send result #
     result = penalty_info.add_to_db()
 
+    description = "Added penalty for" + json_post_data['person_name'] + " to Penalties"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -585,6 +608,10 @@ def api_add_penalty_type():
     type_info = penalties.PenaltyType(json_post_data['penalty_type'])
     # Add it to db #
     result = type_info.add_to_db()
+
+    description = "Added " + json_post_data['penalty_type'] + " to Penalty Types"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -642,6 +669,10 @@ def api_add_city():
                             json_post_data['city_population'])
     # Add it to db #
     result = city_info.add_to_db()
+
+    description = "Added " + json_post_data['city_name'] + " to Cities"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -723,6 +754,10 @@ def api_add_team():
     team_info = team.Team(json_post_data['team_name'], json_post_data['team_couch'])
     # Add it to db #
     result = team_info.add_to_db()
+
+    description = "Added " + json_post_data['team_name'] + " to Teams"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -817,6 +852,10 @@ def api_add_sponsorship():
     # Add it to db and send result #
     result = sponsorship_info.add_to_db()
 
+    description = "Added " + json_post_data['sponsorship_name'] + " to Sponsorships"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -910,6 +949,10 @@ def api_add_stadium():
     # Add it to db and send result #
     result = stadium_info.add_to_db()
 
+    description = "Added " + json_post_data['stadium_name'] + " to Stadiums"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -977,6 +1020,10 @@ def api_add_country():
     # Add it to db and send result #
     result = country_info.add_to_db()
 
+    description = "Added " + json_post_data['country_name'] + " to Countries"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
+
     return jsonify({'result': result})
 
 
@@ -994,6 +1041,10 @@ def api_delete_country():
         country_obj = country.Country()
         country_obj.get_country_by_id(country_id)
         status = country_obj.delete_from_db()
+
+        description = "Deleted " + country_obj.name + " from Countries"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 
@@ -1044,6 +1095,10 @@ def api_add_league():
 
     # Add it to db and send result #
     result = league_info.add_to_db()
+
+    description = "Added " + json_post_data['league_name'] + " to Leagues"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 
@@ -1112,6 +1167,10 @@ def api_add_player():
 
     # Add it to db and send result #
     result = player_info.add_to_db()
+
+    description = "Added " + json_post_data['player_name'] + " to Players"
+    log_info = log.Log(description, session['alias'], datetime.datetime.now())
+    log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
 

@@ -149,3 +149,27 @@ html {
     background: #484848;
     border-color: #484848;
 }
+
+.log {
+
+    border-radius: 5px;
+    border: 1px solid black;
+    background: lightgreen;
+    margin: 1px 5px 1px 5px;
+    padding: auto;
+
+}
+
+#description{
+
+    float: left;
+    position: relative;
+
+}
+
+.closelog {
+
+    margin-right: 5px;
+    float: right;
+    position: relative;
+}
