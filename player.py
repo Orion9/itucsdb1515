@@ -71,7 +71,7 @@ class Player (object):
                         'team': player[5]
                     }
                 )
-
+            print(array)
 
             cursor.close()
             connection.close()

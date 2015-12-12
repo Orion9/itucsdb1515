@@ -259,37 +259,6 @@ $(function() {
         console.log(data);
     });
 
-
-    // Delete Tournament
-    $('#delete-tournament').click(function(){
-
-        var data = [];
-        var selected_rows = glorious_table.rows('.selected').data();
-        for (var i = 0; i < selected_rows.length; ++i) {
-            data[i] = (selected_rows[i][0]);
-        }
-        $.ajax({
-            url: "/api/tournament/delete",
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            type: "POST",
-            dataType : "json",
-            success: function( json ) {
-                if ( json.result ) {
-                    $('#op-main-success-alert').show();
-                    location.reload();
-                } else {
-                    $('#op-main-error-alert').show();
-                }
-                console.log( json );
-            },
-            error: function( ) {
-                console.log( "TROUBLE!" );
-            }
-        });
-        console.log(data);
-    });
-
     // Delete Team
     $('#delete-rows-button-team').click(function(){
 
@@ -622,66 +591,6 @@ $(function() {
                 if ( json.result ) {
                     $('#op-main-success-alert').show();
                     $('#modal-update-city').modal('hide');
-                    location.reload();
-                } else {
-                    $('#op-main-error-alert').show();
-                }
-                console.log( json );
-           },
-           error: function( ) {
-                console.log( "TROUBLE!" );
-           }
-       });
-    });
-
-    // Update Tournament Button
-    $('#update-tournament').click(function(){
-
-        var selected_row = glorious_table.rows('.selected').data();
-        if (selected_row.length > 1 || selected_row.length === 0)
-        {
-            $('#op-update-error-alert').show();
-        }
-        else
-        {
-            $('#modal-tournament-update').modal('show');
-
-            var user_data = selected_row[0];
-            $('#modal-update-tournament-id').val(user_data[0]);
-            $('#modal-update-tournament-name').val(user_data[1]);
-            $('#modal-update-tournament-matches').val(user_data[2]);
-            $('#modal-update-tournament-start-date').val(user_data[3]);
-            $('#modal-update-tournament-end-date').val(user_data[4]);
-            $('#modal-update-tournament-country').val(user_data[5]);
-            $('#modal-update-tournament-prize').val(user_data[6]);
-
-            console.log(user_data);
-        }
-    });
-
-     // Update Tournament
-    $('#modal-tournament-update-form').submit(function(event){
-        event.preventDefault();
-        var data = {
-            tournament_id: $('#modal-update-tournament-id').val(),
-            tournament_name: $('#modal-update-tournament-name').val(),
-            tournament_matches: $('#modal-update-tournament-matches').val()
-            tournament_start_date: $('#modal-update-tournament-start-date').val()
-            tournament_end_date: $('#modal-update-tournament-end-date').val()
-            tournament_country: $('#modal-update-tournament-country').val()
-            tournament_prize: $('#modal-update-tournament-prize').val()
-        };
-
-       $.ajax({
-           url: "/api/tournament/update",
-           contentType: 'application/json',
-           data: JSON.stringify(data),
-           type: "POST",
-           dataType : "json",
-           success: function( json ) {
-                if ( json.result ) {
-                    $('#op-main-success-alert').show();
-                    $('#modal-update-tournament').modal('hide');
                     location.reload();
                 } else {
                     $('#op-main-error-alert').show();
@@ -1438,41 +1347,6 @@ $(document).ready(function() {
                 } else {
                     $('#op-main-error-alert').show();
                     $('#add-new-team').hide();
-                }
-                console.log( json );
-            },
-            error: function( ) {
-                $('#op-main-error-alert').show();
-                console.log( "TROUBLE!" );
-            }
-        });
-        return false;
-    });
-
-    // Tournament Add Form
-    $('#modal-add-form-tournament').submit(function() {
-        var user_data = {
-                tournament_name: $('#modal-tournament-name').val(),
-                tournament_matches: $('#modal-tournament-matches').val(),
-                tournament_start_date: $('#modal-tournament-start-date').val(),
-                tournament_end_date: $('#modal-tournament-end-date').val(),
-                tournament_country: $('#modal-tournament-country').val(),
-                tournament_prize: $('#modal-tournament-prize').val()
-            };
-
-        $.ajax({
-            url: "/api/tournament/add",
-            contentType: 'application/json',
-            data: JSON.stringify(user_data),
-            type: "POST",
-            dataType : "json",
-            success: function( json ) {
-                if ( json.result ) {
-                    $('#op-main-success-alert').show();
-                    location.reload();
-                } else {
-                    $('#op-main-error-alert').show();
-                    $('#add-new-tournament').hide();
                 }
                 console.log( json );
             },
