@@ -505,6 +505,10 @@ def api_delete_person():
         # print(person_id)
         status = person_obj.delete_from_db()
 
+        description = "Deleted " + person_obj.name + " from Persons"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
     return jsonify({'result': status})
 # PERSON - end #
 
@@ -633,6 +637,10 @@ def api_delete_penalty():
         # print(person_id)
         status = penalty_obj.delete_from_db()
 
+        description = "Deleted penalty for " + penalty_obj.person + " from Penalties"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
     return jsonify({'result': status})
 # Penalties API - End  #
 
@@ -711,6 +719,10 @@ def api_delete_city():
         city_obj.get_city_by_id(city_id)
         status = city_obj.delete_from_db()
 
+        description = "Deleted " + city_obj.name + " from Cities"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
     return jsonify({'result': status})
 # Cities end #
 
@@ -777,6 +789,11 @@ def api_delete_team():
         team_obj = team.Team()
         team_obj.get_team_by_id(team_id)
         status = team_obj.delete_from_db()
+
+        description = "Deleted " + team_obj.name + " from Teams"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
     return jsonify({'result': status})
 
 
@@ -896,6 +913,10 @@ def api_delete_sponsorship():
         sponsorship_obj.get_sponsorship_by_id(sponsorship_id)
         status = sponsorship_obj.delete_from_db()
 
+        description = "Deleted " + sponsorship_obj.name + " from Sponsorships"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
     return jsonify({'result': status})
 # SPONSORSHIP - end #
 
@@ -991,6 +1012,10 @@ def api_delete_stadium():
         stadium_obj = stadiums.Stadium()
         stadium_obj.get_stadium_by_id(stadium_id)
         status = stadium_obj.delete_from_db()
+
+        description = "Deleted " + stadium_obj.name + " from Stadiums"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 # STADIUM - end #
@@ -1118,6 +1143,10 @@ def api_delete_league():
         league_obj.get_league_by_id(league_id)
         status = league_obj.delete_from_db()
 
+        description = "Deleted " + league_obj.name + " from Leagues"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
     return jsonify({'result': status})
 
 
@@ -1189,6 +1218,10 @@ def api_delete_player():
         player_obj = player.Player()
         player_obj.get_player_by_id(player_id)
         status = player_obj.delete_from_db()
+
+        description = "Deleted " + player_obj.name + " from Players"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
 
     return jsonify({'result': status})
 
