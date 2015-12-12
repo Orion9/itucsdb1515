@@ -16,6 +16,7 @@ import country
 import league
 import team
 import player
+import penalties
 
 
 from config import *
@@ -74,7 +75,7 @@ def manage_people():
     city_obj = cities.City()
     cities_data = city_obj.get_city_by_id()
 
-    #print(cities_data)
+    # print(cities_data)
 
     return render_template("manager/people.html", people_data=people_data, types=types_data, cities=cities_data)
 
@@ -232,7 +233,21 @@ def manage_penalties():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
-    return render_template("manager/penalties.html")
+    # Create empty person and get all data from db #
+    person = people.Person()
+    people_data = person.get_person_by_id()
+
+    penalty = penalties.Penalty()
+    penalties_data = penalty.get_penalty_by_id()
+
+    # Same for types and city objects #
+    types_obj = penalties.PenaltyType()
+    types_data = types_obj.get_penalty_type()
+
+    # print(cities_data)
+
+    return render_template("manager/penalties.html", penalties_data=penalties_data,
+                           people_data=people_data, types=types_data)
 
 
 @app.route('/cities')
@@ -473,6 +488,126 @@ def api_delete_person():
 
     return jsonify({'result': status})
 # PERSON - end #
+
+
+# Penalties API - Begin #
+@app.route('/api/penalty', methods=['GET'])
+def api_get_penalty_all():
+    # Create empty person then get all data from db #
+    penalty = penalties.Penalty()
+    penalties_data = penalty.get_penalty_by_id()
+    # jsonify function does not work for arrays #
+    penalty_json = json.dumps(penalties_data)
+
+    # Return JSON response. #
+    return Response(penalty_json, mimetype="application/json")
+
+
+@app.route('/api/penalty/<int:data_id>', methods=['GET'])
+def api_get_penalty(data_id):
+    # Create empty person and fill it from db #
+    penalty_obj = penalties.Penalty()
+    penalty_obj.get_penalty_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': penalty_obj.id,
+        'person': penalty_obj.person,
+        'given_date': penalty_obj.given_date.strftime('%d/%m/%Y'),
+        'penalty_type': penalty_obj.type
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/penalty/add', methods=['POST'])
+def api_add_penalty():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create an person object #
+    penalty_info = penalties.Penalty(json_post_data['person_name'], json_post_data['penalty_given_date'],
+                                     json_post_data['penalty_type'])
+
+    # Add it to db and send result #
+    result = penalty_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/penalty/update', methods=['POST'])
+def api_update_penalty():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get person from db #
+    penalty_obj = penalties.Penalty()
+    penalty_obj.get_penalty_by_id(json_data['penalty_id'])
+
+    # Update person object's values #
+    penalty_obj.person = json_data['person_name']
+    penalty_obj.given_date = json_data['penalty_given_date']
+    penalty_obj.type = json_data['penalty_type']
+
+    # Update db #
+    result = penalty_obj.update_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/penalty/type/<int:type_id>', methods=['GET'])
+def api_get_penalty_type(type_id):
+    # Get person type #
+    type_obj = penalties.PenaltyType()
+    type_obj.get_penalty_type(type_id)
+    # Create a dict #
+    data = {
+        'id': type_obj.id,
+        'type': type_obj.type
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/penalty/type/add', methods=['POST'])
+def api_add_penalty_type():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get request #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create a person type object #
+    type_info = penalties.PenaltyType(json_post_data['penalty_type'])
+    # Add it to db #
+    result = type_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/penalty/delete', methods=['POST'])
+def api_delete_penalty():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+    # Get request #
+    penalty_id_json = request.get_json()
+    # print(person_id_json)
+    # Delete every requested id #
+    for penalty_id in penalty_id_json:
+        penalty_obj = penalties.Penalty()
+        penalty_obj.get_penalty_by_id(penalty_id)
+        # print(person_id)
+        status = penalty_obj.delete_from_db()
+
+    return jsonify({'result': status})
+# Penalties API - End  #
 
 
 # Cities Begin #

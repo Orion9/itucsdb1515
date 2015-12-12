@@ -1,3 +1,214 @@
 {% extends "manager/layout.html" %}
 {% set active_page = 'penalties' %}
 {% block title %}Penalties{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of penalty records registered in database
+        </div>
+        <div class="panel-body">
+            <div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-error-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Shame! <i>*rings bell*</i></strong> Something went wrong and your process could not be completed.
+            </div>
+            <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Whoa!</strong> You choose too many things or you forgot to choose one.
+            </div>
+            <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>BAM! </strong> Your operation successfully completed.
+            </div>
+            <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Penalty ID</th>
+                        <th>Person Name</th>
+                        <th>Given Date</th>
+                        <th>Penalty Type</th>
+                    </tr>
+                </thead>
+                <tbody id="glorious-table-body">
+                {% if penalties_data %}
+                    {% for penalty in penalties_data %}
+                        <tr>
+                            <td>{{ penalty['id'] }}</td>
+                            <td>{{ penalty['person'] }}</td>
+                            <td>{{ penalty['given_date'] }}</td>
+                            <td>{{ penalty['type'] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add New Data <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" data-toggle="modal" data-target="#add-new-penalty">Add New Person</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#add-new-penalty-type">Add New Person Type</a></li>
+                </ul>
+            </div>
+
+            <button class="btn btn-primary" href="#" id="penalty-update-rows-button">Update Selected Row</button>
+            <button class="btn btn-primary" href="#" id="penalty-delete-rows-button">Delete Selected Row(s)</button>
+        </div>
+    </div>
+
+    <!-- Modal form for Add Screen -->
+    <div class="modal fade" id="add-new-penalty" tabindex="-1" role="dialog" aria-labelledby="add-new-penalty-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-penalty-title">Add New Person</h4>
+          </div>
+        <form id="modal-add-form-penalty" action="#" method="post">
+          <div class="modal-body">
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                      <select class="form-control" id="modal-penalty-name" required>
+                      {% if people_data %}
+                        {% for person in people_data %}
+                        <option value="{{ person['id'] }}">{{ person['name'] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-penalty-given-date" type="date" name="penalty_given_date"
+                       class="form-control" placeholder="Birth Day" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                      <select class="form-control" id="modal-penalty-type" required>
+                      {% if types %}
+                        {% for type in types %}
+                        <option>{{ type[0] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+    <!-- Modal form for Add Type Screen -->
+    <div class="modal fade" id="add-new-penalty-type" tabindex="-1" role="dialog"
+         aria-labelledby="add-new-penalty-type-label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-penalty-title">Add New Penalty</h4>
+          </div>
+        <form id="modal-add-penalty-type-form" action="#" method="post">
+          <div class="modal-body">
+              <div class="form-group">
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input id="add-modal-penalty-type" type="text" name="penalty_type"
+                       class="form-control" placeholder="Penalty Type" required>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+    <!-- Modal form for Update Screen -->
+    <div class="modal fade" id="modal-update-penalty" tabindex="-1" role="dialog" aria-labelledby="update-penalty-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-penalty-title">Update Person</h4>
+          </div>
+        <form id="modal-update-penalty-form" action="#" method="post">
+          <div class="modal-body">
+              <div class="form-group">
+                <input type="hidden" id="modal-update-penalty-id">
+              </div>
+
+              <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                          <select class="form-control" id="modal-update-penalty-name" required>
+                          {% if people_data %}
+                            {% for person in people_data %}
+                                <option value="{{ person['id'] }}">{{ person['name'] }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input id="modal-update-penalty-given-date" type="date" name="penalty_given_date"
+                       class="form-control" placeholder="Given Date" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                      <select class="form-control" id="modal-update-penalty-type" required>
+                      {% if types %}
+                        {% for type in types %}
+                        <option>{{ type[0] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+{% endblock %}

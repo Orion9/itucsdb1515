@@ -6,8 +6,8 @@
 # Furkan Akgun 150130106      #
 # Emine Oyku Bozkir 150120017 #
 ###############################
-
 from config import db_connect
+
 
 class League (object):
     def __init__(self, league_name=None, league_country=None,

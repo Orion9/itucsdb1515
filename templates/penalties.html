@@ -1,3 +1,51 @@
 {% extends "layout.html" %}
 {% set active_page = 'penalties' %}
 {% block title %}Penalties{% endblock %}
+
+{% block content %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of cities registered in database
+
+            <a id = "send-to-manager" class="btn btn-default"
+               {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
+                    href="{% if session.logged_in %}{{ url_for('manage_cities') }}{% else %}#{% endif %}">Manage</a>
+        </div>
+
+        <div class="panel-body">
+            <div id="log-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true" onclick="$('#log-main-error-alert').hide()">&times;</span>
+                </button>
+                <strong>Oops!</strong> You should be logged in to manage database. You can login from upper right corner.
+                <i>(From <span class="glyphicon glyphicon-log-in"></span> icon)</i>
+            </div>
+
+            <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th hidden>Penalty ID</th>
+                        <th>Person Name</th>
+                        <th>Given Date</th>
+                        <th>Penalty Type</th>
+                    </tr>
+                </thead>
+                <tbody id="glorious-table-body">
+                {% if penalties_data %}
+                    {% for penalty in penalties_data %}
+                        <tr>
+                            <td>{{ penalty['id'] }}</td>
+                            <td>{{ penalty['person'] }}</td>
+                            <td>{{ penalty['given_date'] }}</td>
+                            <td>{{ penalty['type'] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+{% endblock %}

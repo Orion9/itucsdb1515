@@ -126,12 +126,18 @@ html {
     border-color: #383838;
 }
 
-.btn-primary:active,
 .open > .dropdown-toggle.btn-primary,
-.btn-primary:hover
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:visited
 {
     background: #888888;
     border-color: #383838;
+}
+
+.pagination{
+    color:#484848;
 }
 
 .pagination>.active>a,

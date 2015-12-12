@@ -319,6 +319,36 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Penalties
+    $('#penalty-delete-rows-button').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/penalty/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     // Update Person Button
     $('#update-rows-button').click(function(event){
         event.preventDefault();
@@ -346,6 +376,32 @@ $(function() {
         }
     });
 
+    // Penalty Update Button
+    $('#penalty-update-rows-button').click(function(event){
+        event.preventDefault();
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-update-penalty').modal('show');
+            var user_data = selected_row[0];
+            $('#modal-update-penalty-id').val(user_data[0]);
+            $('#modal-update-penalty-name').val(user_data[1]);
+
+            //Let us arrange date value a little bit.
+            var date_array = user_data[2].split('/');
+            var date = date_array[2] + "-" + date_array[1] + "-" + date_array[0];
+
+            $('#modal-update-penalty-given-date').val(date);
+            $('#modal-update-penalty-type').val(user_data[3]);
+
+            console.log(user_data);
+        }
+    });
+
     // Update Person
     $('#modal-update-form').submit(function(event){
         event.preventDefault();
@@ -367,6 +423,39 @@ $(function() {
                 if ( json.result ) {
                     $('#op-main-success-alert').show();
                     $('#modal-update-person').modal('hide');
+
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+           error: function() {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
+    // Update Penalty
+    $('#modal-update-penalty').submit(function(event){
+        event.preventDefault();
+        var data = {
+            penalty_id: $('#modal-update-penalty-id').val(),
+            person_name: $('#modal-update-penalty-name').val(),
+            penalty_given_date: $('#modal-update-penalty-given-date').val(),
+            penalty_type: $('#modal-update-penalty-type').val()
+        };
+
+       $.ajax({
+           url: "/api/penalty/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-penalty').modal('hide');
 
                     location.reload();
                 } else {
@@ -839,6 +928,70 @@ $(document).ready(function() {
                 } else {
                     $('#op-main-error-alert').show();
                     $('#add-new-person-type').hide();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Penalty Add
+    $('#modal-add-form-penalty').submit(function() {
+        var user_data =
+            {
+                person_name: $('#modal-penalty-name').val(),
+                penalty_given_date: $('#modal-penalty-given-date').val(),
+                penalty_type: $('#modal-penalty-type').val()
+            };
+
+        $.ajax({
+            url: "/api/penalty/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-penalty').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Penalty-Type Add
+    $('#modal-add-penalty-type-form').submit(function() {
+        var user_data = {
+                penalty_type: $('#add-modal-penalty-type').val()
+            };
+
+        $.ajax({
+            url: "/api/penalty/type/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#add-new-person-type').hide();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-penalty-type').hide();
                 }
                 console.log( json );
             },
