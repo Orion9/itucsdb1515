@@ -198,10 +198,10 @@ def manage_team_stats():
     team_obj = team.Team()
     team_data = team_obj.get_team_by_id()
 
-    city_obj = cities.City()
-    cities_data = city_obj.get_city_by_id()
+    match_obj = matches.Match()
+    matches_data = match_obj.get_match_by_id()
 
-    return render_template("manager/team_stats.html", team_stats_data=team_stats_data, teams= team_data, cities=cities_data)
+    return render_template("manager/team_stats.html", team_stats_data=team_stats_data, teams= team_data, matches=matches_data)
 
 
 @app.route('/countries')
@@ -1185,9 +1185,9 @@ def api_get_team_stat(data_id):
     data = {
         'id': team_stat_obj.id,
         'name': team_stat_obj.name,
-        'team': team_stat_obj.team,
-        'location': team_stat_obj.location,
-        'capacity': team_stat_obj.capacity
+        'win': team_stat_obj.win,
+        'draw': team_stat_obj.draw,
+        'loss': team_stat_obj.loss
     }
 
     return jsonify(data)
@@ -1204,9 +1204,9 @@ def api_add_team_stat():
     # print(json_post_data)
     # Create a sponsor object #
     team_stat_info = team_stats.Team_stat(json_post_data['team_stat_name'],
-                                          json_post_data['team_stat_team'],
-                                          json_post_data['team_stat_location'],
-                                          json_post_data['team_stat_capacity'])
+                                          json_post_data['team_stat_win'],
+                                          json_post_data['team_stat_draw'],
+                                          json_post_data['team_stat_loss'])
 
     # Add it to db and send result #
     result = team_stat_info.add_to_db()
@@ -1229,9 +1229,9 @@ def api_update_team_stat():
 
     # Update team_stat object's values #
     team_stat_obj.name = json_data['team_stat_name']
-    team_stat_obj.team = json_data['team_stat_team']
-    team_stat_obj.location = json_data['team_stat_location']
-    team_stat_obj.capacity = json_data['team_stat_capacity']
+    team_stat_obj.win = json_data['team_stat_win']
+    team_stat_obj.draw = json_data['team_stat_draw']
+    team_stat_obj.loss = json_data['team_stat_loss']
 
     # Update db #
     result = team_stat_obj.update_db()
@@ -1261,7 +1261,7 @@ def api_delete_team_stat():
         status = team_stat_obj.delete_from_db()
 
         if status:
-            description = "Deleted " + team_stat_obj.name + " from Team_stats"
+            description = "Deleted " + str(team_stat_obj.name) + " from Team_stats"
             log_info = log.Log(description, session['alias'], datetime.datetime.now())
             log_status = log_info.add_to_db()
 

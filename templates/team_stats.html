@@ -22,9 +22,9 @@
                     <tr>
                         <th hidden>Team_stat ID</th>
                         <th>Team_stat Name</th>
-                        <th>Team_stat Team</th>
-                        <th>Team_stat Location</th>
-                        <th>Team_stat Capacity</th>
+                        <th>Team_stat Win</th>
+                        <th>Team_stat Draw</th>
+                        <th>Team_stat Loss</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
@@ -32,9 +32,9 @@
                     <tr>
                         <td hidden>{{ team_stat['id'] }}</td>
                         <td>{{ team_stat['name'] }}</td>
-                        <td>{{ team_stat['team'] }}</td>
-                        <td>{{ team_stat['location'] }}</td>
-                        <td>{{ team_stat['capacity'] }}</td>
+                        <td>{{ team_stat['win'] }}</td>
+                        <td>{{ team_stat['draw'] }}</td>
+                        <td>{{ team_stat['loss'] }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

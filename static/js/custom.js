@@ -379,6 +379,36 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Team_stat
+    $('#delete-rows-button-team_stat').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/team_stat/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     // Delete Penalties
     $('#penalty-delete-rows-button').click(function(){
 
@@ -971,7 +1001,7 @@ $(function() {
        });
     });
 
-       // Update Stadium Button
+    // Update Stadium Button
     $('#update-rows-button-stadium').click(function(){
 
         var selected_row = glorious_table.rows('.selected').data();
@@ -994,7 +1024,7 @@ $(function() {
         }
     });
 
-     // Update Stadium
+    // Update Stadium
     $('#modal-update-form-stadium').submit(function(event){
         event.preventDefault();
         var data = {
@@ -1025,7 +1055,64 @@ $(function() {
                 console.log( "TROUBLE!" );
            }
        });
+    });
+
+     // Update Team_stat
+    $('#modal-update-form-team_stat').submit(function(event){
+        event.preventDefault();
+        var data = {
+            team_stat_id: $('#modal-update-team_stat-id').val(),
+            team_stat_name: $('#modal-update-team_stat-name').val(),
+            team_stat_win: $('#modal-update-team_stat-win').val(),
+            team_stat_draw: $('#modal-update-team_stat-draw').val(),
+            team_stat_loss: $('#modal-update-team_stat-loss').val()
+        };
+
+       $.ajax({
+           url: "/api/team_stat/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-team_stat').modal('hide');
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+           },
+           error: function( ) {
+                console.log( "TROUBLE!" );
+           }
        });
+    });
+
+    // Update Team_stat Button
+    $('#update-rows-button-team_stat').click(function(){
+
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-team_stat-update').modal('show');
+
+            var user_data = selected_row[0];
+            $('#modal-update-team_stat-id').val(user_data[0]);
+            $('#modal-update-team_stat-name').val(user_data[1]);
+            $('#modal-update-team_stat-win').val(user_data[2]);
+            $('#modal-update-team_stat-draw').val(user_data[3]);
+            $('#modal-update-team_stat-loss').val(user_data[4]);
+
+            console.log(user_data);
+        }
+    });
+
 } );
 
 // Hides alert. Prevents them to be destroyed from DOM.
@@ -1447,6 +1534,40 @@ $(document).ready(function() {
                 } else {
                     $('#op-main-error-alert').show();
                     $('#add-new-stadium').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Team_stat Add
+    $('#modal-add-form-team_stat').submit(function() {
+        var user_data =
+            {
+                team_stat_name: $('#modal-team_stat-name').val(),
+                team_stat_win: $('#modal-team_stat-win').val(),
+                team_stat_draw: $('#modal-team_stat-draw').val(),
+                team_stat_loss: $('#modal-team_stat-loss').val()
+            };
+
+        $.ajax({
+            url: "/api/team_stat/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-team_stat').modal('hide');
                 }
                 console.log( json );
             },
