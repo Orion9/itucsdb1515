@@ -1058,11 +1058,7 @@ $(function() {
         event.preventDefault();
         var data = {
             sponsorship_id: $('#modal-update-sponsorship-id').val(),
-            sponsorship_name: $('#modal-update-sponsorship-name').val(),
-            sponsorship_start_date: $('#modal-update-sponsorship-start-date').val(),
-            sponsorship_league: $('#modal-update-sponsorship-league').val(),
-            sponsorship_team: $('#modal-update-sponsorship-team').val(),
-            sponsorship_person: $('#modal-update-sponsorship-person').val()
+            sponsorship_name: $('#modal-update-sponsorship-name').val()
         };
 
        $.ajax({
@@ -1670,10 +1666,7 @@ $(document).ready(function() {
     $('#modal-add-form-team_stat').submit(function() {
         var user_data =
             {
-                team_stat_name: $('#modal-team_stat-name').val(),
-                team_stat_win: $('#modal-team_stat-win').val(),
-                team_stat_draw: $('#modal-team_stat-draw').val(),
-                team_stat_loss: $('#modal-team_stat-loss').val()
+                team_stat_name: $('#modal-team_stat-name').val()
             };
 
         $.ajax({

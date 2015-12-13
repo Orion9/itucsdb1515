@@ -85,19 +85,38 @@ class Team_stat(object):
 
         new_team = None
 
-        total_win = 0
-        total_draw = 0
-        total_loss = 0
-
         select_team = """SELECT team_id FROM team WHERE team_name = %s"""
 
 
-        tita = """SELECT COUNT(*) FROM matches
+        count_win1 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
+                    WHERE (matches.match_team1_score > matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_win2 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_2
+                    WHERE (matches.match_team1_score < matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_draw1 = """SELECT COUNT(*) FROM matches
                     LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
                     WHERE (matches.match_team1_score = matches.match_team2_score AND team.team_name = %s)
                     GROUP BY team.team_name"""
 
-        ita = """SELECT COUNT(*) FROM matches"""
+        count_draw2 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_2
+                    WHERE (matches.match_team1_score = matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_loss1 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
+                    WHERE (matches.match_team1_score < matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_loss2 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_2
+                    WHERE (matches.match_team1_score > matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
 
         statement = """INSERT INTO team_stat (team_stat_name, team_stat_win,
                         team_stat_draw, team_stat_loss )
@@ -105,20 +124,66 @@ class Team_stat(object):
 
         count_matches = """SELECT count(match_id) FROM matches"""
 
+        test_match = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
+                    WHERE (matches.match_team_1 = matches.match_team_2 AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
         try:
-            cursor.execute(select_team, (self.name,))
+            #Check if matches are between two different teams
+            cursor.execute(test_match, (self.name,))
             connection.commit()
-            new_name = cursor.fetchone()
+            tested = cursor.fetchone()
 
-            cursor.execute(tita, (self.name,))
-            connection.commit()
-            total_win = cursor.fetchone()
+            if tested is not None:
+                connection.rollback()
+                status = False
+                print("Invalid data in teams table, a team cannot have a match with itself.")
+            else:
+                cursor.execute(select_team, (self.name,))
+                connection.commit()
+                new_name = cursor.fetchone()
 
-            print(total_win)
+                cursor.execute(count_win1, (self.name,))
+                connection.commit()
+                total_win1 = cursor.fetchone()
+                if total_win1 is None:
+                    total_win1 = (0,)
 
-            cursor.execute(statement, (new_name, total_win, 0, 0))
-            connection.commit()
-            status = True
+                cursor.execute(count_win2, (self.name,))
+                connection.commit()
+                total_win2 = cursor.fetchone()
+                if total_win2 is None:
+                    total_win2 = (0,)
+
+                cursor.execute(count_draw1, (self.name,))
+                connection.commit()
+                total_draw1 = cursor.fetchone()
+                if total_draw1 is None:
+                    total_draw1 = (0,)
+
+                cursor.execute(count_draw2, (self.name,))
+                connection.commit()
+                total_draw2 = cursor.fetchone()
+                if total_draw2 is None:
+                    total_draw2 = (0,)
+
+                cursor.execute(count_loss1, (self.name,))
+                connection.commit()
+                total_loss1 = cursor.fetchone()
+                if total_loss1 is None:
+                    total_loss1 = (0,)
+
+                cursor.execute(count_loss2, (self.name,))
+                connection.commit()
+                total_loss2 = cursor.fetchone()
+                if total_loss2 is None:
+                    total_loss2 = (0,)
+
+                cursor.execute(statement, (new_name, total_win1[0]+total_win2[0], total_draw1[0]+total_draw2[0],
+                                           total_loss1[0]+total_loss2[0]))
+                connection.commit()
+                status = True
         except connection.Error:
             connection.rollback()
             status = False
@@ -152,23 +217,104 @@ class Team_stat(object):
 
         new_name = None
 
-        total_win = 0
-        total_draw = 0
-        total_loss = 0
-
         select_team = """SELECT team_id FROM team WHERE team_name = %s"""
+
+        count_win1 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
+                    WHERE (matches.match_team1_score > matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_win2 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_2
+                    WHERE (matches.match_team1_score < matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_draw1 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
+                    WHERE (matches.match_team1_score = matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_draw2 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_2
+                    WHERE (matches.match_team1_score = matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_loss1 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
+                    WHERE (matches.match_team1_score < matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_loss2 = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_2
+                    WHERE (matches.match_team1_score > matches.match_team2_score AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        count_matches = """SELECT count(match_id) FROM matches"""
 
         statement = """UPDATE team_stat
                        SET team_stat_name=%s, team_stat_win=%s, team_stat_loss=%s, team_stat_draw=%s
                        WHERE team_stat_id=%s"""
-        try:
-            cursor.execute(select_team, (self.team,))
-            connection.commit()
-            new_name = cursor.fetchone()
 
-            cursor.execute(statement, (new_name, 0, 0, 0, self.id))
+        test_match = """SELECT COUNT(*) FROM matches
+                    LEFT OUTER JOIN team ON team.team_id = matches.match_team_1
+                    WHERE (matches.match_team_1 = matches.match_team_2 AND team.team_name = %s)
+                    GROUP BY team.team_name"""
+
+        try:
+            #Check if matches are between two different teams
+            cursor.execute(test_match, (self.name,))
             connection.commit()
-            status = True
+            tested = cursor.fetchone()
+
+            if tested is not None:
+                connection.rollback()
+                status = False
+                print("Invalid data in teams table, a team cannot have a match with itself.")
+            else:
+                cursor.execute(select_team, (self.name,))
+                connection.commit()
+                new_name = cursor.fetchone()
+
+                cursor.execute(count_win1, (self.name,))
+                connection.commit()
+                total_win1 = cursor.fetchone()
+                if total_win1 is None:
+                    total_win1 = (0,)
+
+                cursor.execute(count_win2, (self.name,))
+                connection.commit()
+                total_win2 = cursor.fetchone()
+                if total_win2 is None:
+                    total_win2 = (0,)
+
+                cursor.execute(count_draw1, (self.name,))
+                connection.commit()
+                total_draw1 = cursor.fetchone()
+                if total_draw1 is None:
+                    total_draw1 = (0,)
+
+                cursor.execute(count_draw2, (self.name,))
+                connection.commit()
+                total_draw2 = cursor.fetchone()
+                if total_draw2 is None:
+                    total_draw2 = (0,)
+
+                cursor.execute(count_loss1, (self.name,))
+                connection.commit()
+                total_loss1 = cursor.fetchone()
+                if total_loss1 is None:
+                    total_loss1 = (0,)
+
+                cursor.execute(count_loss2, (self.name,))
+                connection.commit()
+                total_loss2 = cursor.fetchone()
+                if total_loss2 is None:
+                    total_loss2 = (0,)
+
+                cursor.execute(statement, (new_name, total_win1[0]+total_win2[0], total_draw1[0]+total_draw2[0],
+                                           total_loss1[0]+total_loss2[0], self.id))
+                connection.commit()
+                status = True
         except connection.Error:
             connection.rollback()
             status = False
