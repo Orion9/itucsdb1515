@@ -90,7 +90,7 @@ class Match (object):
                         'referee': match[25],
                         'score1': match[7],
                         'score2': match[8],
-                        'date': match[6]
+                        'date': match[6].strftime("%d %B %Y")
                     }
                 )
             print(array)

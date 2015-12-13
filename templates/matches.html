@@ -4,6 +4,22 @@
 
 {% block content %}
 
+<script type="text/javascript">
+       function format_time(match_date){
+           var time = match_date;
+           time_array = time.toString().split('-');
+           var monthNames = [
+              "January", "February", "March",
+              "April", "May", "June", "July",
+              "August", "September", "October",
+              "November", "December" ];
+           console.log(time_array);
+
+           $('#time-td').append(time_array[2] + "/" + monthNames[time_array[1] - 1] + "/" + time_array[0]);
+       }
+
+</script>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             List of Matches registered in database
@@ -22,34 +38,32 @@
                 <i>(From <span class="glyphicon glyphicon-log-in"></span> icon)</i>
             </div>
 
-            <table id="glorious-table" class="table table-bordered table-responsive">
+            <table class="table table-hover">
                 <thead>
-                    <tr>
-                        <th hidden>Match ID</th>
-                        <th>Match Team 1</th>
-                        <th>Match Team 2</th>
-                        <th>Match League</th>
-                        <th>Match Stadium</th>
-                        <th>Match Referee</th>
-                        <th>Match Date</th>
-                    </tr>
+                <tr>
+                    <th class="col-md-3" style="text-align:center;">Time</th>
+                    <th class="col-md-6" style="text-align:center;">Results</th>
+                    <th class="col-md-2" style="text-align:center;">Stadium</th>
+                    <th class="col-md-2" style="text-align:center;">Referee</th>
+                </tr>
                 </thead>
-                <tbody id="glorious-table-body">
-                {% if match_data %}
-                {% for match in match_data %}
-                    <tr>
-                        <td hidden>{{ match['id'] }}</td>
-                        <td>{{ match['name1'] }}</td>
-                        <td>{{ match['name2'] }}</td>
-                        <td>{{ match['league'] }}</td>
-                        <td>{{ match['stadium'] }}</td>
-                        <td>{{ match['referee'] }}</td>
-                        <td>{{ match['date'] }}</td>
+                <tbody>
+                    {% if match_data %}
+                    {% for match in match_data %}
+                    <tr style="">
+                        <td style="text-align:center;">{{ match['date'] }}</td>
+                        <td style="text-align:center;">{{match['name1']}}
+                        <span><b>   {{match['score1']}} - {{match['score2']}}  </b></span> {{match['name2']}}</td>
+                        <td style="text-align:center;">{{match['stadium']}}</td>
+                        <td style="text-align:center;">{{match['referee']}}</td>
                     </tr>
-                {% endfor %}
-                {% endif %}
+                    {% endfor %}ı
+                    {% endif %}
                 </tbody>
+
+
             </table>
+
         </div>
     </div>
 
