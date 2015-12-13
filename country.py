@@ -25,10 +25,6 @@ class Country (object):
                             JOIN city ON country.capital=city.city_id
                             WHERE country_id = %s"""
             try:
-                cursor.execute(query, (self.capital,))
-                connection.commit()
-                city_id = cursor.fetchone()
-
                 cursor.execute(query, (get_id,))
                 connection.commit()
                 
@@ -38,6 +34,7 @@ class Country (object):
                     self.name = data[1]
                     self.population = data[2]
                     self.capital = data[5]
+
                     cursor.close()
                     connection.close()
                     return self
@@ -72,7 +69,6 @@ class Country (object):
 
                 cursor.close()
                 connection.close()
-
                 return array
             
             except connection.Error as error:
@@ -85,7 +81,7 @@ class Country (object):
 
         query_capital = """SELECT city_id FROM city
                                     WHERE city_name = %s"""
-        # query to add given country tuple to database                     
+
         query = """INSERT INTO country (country_name, country_population, capital)
                         VALUES (%s, %s, %s)"""
 
@@ -105,7 +101,6 @@ class Country (object):
 
         cursor.close()
         connection.close()
-        
         return status
 
     def delete_from_db(self):
@@ -147,12 +142,12 @@ class Country (object):
             cursor.execute(query, (self.name, self.population, capital_id, self.id,))
             connection.commit()
             status = True
+
         except connection.Error as error:
             print(error)
             connection.rollback()
             status = False
-        finally:
-            cursor.close()
-            connection.close()
 
+        cursor.close()
+        connection.close()
         return status

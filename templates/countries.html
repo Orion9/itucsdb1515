@@ -4,15 +4,31 @@
 
 {% block content %}
 
+<script type="text/javascript">
+       function findlocation(a)
+       {
+           var parent = a.parentElement;
+           var query = parent.firstChild.innerHTML;
+
+           $('#map-modal-city').modal();
+           var place = document.getElementById('map-canvas-city');
+           place.innerHTML = "";
+
+           var innerHtml = '<iframe width="560" height="450" frameborder="0" style="border:0" ' +
+                    'src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCZGB4LyytNSiSk3hsmIrgM0ikaOO3NMUs&q=' +
+                    query + '&zoom=8" allowfullscreen> </iframe>';
+
+           place.innerHTML = innerHtml;
+       }
+</script>
+
     <div class="panel panel-default">
         <div class="panel-heading">
-            List of Countries registered in database
-
+            List of Countries Registered in Database
             <a id = "send-to-manager" class="btn btn-default"
                {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
                     href="{% if session.logged_in %}{{ url_for('manage_countries') }}{% else %}#{% endif %}">Manage</a>
         </div>
-
         <div class="panel-body">
             <div id="log-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" aria-label="Close">
@@ -21,28 +37,49 @@
                 <strong>Oops!</strong> You should be logged in to manage database. You can login from upper right corner.
                 <i>(From <span class="glyphicon glyphicon-log-in"></span> icon)</i>
             </div>
-
-            <table id="glorious-table" class="table table-bordered table-responsive">
+            <table class="table table-hover">
                 <thead>
-                    <tr>
-                        <th hidden>Country ID</th>
-                        <th>Country Name</th>
-                        <th>Population</th>
-                    </tr>
+                <tr>
+                    <th class="col-md-4" style="text-align:center;"><i class="fa fa-flag"></i>Country</th>
+                    <th class="col-md-4" style="text-align:center;"><i class="fa fa-university"></i>Capital</th>
+                    <th class="col-md-4" style="text-align:center;"><i class="fa fa-users"></i>Population</th>
+                </tr>
                 </thead>
-                <tbody id="glorious-table-body">
-                {% if country_data %}
-                {% for country in country_data %}
-                    <tr>
-                        <td hidden>{{ country['id'] }}</td>
-                        <td>{{ country['name'] }}</td>
-                        <td>{{ country['population'] }}</td>
+                <tbody>
+                    {% if country_data %}
+                    {% for country in country_data %}
+                    <tr style="">
+                        <td style="text-align:center;"><span>{{country['name']}}</span>&nbsp;&nbsp;
+                            <a href="#" onclick="findlocation(this);">
+                            <i class="fa fa-map-marker"></i></a></td>
+                        <td style="text-align:center;"><span>{{country['capital']}}</span>&nbsp;&nbsp;
+                            <a href="#" onclick="findlocation(this);">
+                            <i class="fa fa-map-marker"></i></a></td>
+                        <td style="text-align:center;">{{country['population']}}</td>
                     </tr>
-                {% endfor %}
-                {% endif %}
+                    {% endfor %}ı
+                    {% endif %}
                 </tbody>
             </table>
         </div>
+    </div>
+
+    <!-- Map Modal -->
+    <div id="map-modal-city" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="map-modal-header-city">Location</h4>
+          </div>
+          <div id="map-modal-body-city" class="modal-body">
+            <div id="map-canvas-city"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
 
 {% endblock %}

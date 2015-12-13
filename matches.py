@@ -38,6 +38,7 @@ class Match (object):
             try:
                 cursor.execute(query, (get_id,))
                 connection.commit()
+
                 data = cursor.fetchone()
                 if data is not None:
                     self.id = data[0]
@@ -73,38 +74,36 @@ class Match (object):
             try:
                 cursor.execute(query)
                 connection.commit()
+
+                array = []
+                data = cursor.fetchall()
+                for match in data:
+                    array.append(
+                        {
+                            'id': match[0],
+                            'name1': match[10],
+                            'name2': match[13],
+                            'league': match[16],
+                            'stadium': match[20],
+                            'referee': match[25],
+                            'score1': match[7],
+                            'score2': match[8],
+                            'date': match[6].strftime("%d %B %Y")
+                        }
+                    )
+
+                cursor.close()
+                connection.close()
+                return array
+
             except connection.Error as error:
                 print(error)
                 connection.rollback()
-
-            array = []
-            data = cursor.fetchall()
-            for match in data:
-                array.append(
-                    {
-                        'id': match[0],
-                        'name1': match[10],
-                        'name2': match[13],
-                        'league': match[16],
-                        'stadium': match[20],
-                        'referee': match[25],
-                        'score1': match[7],
-                        'score2': match[8],
-                        'date': match[6].strftime("%d %B %Y")
-                    }
-                )
-            print(array)
-
-            cursor.close()
-            connection.close()
-
-            return array
 
     def add_to_db(self):
         connection = db_connect()
         cursor = connection.cursor()
 
-        # query to get referenced team by its id
         query_team = """SELECT team_id FROM team
                                 WHERE team_name = %s"""
 
@@ -117,7 +116,6 @@ class Match (object):
         query_referee = """SELECT person_id FROM person
                                 WHERE person_name = %s"""
 
-        # query to add given match tuple to database
         query = """INSERT INTO matches (match_team_1, match_team_2, match_league,
                                         match_stadium, match_referee, match_date,
                                         match_team1_score, match_team2_score)
@@ -156,7 +154,6 @@ class Match (object):
 
         cursor.close()
         connection.close()
-
         return status
 
     def delete_from_db(self):
@@ -226,13 +223,12 @@ class Match (object):
                                    referee_id, self.date, self.score1, self.score2, self.id,))
             connection.commit()
             status = True
+
         except connection.Error as error:
             print(error)
             connection.rollback()
             status = False
-        finally:
-            cursor.close()
-            connection.close()
 
+        cursor.close()
+        connection.close()
         return status
-

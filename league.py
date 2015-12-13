@@ -28,6 +28,7 @@ class League (object):
             try:
                 cursor.execute(query, (get_id,))
                 connection.commit()
+
                 data = cursor.fetchone()
                 if data is not None:
                     self.id = data[0]
@@ -54,37 +55,34 @@ class League (object):
             try:
                 cursor.execute(query)
                 connection.commit()
+
+                array = []
+                data = cursor.fetchall()
+                for league in data:
+                    array.append(
+                        {
+                            'id': league[0],
+                            'name': league[1],
+                            'start_date': league[3].strftime('%d/%m/%Y'),
+                            'country': league[5]
+                        }
+                    )
+
+                cursor.close()
+                connection.close()
+                return array
+
             except connection.Error as error:
                 print(error)
                 connection.rollback()
 
-            array = []
-            data = cursor.fetchall()
-            for league in data:
-                array.append(
-                    {
-                        'id': league[0],
-                        'name': league[1],
-                        'start_date': league[3].strftime('%d/%m/%Y'),
-                        'country': league[5]
-                    }
-                )
-
-
-            cursor.close()
-            connection.close()
-
-            return array
-
     def add_to_db(self):
         connection = db_connect()
         cursor = connection.cursor()
-        
-        # query to get referenced country by its id
+
         query_country = """SELECT country_id FROM country
                                 WHERE country_name = %s"""
-                             
-        # query to add given league tuple to database                     
+
         query = """INSERT INTO league (league_name, league_country, league_start_date)
                         VALUES (%s, %s, %s)"""
 
@@ -104,7 +102,6 @@ class League (object):
 
         cursor.close()
         connection.close()
-        
         return status
 
     def delete_from_db(self):
@@ -132,6 +129,7 @@ class League (object):
         cursor = connection.cursor()
 
         query_country = """SELECT country_id FROM country WHERE country_name=%s"""
+
         query = """UPDATE league
                    SET league_name=%s, league_country=%s, league_start_date=%s
                    WHERE league_id=%s"""
@@ -144,12 +142,12 @@ class League (object):
             cursor.execute(query, (self.name, country_id, self.start_date, self.id,))
             connection.commit()
             status = True
+
         except connection.Error as error:
             print(error)
             connection.rollback()
             status = False
-        finally:
-            cursor.close()
-            connection.close()
-            return status
 
+        cursor.close()
+        connection.close()
+        return status

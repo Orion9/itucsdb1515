@@ -5,9 +5,11 @@
 {% block content %}
 
 <script type="text/javascript">
-       function format_time(match_date){
+       function format_time(match_date)
+       {
            var time = match_date;
            time_array = time.toString().split('-');
+
            var monthNames = [
               "January", "February", "March",
               "April", "May", "June", "July",
@@ -17,18 +19,15 @@
 
            $('#time-td').append(time_array[2] + "/" + monthNames[time_array[1] - 1] + "/" + time_array[0]);
        }
-
 </script>
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            List of Matches registered in database
-
+            List of Matches Registered in Database
             <a id = "send-to-manager" class="btn btn-default"
                {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
                     href="{% if session.logged_in %}{{ url_for('manage_matches') }}{% else %}#{% endif %}">Manage</a>
         </div>
-
         <div class="panel-body">
             <div id="log-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
                 <button type="button" class="close" aria-label="Close">
@@ -37,14 +36,13 @@
                 <strong>Oops!</strong> You should be logged in to manage database. You can login from upper right corner.
                 <i>(From <span class="glyphicon glyphicon-log-in"></span> icon)</i>
             </div>
-
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="col-md-3" style="text-align:center;">Time</th>
-                    <th class="col-md-6" style="text-align:center;">Results</th>
-                    <th class="col-md-2" style="text-align:center;">Stadium</th>
-                    <th class="col-md-2" style="text-align:center;">Referee</th>
+                    <th class="col-md-3" style="text-align:center;"><i class="fa fa-hourglass-end"></i>Date</th>
+                    <th class="col-md-6" style="text-align:center;"><i class="fa fa-bar-chart"></i>Results</th>
+                    <th class="col-md-2" style="text-align:center;"><i class="fa fa-university"></i>Stadium</th>
+                    <th class="col-md-2" style="text-align:center;"><i class="fa fa-bullhorn"></i>Referee</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -60,10 +58,7 @@
                     {% endfor %}ı
                     {% endif %}
                 </tbody>
-
-
             </table>
-
         </div>
     </div>
 
