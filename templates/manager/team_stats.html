@@ -22,8 +22,11 @@
             <table id="glorious-table" class="table table-bordered table-responsive">
                 <thead>
                     <tr>
-                        <th hidden>Team_stat ID</th>
+                        <th>Team_stat ID</th>
                         <th>Team_stat Name</th>
+                        <th>Team_stat Run</th>
+                        <th>Team_stat Hit</th>
+                        <th>Team_stat Save</th>
                         <th>Team_stat Win</th>
                         <th>Team_stat Draw</th>
                         <th>Team_stat Loss</th>
@@ -32,8 +35,11 @@
                 <tbody id="glorious-table-body">
                 {% for team_stat in team_stats_data %}
                     <tr>
-                        <td hidden>{{ team_stat['id'] }}</td>
+                        <td>{{ team_stat['id'] }}</td>
                         <td>{{ team_stat['name'] }}</td>
+                        <td>{{ team_stat['run'] }}</td>
+                        <td>{{ team_stat['hit'] }}</td>
+                        <td>{{ team_stat['save'] }}</td>
                         <td>{{ team_stat['win'] }}</td>
                         <td>{{ team_stat['draw'] }}</td>
                         <td>{{ team_stat['loss'] }}</td>
@@ -81,6 +87,30 @@
                 </div>
               </div>
 
+              <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <input id="modal-team_stat-run" type="number" name="team_stat_run"
+                           class="form-control" placeholder="Team_stat Run" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <input id="modal-team_stat-hit" type="number" name="team_stat_hit"
+                           class="form-control" placeholder="Team_stat Hit" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <input id="modal-team_stat-save" type="number" name="team_stat_save"
+                           class="form-control" placeholder="Team_stat Save" required>
+                    </div>
+                </div>
+
           </div>
 
               <div class="modal-footer">
@@ -123,6 +153,32 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <input id="modal-update-team_stat-run" type="number" name="team_stat_run"
+                           class="form-control" placeholder="Team_stat Run" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <input id="modal-update-team_stat-hit" type="number" name="team_stat_hit"
+                           class="form-control" placeholder="Team_stat Run" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                        <input id="modal-update-team_stat-save" type="number" name="team_stat_save"
+                           class="form-control" placeholder="Team_stat Run" required>
+                    </div>
+                </div>
+
+              </div>
 
               <div class="modal-footer">
                   <button type="submit" id="form-submit-button-update" class="btn btn-default">Submit</button>

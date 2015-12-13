@@ -1311,6 +1311,9 @@ def api_get_team_stat(data_id):
     data = {
         'id': team_stat_obj.id,
         'name': team_stat_obj.name,
+        'run': team_stat_obj.run,
+        'hit': team_stat_obj.hit,
+        'save': team_stat_obj.save,
         'win': team_stat_obj.win,
         'draw': team_stat_obj.draw,
         'loss': team_stat_obj.loss
@@ -1329,7 +1332,10 @@ def api_add_team_stat():
     json_post_data = request.get_json()
     # print(json_post_data)
     # Create a sponsor object #
-    team_stat_info = team_stats.Team_stat(json_post_data['team_stat_name'])
+    team_stat_info = team_stats.Team_stat(json_post_data['team_stat_name'],
+                                          json_post_data['team_stat_run'],
+                                          json_post_data['team_stat_hit'],
+                                          json_post_data['team_stat_save'])
 
     # Add it to db and send result #
     result = team_stat_info.add_to_db()
@@ -1352,6 +1358,9 @@ def api_update_team_stat():
 
     # Update team_stat object's values #
     team_stat_obj.name = json_data['team_stat_name']
+    team_stat_obj.run = json_data['team_stat_run']
+    team_stat_obj.hit = json_data['team_stat_hit']
+    team_stat_obj.save = json_data['team_stat_save']
 
     # Update db #
     result = team_stat_obj.update_db()

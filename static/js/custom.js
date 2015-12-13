@@ -1145,9 +1145,9 @@ $(function() {
         var data = {
             team_stat_id: $('#modal-update-team_stat-id').val(),
             team_stat_name: $('#modal-update-team_stat-name').val(),
-            team_stat_win: $('#modal-update-team_stat-win').val(),
-            team_stat_draw: $('#modal-update-team_stat-draw').val(),
-            team_stat_loss: $('#modal-update-team_stat-loss').val()
+            team_stat_run: $('#modal-update-team_stat-run').val(),
+            team_stat_hit: $('#modal-update-team_stat-hit').val(),
+            team_stat_save: $('#modal-update-team_stat-save').val()
         };
 
        $.ajax({
@@ -1187,9 +1187,9 @@ $(function() {
             var user_data = selected_row[0];
             $('#modal-update-team_stat-id').val(user_data[0]);
             $('#modal-update-team_stat-name').val(user_data[1]);
-            $('#modal-update-team_stat-win').val(user_data[2]);
-            $('#modal-update-team_stat-draw').val(user_data[3]);
-            $('#modal-update-team_stat-loss').val(user_data[4]);
+            $('#modal-update-team_stat-run').val(user_data[2]);
+            $('#modal-update-team_stat-hit').val(user_data[3]);
+            $('#modal-update-team_stat-save').val(user_data[4]);
 
             console.log(user_data);
         }
@@ -1666,7 +1666,10 @@ $(document).ready(function() {
     $('#modal-add-form-team_stat').submit(function() {
         var user_data =
             {
-                team_stat_name: $('#modal-team_stat-name').val()
+                team_stat_name: $('#modal-team_stat-name').val(),
+                team_stat_run: $('#modal-team_stat-run').val(),
+                team_stat_hit: $('#modal-team_stat-hit').val(),
+                team_stat_save: $('#modal-team_stat-save').val()
             };
 
         $.ajax({
