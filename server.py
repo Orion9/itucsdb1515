@@ -1401,6 +1401,23 @@ def api_get_country_all():
     return Response(country_json, mimetype="application/json")
 
 
+@app.route('/api/country/<int:data_id>', methods=['GET'])
+def api_get_country(data_id):
+    # Create empty country and fill it from db #
+    country_obj = country.Country()
+    country_obj.get_country_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': country_obj.id,
+        'name': country_obj.name,
+        'capital': country_obj.capital,
+        'population': country_obj.population
+    }
+
+    return jsonify(data)
+
+
 @app.route('/api/country/add', methods=['POST'])
 def api_add_country():
     # Prevent unauthorized access from API #
@@ -1472,6 +1489,40 @@ def api_update_country():
 
     return jsonify({'result': result})
 # COUNTRY - end #
+
+
+# MATCH - start #
+@app.route('/api/matches', methods=['GET'])
+def api_get_matches_all():
+    # Creates an empty Match object
+    match_obj = matches.Match()
+    # Transfers All Match Rows to match_data
+    match_data = match_obj.get_match_by_id()
+    match_json = json.dumps(match_data)
+
+    return Response(match_json, mimetype="application/json")
+
+
+@app.route('/api/matches/<int:data_id>', methods=['GET'])
+def api_get_match(data_id):
+    # Create empty match and fill it from db #
+    match_obj = matches.Match()
+    match_obj.get_match_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': match_obj.id,
+        'team1': match_obj.name1,
+        'team2': match_obj.name2,
+        'league': match_obj.league,
+        'stadium': match_obj.stadium,
+        'score1': match_obj.score1,
+        'score2': match_obj.score2,
+        'referee': match_obj.referee,
+        'date': match_obj.date
+    }
+
+    return jsonify(data)
 
 
 @app.route('/api/match/add', methods=['POST'])
@@ -1552,6 +1603,7 @@ def api_update_match():
         log_status = log_info.add_to_db()
 
     return jsonify({'result': result})
+# MATCH - end #
 
 
 # LEAGUE - start #
@@ -1562,6 +1614,23 @@ def api_get_league_all():
     league_json = json.dumps(league_data)
 
     return Response(league_json, mimetype="application/json")
+
+
+@app.route('/api/league/<int:data_id>', methods=['GET'])
+def api_get_league(data_id):
+    # Create empty league and fill it from db #
+    league_obj = league.League()
+    league_obj.get_league_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': league_obj.id,
+        'name': league_obj.name,
+        'country': league_obj.country,
+        'start-date': league_obj.start_date
+    }
+
+    return jsonify(data)
 
 
 @app.route('/api/league/add', methods=['POST'])
@@ -1636,6 +1705,7 @@ def api_update_league():
 
     return jsonify({'result': result})
 # LEAGUE - end #
+
 
 # TOURNAMENT - start #
 @app.route('/api/tournament', methods=['GET'])
