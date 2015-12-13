@@ -305,7 +305,10 @@ def manage_tournaments():
 
 @app.route('/penalties')
 def show_penalties():
-    return render_template("penalties.html")
+    penalty_obj = penalties.Penalty()
+    penalties_data = penalty_obj.get_penalty_by_id()
+
+    return render_template("penalties.html", penalties_data)
 
 
 @app.route('/manage/penalties', methods=['GET', 'POST'])
