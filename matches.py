@@ -130,6 +130,9 @@ class Match (object):
             connection.commit()
             team2_id = cursor.fetchone()
 
+            if team1_id == team2_id:
+                return False
+
             cursor.execute(query_league, (self.league,))
             connection.commit()
             league_id = cursor.fetchone()
@@ -206,6 +209,9 @@ class Match (object):
             cursor.execute(query_team, (self.name2,))
             connection.commit()
             team2_id = cursor.fetchone()
+
+            if team1_id == team2_id:
+                return False
 
             cursor.execute(query_league, (self.league,))
             connection.commit()
