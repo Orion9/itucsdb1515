@@ -25,14 +25,16 @@
                       <h2>Welcome to DBall!</h2>
                   </div>
                   <div class="panel-body">
-                      You can use our web site to get information about baseball.
-                      How can you use?
-                      <ul>
+                      <p class="big">You can use our web site to get information about baseball.</p>
+                      <p class="big">How can you use?</p>
+                      <ul class="big">
                           <li>Use login area to access manager area for changing information.</li>
                           <li>You can see change history in right panel.</li>
                           <li>You can see views through nav bar</li>
                           <li>Also do not forget to check our REST API.</li>
                       </ul>
+                      <br/>
+
                   </div>
             </div>
 
@@ -44,17 +46,15 @@
                       <h2>Last Changes</h2>
                   </div>
                   <div class="panel-body">
-
+                    <table class="table borderless">
                       {% if log_data %}
                           {% for log in log_data %}
-                            <table class="table table-responsive">
-                                <tr>
-                                    <td>{{log['description']}} by <b>{{log['author']}}</b> at {{log['time']}}</td>
+                                <tr style="border:none">
+                                    <td style="border:none">{{log['description']}} by <b>{{log['author']}}</b> at {{log['time']}}</td>
                                 </tr>
-                            </table>
                           {% endfor %}
                       {% endif %}
-
+                    </table>
                   </div>
             </div>
         </div>
