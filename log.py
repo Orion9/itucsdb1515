@@ -49,7 +49,8 @@ class Log (object):
 
         else:
             query = """SELECT * FROM log
-                            JOIN users ON log.log_author = users.user_id"""
+                       JOIN users ON log.log_author = users.user_id
+                       ORDER BY log_id DESC"""
             try:
                 cursor.execute(query)
                 connection.commit()

@@ -35,31 +35,18 @@ app.secret_key = 'come_on_dude_it_is_a_secret'
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    conn = db_connect()
-    cursor = conn.cursor()
-
-    query = """ SELECT * FROM log
-                        JOIN users ON log.log_author = users.user_id
-                        ORDER BY log_id DESC
-                        LIMIT 6"""
-
-    cursor.execute(query,)
-    conn.commit()
-
     array = []
-    data = cursor.fetchall()
-    for log in data:
-        array.append(
-            {
-            'id': log[0],
-            'description': log[1],
-            'author': log[5],
-            'time': log[3]
-            }
-        )
+    log_obj = log.Log()
+    log_array = log_obj.get_log_by_id()
+    i = 0
+    for log_data in log_array:
+        if i is 5:
+            break
 
+        array.append(log_data)
+        i += 1
 
-    return render_template('home.html', log_data = array)
+    return render_template('home.html', log_data=array)
 
 
 @app.route('/search', methods=['POST'])
@@ -78,7 +65,10 @@ def manage():
     if not session.get('logged_in'):
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
-    return render_template("manager/main.html")
+    log_obj = log.Log()
+    log_array = log_obj.get_log_by_id()
+
+    return render_template("manager/main.html", log_data=log_array)
 
 
 @app.route('/people')
@@ -355,7 +345,7 @@ def manage_matches():
     match_obj = matches.Match()
     match_data = match_obj.get_match_by_id()
     return render_template("manager/matches.html", match_data = match_data, team_data=team_data,
-                                    league_data=league_data, stadium_data=stadium_data, referee_data=referee_data)
+                           league_data=league_data, stadium_data=stadium_data, referee_data=referee_data)
 
 
 @app.route('/manage/users', methods=['GET', 'POST'])
@@ -364,13 +354,6 @@ def manage_users():
         flash("Unauthorized Access. Please identify yourself")
         return redirect(url_for('home'))
     return render_template("manager/users.html")
-
-
-@app.route('/manage/log')
-def show_logs():
-    log_obj = log.Log()
-    log_data = log_obj.get_log_by_id()
-    return render_template("manager/log.html", log_data=log_data)
 
 
 @app.route('/manage/users/<int:user_id>', methods=['GET', 'POST'])
@@ -1191,9 +1174,9 @@ def api_add_team_stat():
     # print(json_post_data)
     # Create a sponsor object #
     team_stat_info = team_stats.Team_stat(json_post_data['team_stat_name'],
-                                    json_post_data['team_stat_team'],
-                                    json_post_data['team_stat_location'],
-                                    json_post_data['team_stat_capacity'])
+                                          json_post_data['team_stat_team'],
+                                          json_post_data['team_stat_location'],
+                                          json_post_data['team_stat_capacity'])
 
     # Add it to db and send result #
     result = team_stat_info.add_to_db()

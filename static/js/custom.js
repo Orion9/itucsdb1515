@@ -881,7 +881,7 @@ $(function() {
                 console.log( "TROUBLE!" );
            }
        });
-       });
+    });
 
        // Update Stadium Button
     $('#update-rows-button-stadium').click(function(){
