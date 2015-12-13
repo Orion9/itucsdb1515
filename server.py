@@ -785,8 +785,8 @@ def api_delete_penalty():
 @app.route('/api/popularity', methods=['GET'])
 def api_get_popularity_all():
     # Create empty popularity then get all data from db #
-    popularity = popularity.Popularity()
-    popularity_data = popularity.get_popularity_by_id()
+    popularity_obj = popularity.Popularity()
+    popularity_data = popularity_obj.get_popularity_by_id()
     # jsonify function does not work for arrays #
     popularity_json = json.dumps(popularity_data)
 
