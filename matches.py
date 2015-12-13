@@ -243,10 +243,12 @@ class Match (object):
                           COUNT(case when(match_team1_score < match_team2_score) then 1 else null end) AS home_loses,
                           COUNT(case when(match_team1_score = match_team2_score) then 1 else null end) AS home_draw,
                           (3*COUNT(case when(match_team1_score > match_team2_score) then 1 else null end)+
-                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end)) AS home_points
+                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end)) AS home_points,
+                          league_name
                             FROM team
                           JOIN matches ON team_id = match_team_1
-                          GROUP BY team_id
+                          JOIN league ON match_league = league_id
+                          GROUP BY team_id, league_name
                           ORDER BY home_points DESC"""
 
         try:
@@ -263,7 +265,8 @@ class Match (object):
                         'home_wins': x[2],
                         'home_loses': x[3],
                         'home_draw': x[4],
-                        'home_points': x[5]
+                        'home_points': x[5],
+                        'league': x[6]
                     }
                 )
 
@@ -285,10 +288,12 @@ class Match (object):
                           COUNT(case when(match_team2_score < match_team1_score) then 1 else null end) AS away_loses,
                           COUNT(case when(match_team1_score = match_team2_score) then 1 else null end) AS away_draw,
                           (3*COUNT(case when(match_team2_score > match_team1_score) then 1 else null end)+
-                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end)) AS away_points
+                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end)) AS away_points,
+                          league_name
                             FROM team
                           JOIN matches ON team_id = match_team_2
-                          GROUP BY team_id
+                          JOIN league ON match_league = league_id
+                          GROUP BY team_id, league_name
                           ORDER BY away_points DESC"""
 
         try:
@@ -305,7 +310,8 @@ class Match (object):
                         'away_wins': x[2],
                         'away_loses': x[3],
                         'away_draw': x[4],
-                        'away_points': x[5]
+                        'away_points': x[5],
+                        'league': x[6]
                     }
                 )
 
