@@ -60,7 +60,7 @@ class Popularity(object):
                                 JOIN team AS team1 ON popularity.team_name = team1.team_id
                                 JOIN matches ON popularity.most_popular_match = matches.match_id
                                 JOIN team AS team2 ON matches.match_team_1 = team2.team_id
-				                JOIN team AS team3 ON matches.match_team_2 = team2.team_id
+                                JOIN team AS team3 ON matches.match_team_2 = team2.team_id
                                 JOIN person ON popularity.most_popular_player = person.person_id"""
             try:
                 cursor.execute(query, (get_id,))

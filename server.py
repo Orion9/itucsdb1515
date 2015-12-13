@@ -308,7 +308,7 @@ def show_penalties():
     penalty_obj = penalties.Penalty()
     penalties_data = penalty_obj.get_penalty_by_id()
 
-    return render_template("penalties.html", penalties_data)
+    return render_template("penalties.html", penalties_data=penalties_data)
 
 
 @app.route('/manage/penalties', methods=['GET', 'POST'])
