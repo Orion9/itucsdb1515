@@ -51,11 +51,6 @@ def home():
     return render_template('home.html', log_data=array)
 
 
-@app.route('/search', methods=['POST'])
-def search():
-    pass
-
-
 @app.route('/logout')
 def logout():
     api_user_logout()
@@ -495,11 +490,6 @@ def api_user_logout():
 #                                                                                             #
 # curl http://localhost:5000/api/<route>/<id>                                                 #
 ###############################################################################################
-@app.route('/api/search/<string:keywords>')
-def api_db_search(keywords):
-    pass
-
-
 # PERSON - start #
 @app.route('/api/person', methods=['GET'])
 def api_get_person_all():
