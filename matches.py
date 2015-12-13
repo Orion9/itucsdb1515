@@ -232,3 +232,88 @@ class Match (object):
         cursor.close()
         connection.close()
         return status
+
+    @staticmethod
+    def home_stats():
+        connection = db_connect()
+        cursor = connection.cursor()
+
+        query_home = """SELECT team_name AS Team, COUNT(match_id) AS home_played,
+                          COUNT(case when(match_team1_score > match_team2_score) then 1 else null end) AS home_wins,
+                          COUNT(case when(match_team1_score < match_team2_score) then 1 else null end) AS home_loses,
+                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end) AS home_draw,
+                          (3*COUNT(case when(match_team1_score > match_team2_score) then 1 else null end)+
+                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end)) AS home_points
+                            FROM team
+                          JOIN matches ON team_id = match_team_1
+                          GROUP BY team_id
+                          ORDER BY home_points DESC"""
+
+        try:
+            cursor.execute(query_home)
+            connection.commit()
+
+            array = []
+            data = cursor.fetchall()
+            for x in data:
+                array.append(
+                    {
+                        'team': x[0],
+                        'home_played': x[1],
+                        'home_wins': x[2],
+                        'home_loses': x[3],
+                        'home_draw': x[4],
+                        'home_points': x[5]
+                    }
+                )
+
+            cursor.close()
+            connection.close()
+            return array
+
+        except connection.Error as error:
+            print(error)
+            connection.rollback()
+
+    @staticmethod
+    def away_stats():
+        connection = db_connect()
+        cursor = connection.cursor()
+
+        query_away = """SELECT team_name AS Team, COUNT(match_id) AS away_played,
+                          COUNT(case when(match_team2_score > match_team1_score) then 1 else null end) AS away_wins,
+                          COUNT(case when(match_team2_score < match_team1_score) then 1 else null end) AS away_loses,
+                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end) AS away_draw,
+                          (3*COUNT(case when(match_team2_score > match_team1_score) then 1 else null end)+
+                          COUNT(case when(match_team1_score = match_team2_score) then 1 else null end)) AS away_points
+                            FROM team
+                          JOIN matches ON team_id = match_team_2
+                          GROUP BY team_id
+                          ORDER BY away_points DESC"""
+
+        try:
+            cursor.execute(query_away)
+            connection.commit()
+
+            array = []
+            data = cursor.fetchall()
+            for x in data:
+                array.append(
+                    {
+                        'team': x[0],
+                        'away_played': x[1],
+                        'away_wins': x[2],
+                        'away_loses': x[3],
+                        'away_draw': x[4],
+                        'away_points': x[5]
+                    }
+                )
+
+            cursor.close()
+            connection.close()
+            return array
+
+        except connection.Error as error:
+            print(error)
+            connection.rollback()
+

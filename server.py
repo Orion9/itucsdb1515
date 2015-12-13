@@ -255,7 +255,12 @@ def show_leagues():
     league_obj = league.League()
     league_data = league_obj.get_league_by_id()
 
-    return render_template("leagues.html", league_data=league_data)
+    home_stats_obj = matches.Match().home_stats()
+    away_stats_obj = matches.Match().away_stats()
+    print(home_stats_obj)
+
+    return render_template("leagues.html", league_data=league_data,
+                           home_stats_obj=home_stats_obj, away_stats_obj=away_stats_obj)
 
 
 @app.route('/manage/leagues', methods=['GET', 'POST'])
@@ -270,7 +275,8 @@ def manage_leagues():
     country_obj = country.Country()
     country_data = country_obj.get_country_by_id()
 
-    return render_template("manager/leagues.html", league_data=league_data, country_data=country_data)
+    return render_template("manager/leagues.html", league_data=league_data,
+                           country_data=country_data)
 
 
 @app.route('/tournaments')

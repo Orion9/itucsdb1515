@@ -4,6 +4,16 @@
 
 {% block content %}
 
+<script type="text/javascript">
+       function showstats(a)
+       {
+           var node = a.parentElement.parentElement.children[0].innerHTML;
+           console.log(node);
+           $('#modal-title').innerHTML = '';
+           $('#stats').modal();
+       }
+</script>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             List of Leagues registered in database
@@ -22,28 +32,114 @@
                 <i>(From <span class="glyphicon glyphicon-log-in"></span> icon)</i>
             </div>
 
-            <table id="glorious-table" class="table table-bordered table-responsive">
+            <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th hidden>League ID</th>
-                        <th>League Name</th>
-                        <th>League Country</th>
-                        <th>League Start Date</th>
+                        <th class="col-md-3" style="text-align:center;">
+                            <i class="fa fa-university"></i>League</th>
+                        <th class="col-md-3" style="text-align:center;">
+                            <i class="fa fa-flag"></i>Country</th>
+                        <th class="col-md-2" style="text-align:center;">
+                            <i class="fa fa-calendar"></i>Start Date</th>
+                        <th class="col-md-1" style="text-align:center;"></th>
                     </tr>
                 </thead>
-                <tbody id="glorious-table-body">
+                <tbody>
                 {% if league_data %}
                 {% for league in league_data %}
                     <tr>
-                        <td hidden>{{ league['id'] }}</td>
-                        <td>{{ league['name'] }}</td>
-                        <td>{{ league['country'] }}</td>
-                        <td>{{ league['start_date'] }}</td>
+                        <td style="text-align:center;">{{ league['name'] }}</td>
+                        <td style="text-align:center;">{{ league['country'] }}</td>
+                        <td style="text-align:center;">{{ league['start_date'] }}</td>
+                        <td style="text-align:center;"><button class="btn btn-success"
+                                                               onclick="showstats(this);">Leaderboard</button></td>
                     </tr>
                 {% endfor %}
                 {% endif %}
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="stats" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+    <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Leaderboard</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="home_stats" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-1" style="text-align:center;">Rank</th>
+                                    <th class="col-md-6" style="text-align:center;">Team</th>
+                                    <th class="col-md-1" style="text-align:center;">Home Played</th>
+                                    <th class="col-md-1" style="text-align:center;">Home Win</th>
+                                    <th class="col-md-1" style="text-align:center;">Home Draw</th>
+                                    <th class="col-md-1" style="text-align:center;">Home Lose</th>
+                                    <th class="col-md-1" style="text-align:center;">Home Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if home_stats_obj %}
+                                {% set i = 0 %}
+                                {% for home_stats in home_stats_obj %}
+                                {% set i = i+1 %}
+                                <tr>
+                                    <td style="text-align:center;">{{ i }}</td>
+                                    <td style="text-align:center;">{{home_stats['team']}}</td>
+                                    <td style="text-align:center;">{{home_stats['home_played']}}</td>
+                                    <td style="text-align:center;">{{home_stats['home_wins']}}</td>
+                                    <td style="text-align:center;">{{home_stats['home_draw']}}</td>
+                                    <td style="text-align:center;">{{home_stats['home_loses']}}</td>
+                                    <td style="text-align:center;">{{home_stats['home_points']}}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+
+
+                        <table id="away_stats" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-1" style="text-align:center;">Rank</th>
+                                    <th class="col-md-6" style="text-align:center;">Team</th>
+                                    <th class="col-md-1" style="text-align:center;">Away Played</th>
+                                    <th class="col-md-1" style="text-align:center;">Away Win</th>
+                                    <th class="col-md-1" style="text-align:center;">Away Draw</th>
+                                    <th class="col-md-1" style="text-align:center;">Away Lose</th>
+                                    <th class="col-md-1" style="text-align:center;">Away Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if away_stats_obj %}
+                                {% set i = 0 %}
+                                {% for away_stats in away_stats_obj %}
+                                {% set i = i+1 %}
+                                <tr>
+                                    <td style="text-align:center;">{{ i }}</td>
+                                    <td style="text-align:center;">{{away_stats['team']}}</td>
+                                    <td style="text-align:center;">{{away_stats['away_played']}}</td>
+                                    <td style="text-align:center;">{{away_stats['away_wins']}}</td>
+                                    <td style="text-align:center;">{{away_stats['away_draw']}}</td>
+                                    <td style="text-align:center;">{{away_stats['away_loses']}}</td>
+                                    <td style="text-align:center;">{{away_stats['away_points']}}</td>
+                                </tr>
+                                {% endfor %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 
