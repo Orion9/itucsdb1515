@@ -1,0 +1,198 @@
+{% extends "manager/layout.html" %}
+{% set active_page = 'popularity' %}
+{% block title %}Popularity{% endblock %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            List of popularity records registered in database
+        </div>
+        <div class="panel-body">
+            <div id="op-main-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-error-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Shame! <i>*rings bell*</i></strong> Something went wrong and your process could not be completed.
+            </div>
+            <div id="op-update-error-alert" class="alert alert-danger alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-update-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Whoa!</strong> You choose too many things or you forgot to choose one.
+            </div>
+            <div id="op-main-success-alert" class="alert alert-success alert-dismissible" role="alert" hidden>
+                <button type="button" class="close" id="op-success-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>BAM! </strong> Your operation successfully completed.
+            </div>
+            <table id="glorious-table" class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Popularity ID</th>
+                        <th>Team Name</th>
+                        <th>Most Popular Match</th>
+                        <th>Most Popular Player</th>
+                        <th>Number of Supporters</th>
+                    </tr>
+                </thead>
+                <tbody id="glorious-table-body">
+                {% if popularity_data %}
+                    {% for popularity in popularity_data %}
+                        <tr>
+                            <td>{{ popularity['id'] }}</td>
+                            <td>{{ popularity['team'] }}</td>
+                            <td>{{ popularity['match'] }}</td>
+                            <td>{{ popularity['player'] }}</td>
+                            <td>{{ popularity['supporters'] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary"
+                        data-toggle="modal" data-target="#add-new-popularity"aria-haspopup="true" aria-expanded="false">
+                    Add New Data
+                </button>
+            </div>
+
+            <button class="btn btn-primary" href="#" id="popularity-update-rows-button">Update Selected Row</button>
+            <button class="btn btn-primary" href="#" id="popularity-delete-rows-button">Delete Selected Row(s)</button>
+        </div>
+    </div>
+
+    <!-- Modal form for Add Screen -->
+    <div class="modal fade" id="add-new-popularity" tabindex="-1" role="dialog" aria-labelledby="add-new-popularity-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-popularity-title">Add New Popularity Info</h4>
+          </div>
+        <form id="modal-add-form-popularity" action="#" method="post">
+          <div class="modal-body">
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                      <select class="form-control" id="modal-popularity-team" required>
+                      {% if team_data %}
+                        {% for team in team_data %}
+                        <option value="{{ team['id'] }}">{{ team['name'] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+                      <select class="form-control" id="modal-popularity-match" required>
+                      {% if matches_data %}
+                        {% for match in matches_data %}
+                        <option value="{{ match['id'] }}">{{ match['name1'] }} - {{ match['name2'] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                      <select class="form-control" id="modal-popularity-player" required>
+                      {% if people_data %}
+                        {% for person in people_data %}
+                        <option value="{{ person['id'] }}">{{ person['name'] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+              <div class="form-group">
+                 <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input class="form-control" type="number" id="modal-popularity-support" placeholder="Supporters" required>
+                 </div>
+              </div>
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+    <!-- Modal form for Update Screen -->
+    <div class="modal fade" id="modal-update-popularity" tabindex="-1" role="dialog" aria-labelledby="update-popularity-label"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="add-new-popularity-title">Update Popularity Info</h4>
+          </div>
+        <form id="modal-update-form-popularity" action="#" method="post">
+          <div class="modal-body">
+            <input type="hidden" id="modal-update-popularity-id">
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-group"></i></span>
+                      <select class="form-control" id="modal-update-popularity-team" required>
+                      {% if team_data %}
+                        {% for team in team_data %}
+                        <option value="{{ team['id'] }}">{{ team['name'] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-flag"></i></span>
+                      <select class="form-control" id="modal-update-popularity-match" required>
+                      {% if matches_data %}
+                        {% for match in matches_data %}
+                          <option value="{{ match['id'] }}">{{ match['name1'] }} - {{ match['name2'] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                      <select class="form-control" id="modal-update-popularity-player" required>
+                      {% if people_data %}
+                        {% for person in people_data %}
+                        <option value="{{ person['id'] }}">{{ person['name'] }}</option>
+                        {% endfor %}
+                      {% endif %}
+                      </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input class="form-control" type="number" id="modal-update-popularity-support" placeholder="Supporters">
+                </div>
+              </div>
+
+            </div>
+
+              <div class="modal-footer">
+                  <button type="submit" id="form-submit-button" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+        </div>
+      </div>
+    </div>
+    <!-- End modal form -->
+
+{% endblock %}

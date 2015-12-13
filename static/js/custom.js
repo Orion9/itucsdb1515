@@ -439,6 +439,36 @@ $(function() {
         console.log(data);
     });
 
+    // Delete Popularity
+    $('#popularity-delete-rows-button').click(function(){
+
+        var data = [];
+        var selected_rows = glorious_table.rows('.selected').data();
+        for (var i = 0; i < selected_rows.length; ++i) {
+            data[i] = (selected_rows[i][0]);
+        }
+        $.ajax({
+            url: "/api/popularity/delete",
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                console.log( "TROUBLE!" );
+            }
+        });
+        console.log(data);
+    });
+
     // Update Person Button
     $('#update-rows-button').click(function(event){
         event.preventDefault();
@@ -461,32 +491,6 @@ $(function() {
             $('#modal-update-person-bday').val(date);
             $('#modal-update-person-bplace').val(user_data[3]);
             $('#modal-update-person-type').val(user_data[4]);
-
-            console.log(user_data);
-        }
-    });
-
-    // Penalty Update Button
-    $('#penalty-update-rows-button').click(function(event){
-        event.preventDefault();
-        var selected_row = glorious_table.rows('.selected').data();
-        if (selected_row.length > 1 || selected_row.length === 0)
-        {
-            $('#op-update-error-alert').show();
-        }
-        else
-        {
-            $('#modal-update-penalty').modal('show');
-            var user_data = selected_row[0];
-            $('#modal-update-penalty-id').val(user_data[0]);
-            $('#modal-update-penalty-name').val(user_data[1]);
-
-            //Let us arrange date value a little bit.
-            var date_array = user_data[2].split('/');
-            var date = date_array[2] + "-" + date_array[1] + "-" + date_array[0];
-
-            $('#modal-update-penalty-given-date').val(date);
-            $('#modal-update-penalty-type').val(user_data[3]);
 
             console.log(user_data);
         }
@@ -524,6 +528,88 @@ $(function() {
                 console.log( "TROUBLE!" );
            }
        });
+    });
+
+    // Popularity Update Button
+    $('#popularity-update-rows-button').click(function(event){
+        event.preventDefault();
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-update-popularity').modal('show');
+            var user_data = selected_row[0];
+            $('#modal-update-popularity-id').val(user_data[0]);
+            $('#modal-update-popularity-team').val(user_data[1]);
+            $('#modal-update-popularity-match').val(user_data[2]);
+            $('#modal-update-popularity-player').val(user_data[3]);
+            $('#modal-update-popularity-support').val(user_data[4]);
+
+            console.log(user_data);
+        }
+    });
+
+    // Update Popularity
+    $('#modal-update-popularity').submit(function(event){
+        event.preventDefault();
+        var data = {
+            popularity_id: $('#modal-update-popularity-id').val(),
+            team: $('#modal-update-popularity-team').val(),
+            match: $('#modal-update-popularity-match').val(),
+            player: $('#modal-update-popularity-player').val(),
+            supporters: $('#modal-update-popularity-support').val()
+        };
+
+       $.ajax({
+           url: "/api/popularity/update",
+           contentType: 'application/json',
+           data: JSON.stringify(data),
+           type: "POST",
+           dataType : "json",
+           success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    $('#modal-update-popularity').modal('hide');
+
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                }
+                console.log( json );
+            },
+           error: function() {
+                console.log( "TROUBLE!" );
+           }
+       });
+    });
+
+    // Penalty Update Button
+    $('#penalty-update-rows-button').click(function(event){
+        event.preventDefault();
+        var selected_row = glorious_table.rows('.selected').data();
+        if (selected_row.length > 1 || selected_row.length === 0)
+        {
+            $('#op-update-error-alert').show();
+        }
+        else
+        {
+            $('#modal-update-penalty').modal('show');
+            var user_data = selected_row[0];
+            $('#modal-update-penalty-id').val(user_data[0]);
+            $('#modal-update-penalty-name').val(user_data[1]);
+
+            //Let us arrange date value a little bit.
+            var date_array = user_data[2].split('/');
+            var date = date_array[2] + "-" + date_array[1] + "-" + date_array[0];
+
+            $('#modal-update-penalty-given-date').val(date);
+            $('#modal-update-penalty-type').val(user_data[3]);
+
+            console.log(user_data);
+        }
     });
 
     // Update Penalty
@@ -1281,6 +1367,41 @@ $(document).ready(function() {
 
         $.ajax({
             url: "/api/city/add",
+            contentType: 'application/json',
+            data: JSON.stringify(user_data),
+            type: "POST",
+            dataType : "json",
+            success: function( json ) {
+                if ( json.result ) {
+                    $('#op-main-success-alert').show();
+                    location.reload();
+                } else {
+                    $('#op-main-error-alert').show();
+                    $('#add-new-person').modal('hide');
+                }
+                console.log( json );
+            },
+            error: function( ) {
+                $('#op-main-error-alert').show();
+                console.log( "TROUBLE!" );
+            }
+        });
+        return false;
+    });
+
+    // Popularity Add
+    $('#modal-add-form-popularity').submit(function() {
+        var user_data =
+            {
+                popularity_id: $('#modal-popularity-id').val(),
+                team: $('#modal-popularity-team').val(),
+                match: $('#modal-popularity-match').val(),
+                player: $('#modal-popularity-player').val(),
+                supporters: $('#modal-popularity-support').val()
+            };
+
+        $.ajax({
+            url: "/api/popularity/add",
             contentType: 'application/json',
             data: JSON.stringify(user_data),
             type: "POST",

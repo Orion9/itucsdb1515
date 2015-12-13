@@ -22,6 +22,7 @@ import penalties
 import log
 import datetime
 import matches
+import popularity
 import cgi
 import os
 
@@ -347,6 +348,36 @@ def manage_cities():
     return render_template("manager/cities.html", cities_data=cities_data)
 
 
+@app.route('/popularity')
+def show_popularity():
+    popularity_obj = popularity.Popularity()
+    popularity_data = popularity_obj.get_popularity_by_id()
+
+    return render_template("popularity.html", popularity_data=popularity_data)
+
+
+@app.route('/manage/popularity', methods=['GET', 'POST'])
+def manage_popularity():
+    if not session.get('logged_in'):
+        flash("Unauthorized Access. Please identify yourself")
+        return redirect(url_for('home'))
+
+    popularity_obj = popularity.Popularity()
+    popularity_data = popularity_obj.get_popularity_by_id()
+
+    match_obj = matches.Match()
+    matches_data = match_obj.get_match_by_id()
+
+    team_obj = team.Team()
+    team_data = team_obj.get_team_by_id()
+
+    person_obj = people.Person()
+    people_data = person_obj.get_person_by_id()
+
+    return render_template("manager/popularity.html", team_data=team_data, people_data=people_data,
+                           matches_data=matches_data, popularity_data=popularity_data)
+
+
 @app.route('/matches')
 def show_matches():
     match_obj = matches.Match()
@@ -376,19 +407,6 @@ def manage_matches():
     match_data = match_obj.get_match_by_id()
     return render_template("manager/matches.html", match_data = match_data, team_data=team_data,
                            league_data=league_data, stadium_data=stadium_data, referee_data=referee_data)
-
-
-@app.route('/manage/users', methods=['GET', 'POST'])
-def manage_users():
-    if not session.get('logged_in'):
-        flash("Unauthorized Access. Please identify yourself")
-        return redirect(url_for('home'))
-    return render_template("manager/users.html")
-
-
-@app.route('/manage/users/<int:user_id>', methods=['GET', 'POST'])
-def show_user(user_id):
-    pass
 
 
 # API START #
@@ -623,7 +641,7 @@ def api_delete_person():
 # Penalties API - Begin #
 @app.route('/api/penalty', methods=['GET'])
 def api_get_penalty_all():
-    # Create empty person then get all data from db #
+    # Create empty penalty then get all data from db #
     penalty = penalties.Penalty()
     penalties_data = penalty.get_penalty_by_id()
     # jsonify function does not work for arrays #
@@ -635,7 +653,7 @@ def api_get_penalty_all():
 
 @app.route('/api/penalty/<int:data_id>', methods=['GET'])
 def api_get_penalty(data_id):
-    # Create empty person and fill it from db #
+    # Create empty penalty and fill it from db #
     penalty_obj = penalties.Penalty()
     penalty_obj.get_penalty_by_id(data_id)
 
@@ -659,7 +677,7 @@ def api_add_penalty():
     # Get json request from AJAX Handler #
     json_post_data = request.get_json()
     # print(json_post_data)
-    # Create an person object #
+    # Create an penalty object #
     penalty_info = penalties.Penalty(json_post_data['person_name'], json_post_data['penalty_given_date'],
                                      json_post_data['penalty_type'])
 
@@ -679,11 +697,11 @@ def api_add_penalty():
 def api_update_penalty():
     # Get request from AJAX #
     json_data = request.get_json()
-    # Get person from db #
+    # Get penalty from db #
     penalty_obj = penalties.Penalty()
     penalty_obj.get_penalty_by_id(json_data['penalty_id'])
 
-    # Update person object's values #
+    # Update penalty object's values #
     penalty_obj.person = json_data['person_name']
     penalty_obj.given_date = json_data['penalty_given_date']
     penalty_obj.type = json_data['penalty_type']
@@ -701,7 +719,7 @@ def api_update_penalty():
 
 @app.route('/api/penalty/type/<int:type_id>', methods=['GET'])
 def api_get_penalty_type(type_id):
-    # Get person type #
+    # Get penalty type #
     type_obj = penalties.PenaltyType()
     type_obj.get_penalty_type(type_id)
     # Create a dict #
@@ -758,6 +776,111 @@ def api_delete_penalty():
 
     return jsonify({'result': status})
 # Penalties API - End  #
+
+
+# Popularity API - Begin #
+@app.route('/api/popularity', methods=['GET'])
+def api_get_popularity_all():
+    # Create empty popularity then get all data from db #
+    popularity = popularity.Popularity()
+    popularity_data = popularity.get_popularity_by_id()
+    # jsonify function does not work for arrays #
+    popularity_json = json.dumps(popularity_data)
+
+    # Return JSON response. #
+    return Response(popularity_json, mimetype="application/json")
+
+
+@app.route('/api/popularity/<int:data_id>', methods=['GET'])
+def api_get_popularity(data_id):
+    # Create empty popularity and fill it from db #
+    popularity_obj = popularity.Popularity()
+    popularity_obj.get_popularity_by_id(data_id)
+
+    # Create a dict for jsonify #
+    data = {
+        'id': popularity_obj.id,
+        'team': popularity_obj.team,
+        'match': popularity_obj.match,
+        'player': popularity_obj.player,
+        'supporters': popularity_obj.supporters
+    }
+
+    return jsonify(data)
+
+
+@app.route('/api/popularity/add', methods=['POST'])
+def api_add_popularity():
+    # Prevent unauthorized access from API #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    # Get json request from AJAX Handler #
+    json_post_data = request.get_json()
+    # print(json_post_data)
+    # Create an person object #
+    popularity_info = popularity.Popularity(json_post_data['team'], json_post_data['match'],
+                                            json_post_data['player'], json_post_data['supporters'])
+
+    # Add it to db and send result #
+    result = popularity_info.add_to_db()
+
+    if result:
+        description = "Added Popularity Info for " + json_post_data['team'] + " to Popularity"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/popularity/update', methods=['POST'])
+def api_update_popularity():
+    # Get request from AJAX #
+    json_data = request.get_json()
+    # Get person from db #
+    popularity_obj = popularity.Popularity()
+    popularity_obj.get_popularity_by_id(json_data['popularity_id'])
+
+    # Update person object's values #
+    popularity_obj.team = json_data['team']
+    popularity_obj.match = json_data['match']
+    popularity_obj.player = json_data['player']
+    popularity_obj.supporters = json_data['supporters']
+
+    # Update db #
+    result = popularity_obj.update_db()
+
+    if result:
+        description = "Updated Element With id=" + json_data['popularity_id'] + " in Popularity"
+        log_info = log.Log(description, session['alias'], datetime.datetime.now())
+        log_status = log_info.add_to_db()
+
+    return jsonify({'result': result})
+
+
+@app.route('/api/popularity/delete', methods=['POST'])
+def api_delete_popularity():
+    # Prevent unauthorized access #
+    if not session.get('logged_in'):
+        return jsonify({"result": "Unauthorized Access. Please identify yourself"})
+
+    status = False
+    # Get request #
+    popularity_id_json = request.get_json()
+    # Delete every requested id #
+    for popularity_id in popularity_id_json:
+        popularity_obj = popularity.Popularity()
+        popularity_obj.get_popularity_by_id(popularity_id)
+        # print(penalty_id)
+        status = popularity_obj.delete_from_db()
+
+        if status:
+            description = "Deleted Popularity Info For " + popularity_obj.team + " from Penalties"
+            log_info = log.Log(description, session['alias'], datetime.datetime.now())
+            log_status = log_info.add_to_db()
+
+    return jsonify({'result': status})
+# Popularity API - End #
 
 
 # Cities Begin #
