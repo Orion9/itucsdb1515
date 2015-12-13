@@ -4,7 +4,7 @@
 {% block content %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            List of team_stats registered in database
+            List of team statistics registered in database
             <a id = "send-to-manager" class="btn btn-default"
                {% if not session.logged_in %}onclick="$('#log-main-error-alert').show()" {% endif %}
                     href="{% if session.logged_in %}{{ url_for('manage_team_stats') }}{% else %}#{% endif %}">Manage</a>
@@ -21,13 +21,13 @@
                 <thead>
                     <tr>
                         <th hidden>Team_stat ID</th>
-                        <th>Team_stat Name</th>
-                        <th>Team_stat Run</th>
-                        <th>Team_stat Hit</th>
-                        <th>Team_stat Save</th>
-                        <th>Team_stat Win</th>
-                        <th>Team_stat Draw</th>
-                        <th>Team_stat Loss</th>
+                        <th>Team Name</th>
+                        <th>Batting Runs</th>
+                        <th>Batting Hits</th>
+                        <th>Pitching Saves</th>
+                        <th>Total Wins</th>
+                        <th>Total Draws</th>
+                        <th>Total Losses</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">

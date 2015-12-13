@@ -23,13 +23,13 @@
                 <thead>
                     <tr>
                         <th>Team_stat ID</th>
-                        <th>Team_stat Name</th>
-                        <th>Team_stat Run</th>
-                        <th>Team_stat Hit</th>
-                        <th>Team_stat Save</th>
-                        <th>Team_stat Win</th>
-                        <th>Team_stat Draw</th>
-                        <th>Team_stat Loss</th>
+                        <th>Team Name</th>
+                        <th>Batting Runs</th>
+                        <th>Batting Hits</th>
+                        <th>Pitching Saves</th>
+                        <th>Total Wins</th>
+                        <th>Total Draws</th>
+                        <th>Total Losses</th>
                     </tr>
                 </thead>
                 <tbody id="glorious-table-body">
@@ -53,7 +53,7 @@
                     Add New Data <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="#" data-toggle="modal" data-target="#add-new-team_stat">Add New Team_stat</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#add-new-team_stat">Add New Data</a></li>
                 </ul>
             </div>
             <button class="btn btn-primary" href="#" id="update-rows-button-team_stat">Update Selected Row</button>
@@ -69,7 +69,7 @@
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" id="modal-add-close" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="add-new-team_stat-title">Add New Team_stat</h4>
+            <h4 class="modal-title" id="add-new-team_stat-title">Add New Team Statistics</h4>
           </div>
         <form id="modal-add-form-team_stat" action="#" method="post">
           <div class="modal-body">
@@ -91,7 +91,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
                         <input id="modal-team_stat-run" type="number" name="team_stat_run"
-                           class="form-control" placeholder="Team_stat Run" required>
+                           class="form-control" placeholder="Batting Runs" required>
                     </div>
                 </div>
 
@@ -99,7 +99,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
                         <input id="modal-team_stat-hit" type="number" name="team_stat_hit"
-                           class="form-control" placeholder="Team_stat Hit" required>
+                           class="form-control" placeholder="Batting Hits" required>
                     </div>
                 </div>
 
@@ -107,7 +107,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
                         <input id="modal-team_stat-save" type="number" name="team_stat_save"
-                           class="form-control" placeholder="Team_stat Save" required>
+                           class="form-control" placeholder="Pitching Saves" required>
                     </div>
                 </div>
 
@@ -133,7 +133,7 @@
             <button type="button" class="close" data-dismiss="modal" id="close-update-team_stat" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
 
-            <h4 class="modal-title" id="update-team_stat-title">Update Team_stat</h4>
+            <h4 class="modal-title" id="update-team_stat-title">Update Team Statistics</h4>
 
           </div>
 
@@ -158,7 +158,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
                         <input id="modal-update-team_stat-run" type="number" name="team_stat_run"
-                           class="form-control" placeholder="Team_stat Run" required>
+                           class="form-control" placeholder="Batting Runs" required>
                     </div>
                 </div>
 
@@ -166,7 +166,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
                         <input id="modal-update-team_stat-hit" type="number" name="team_stat_hit"
-                           class="form-control" placeholder="Team_stat Run" required>
+                           class="form-control" placeholder="Batting Hits" required>
                     </div>
                 </div>
 
@@ -174,7 +174,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
                         <input id="modal-update-team_stat-save" type="number" name="team_stat_save"
-                           class="form-control" placeholder="Team_stat Run" required>
+                           class="form-control" placeholder="Pitching Saves" required>
                     </div>
                 </div>
 
