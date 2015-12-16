@@ -35,7 +35,7 @@
                 {% if penalties_data %}
                     {% for penalty in penalties_data %}
                         <tr>
-                            <td>{{ penalty['id'] }}</td>
+                            <td hidden>{{ penalty['id'] }}</td>
                             <td>{{ penalty['person'] }}</td>
                             <td>{{ penalty['given_date'] }}</td>
                             <td>{{ penalty['type'] }}</td>
