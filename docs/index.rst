@@ -1,15 +1,14 @@
-Welcome to itucsdb's documentation!
+Welcome to Dball's documentation!
 ===================================
 
-:Team: Team Name
+:Team: ITUCSDB1515
 
 :Members:
 
-   * Member 1
-   * Member 2
-   * Member 3
-   * Member 4
-   * Member 5
+   * Oğuz Kerem Tural
+   * Umut Can Özyar
+   * Mert Şeker
+   * Furkan Akgün
 
 **project description goes here (a few paragraphs)**
 

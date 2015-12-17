@@ -8,6 +8,10 @@ Database Design
 
 **include the E/R diagram(s)**
 
+Git Workflow
+------------
+Git workflow thorough development process has been visualized with open source software called gource.
+
 Code
 ----
 
