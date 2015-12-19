@@ -128,9 +128,11 @@ html {
 
 .open > .dropdown-toggle.btn-primary,
 .btn-primary:hover,
+.btn-primary:hover:active,
 .btn-primary:focus,
 .btn-primary:active,
-.btn-primary:visited
+.btn-primary:visited,
+.btn-primary:active:hover
 {
     background: #888888;
     border-color: #383838;
