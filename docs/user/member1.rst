@@ -92,6 +92,8 @@ From this section, user can navigate through different tables easily. Active pag
 
       Side navigation bar in management area.
 
+.. _people-rec:
+
 People Records
 --------------
 In application each person stored in people table. From front view both unregistered and registered user can see the
@@ -175,6 +177,14 @@ When clicked the selected button, a modal which would provide inputs will appear
 
       Add person type modal.
 
+User should fill all necessary inputs. If it skips any of them a warning will appear and prevent user to send data.
+
+   .. figure:: oguz_pics/required_error.png
+      :scale: 50 %
+      :alt: user warning
+
+      User warning.
+
 Update Operation
 ++++++++++++++++
 User can update records easily first selecting which record will be updated and then clicking ''Update Selected Row'' button.
@@ -211,9 +221,131 @@ delete button. If operation successful the success message will appear and page 
 
 Penalty Records
 ---------------
+In penalty records most of the table functionality are the same as people table since all tables derived from a generic
+table design. Hence, user can search, filter and move across table pages in same way. For those operations please refer to
+:ref:`people-rec`.
+
+   .. figure:: oguz_pics/penalty_main.png
+      :scale: 50 %
+      :alt: penalty main
+
+      Penalty records table.
+
+Add Operation
++++++++++++++
+When user clicks the ''Add New Data'' button a drop down similar in people records will appear. From there user can add
+either a new penalty record or penalty type record.
+    * **PS.** *Beware penalty type records cannot be deleted*
+    * **PPS.** *If user not using Chromium-based browser, it should enter the date in ISO format (YYYY-mm-dd).*
+
+   .. figure:: oguz_pics/penalty_add.png
+      :scale: 50 %
+      :alt: penalty add
+
+      Penalty add modal.
+
+   .. figure:: oguz_pics/penalty_type.png
+      :scale: 50 %
+      :alt: penalty type add
+
+      Penalty type add modal.
+
+Update Operation
+++++++++++++++++
+User can update one record at a time. If more rows selected, user will encounter with an error same as in people records.
+Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
+
+   .. figure:: oguz_pics/update_penalty.png
+      :scale: 50 %
+      :alt: penalty update
+
+      Penalty update modal.
+
+Delete Operation
+++++++++++++++++
+User can delete selected rows. First it should select every rows that need to be deleted then it should hit
+''Delete Selected Row(s)'' button. If operation successful, success message will appear and page will be reloaded.
 
 Popularity Records
 ------------------
+Again in same fashion, popularity records also uses generic table view for user end. User can do all operations that can
+be done in people record. For further information please refer to :ref:`people-rec`.
+
+   .. figure:: oguz_pics/popularity_main.png
+      :scale: 50 %
+      :alt: popularity main
+
+      Popularity main screen.
+
+Add Operation
++++++++++++++
+When user clicks the ''Add New Data'' button this time add modal directly appears and provides input for record. User
+should fill all necessary input or a warning will warn the user and prevent submitting info.
+
+   .. figure:: oguz_pics/popularity_add.png
+      :scale: 50 %
+      :alt: popularity add
+
+      Popularity add modal.
+
+Update Operation
+++++++++++++++++
+Again in here, user can update one record at a time. If more rows selected, user will encounter with an error same as in people records.
+Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
+
+   .. figure:: oguz_pics/popularity_update.png
+      :scale: 50 %
+      :alt: popularity update
+
+      Popularity update modal.
+
+Delete Operation
+++++++++++++++++
+User can delete selected rows. First it should select every rows that need to be deleted then it should hit
+''Delete Selected Row(s)'' button. If operation successful, success message will appear and page will be reloaded.
 
 City Records
 ------------
+In city records, user again can do the same operations as described in people records section. For more information about
+that operations please refer to :ref:`people-rec`. Additionally, user can see the location of city on map using
+''Show Location'' button. When user hits this button after selecting a city record, a extra modal which contains a map and a marker that show location
+will appear. Still, user can only see one location at a time. If it selects more an error will appear.
+
+   .. figure:: oguz_pics/city_main.png
+      :scale: 50 %
+      :alt: city main
+
+      City main screen.
+
+   .. figure:: oguz_pics/city_location.png
+      :scale: 50 %
+      :alt: city location
+
+      City location modal.
+
+Add Operation
++++++++++++++
+Again as it before, when user clicks ''Add New Data'' button, a modal which provides necessary inputs for record will
+appear.
+
+   .. figure:: oguz_pics/city_add.png
+      :scale: 50 %
+      :alt: city add
+
+      City add modal.
+
+Update Operation
+++++++++++++++++
+User can update one record at a time. If more rows selected, user will encounter with an error same as in people records.
+Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
+
+   .. figure:: oguz_pics/city_update.png
+      :scale: 50 %
+      :alt: city update
+
+      City update modal.
+
+Delete Operation
+++++++++++++++++
+User can delete selected rows. First it should select every rows that need to be deleted then it should hit
+''Delete Selected Row(s)'' button. If operation successful, success message will appear and page will be reloaded.
