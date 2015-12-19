@@ -10,6 +10,7 @@ navigation bar user can move across table views and login if it is not yet logge
 user can be able to see latest changes on records have done by registered users.
 
    .. figure:: oguz_pics/main_area.png
+      :align: center
       :scale: 50 %
       :alt: main screen
 
@@ -24,18 +25,21 @@ replaces login button after log in operation. Using drop down menu user can adva
 and sign out when it is needed.
 
    .. figure:: oguz_pics/navbar_notlogin.png
+      :align: center
       :scale: 50 %
       :alt: navbar without login
 
       Navigation bar before user logs in.
 
    .. figure:: oguz_pics/navbar.png
+      :align: center
       :scale: 50 %
       :alt: navbar with login
 
       Navigation bar after user logs in
 
    .. figure:: oguz_pics/navbar_user_menu.png
+      :align: center
       :scale: 85 %
       :alt: navbar use_menu
 
@@ -46,7 +50,7 @@ User System
 User system in application is very basic and an abstract system that aims to prevent anonymous changes could have been done
 to database records. Every registered user has right to add, update or delete records where as unregistered users can only
 view, search and filter the records. Both user login and register operations are done using an Auth API service that has
-been provided by application itself. For further information about API please reference to developer guide.
+been provided by application itself. For further information about API please reference to :ref:`dev-guide`.
 
 Login Using Interface
 +++++++++++++++++++++
@@ -55,6 +59,7 @@ To login using interface, user should click the button provided in navigation ba
 After click, a modal window will be shown which provides user name and password fields to user for log in operation.
 
    .. figure:: oguz_pics/user_login.png
+      :align: center
       :scale: 50 %
       :alt: navbar login
 
@@ -63,6 +68,7 @@ After click, a modal window will be shown which provides user name and password 
 If user enters wrong credentials, an error message will appear and warns user about wrong credentials.
 
    .. figure:: oguz_pics/user_login_error.png
+      :align: center
       :scale: 50 %
       :alt: navbar login error
 
@@ -77,6 +83,7 @@ in manager screen user can be able to see all changes has been done from beginni
 management areas for different tables from sidebar.
 
    .. figure:: oguz_pics/manager_main_area.png
+      :align: center
       :scale: 50 %
       :alt: manager main
 
@@ -87,6 +94,7 @@ Sidebar
 From this section, user can navigate through different tables easily. Active page will be highlighted.
 
    .. figure:: oguz_pics/manager_sidebar.png
+      :align: center
       :scale: 50 %
       :alt: manager sidebar
 
@@ -100,6 +108,7 @@ In application each person stored in people table. From front view both unregist
 view front page.
 
    .. figure:: oguz_pics/front_people.png
+      :align: center
       :scale: 50 %
       :alt: people front
 
@@ -110,6 +119,7 @@ of the table. Also user can order tables by clicking the header of column whose 
 User can order table in ascending or descending order.
 
    .. figure:: oguz_pics/search_people.png
+      :align: center
       :scale: 50 %
       :alt: people search
 
@@ -118,6 +128,7 @@ User can order table in ascending or descending order.
 Also user can change number of elements that are shown in pages.
 
    .. figure:: oguz_pics/number_of_list.png
+      :align: center
       :scale: 50 %
       :alt: people list
 
@@ -127,6 +138,7 @@ From top button right next to title user can advance into management area. If us
 and asks user to login.
 
    .. figure:: oguz_pics/error_manage_not_login.png
+      :align: center
       :scale: 50 %
       :alt: manager login error
 
@@ -136,6 +148,7 @@ When user advances into management area, three button would appear in the bottom
 operation, second of them is for update and the last one is for delete operation.
 
    .. figure:: oguz_pics/people_buttons.png
+      :align: center
       :scale: 50 %
       :alt: people buttons
 
@@ -144,12 +157,14 @@ operation, second of them is for update and the last one is for delete operation
 If operations are successful a success message will appear on top of the table, if not then an error message will appear.
 
    .. figure:: oguz_pics/op_bam.png
+      :align: center
       :scale: 50 %
       :alt: success message
 
       Success message.
 
    .. figure:: oguz_pics/op_error.png
+      :align: center
       :scale: 50 %
       :alt: error message
 
@@ -166,12 +181,14 @@ When clicked the selected button, a modal which would provide inputs will appear
     * **PS.** *If you are not using Chromium-based browser please enter the date in ISO format (YYYY-mm-dd).*
 
    .. figure:: oguz_pics/add_person.png
+      :align: center
       :scale: 50 %
       :alt: people buttons
 
       Add person modal.
 
    .. figure:: oguz_pics/people_type_add.png
+      :align: center
       :scale: 50 %
       :alt: people buttons
 
@@ -180,6 +197,7 @@ When clicked the selected button, a modal which would provide inputs will appear
 User should fill all necessary inputs. If it skips any of them a warning will appear and prevent user to send data.
 
    .. figure:: oguz_pics/required_error.png
+      :align: center
       :scale: 50 %
       :alt: user warning
 
@@ -192,6 +210,7 @@ Still, only one record can be updated at time. If user selects more record and h
 other will be appear.
 
    .. figure:: oguz_pics/selection_many_error.png
+      :align: center
       :scale: 50 %
       :alt: update selection error
 
@@ -199,6 +218,7 @@ other will be appear.
 
 
    .. figure:: oguz_pics/row_selection.png
+      :align: center
       :scale: 50 %
       :alt: row selection
 
@@ -208,6 +228,7 @@ After selecting one record, user can hit update button. When user clicks the upd
 pre-filled inputs would appear. After that user can change any value as it would like.
 
    .. figure:: oguz_pics/update_person.png
+      :align: center
       :scale: 50 %
       :alt: people update
 
@@ -226,6 +247,7 @@ table design. Hence, user can search, filter and move across table pages in same
 :ref:`people-rec`.
 
    .. figure:: oguz_pics/penalty_main.png
+      :align: center
       :scale: 50 %
       :alt: penalty main
 
@@ -239,12 +261,14 @@ either a new penalty record or penalty type record.
     * **PPS.** *If user not using Chromium-based browser, it should enter the date in ISO format (YYYY-mm-dd).*
 
    .. figure:: oguz_pics/penalty_add.png
+      :align: center
       :scale: 50 %
       :alt: penalty add
 
       Penalty add modal.
 
    .. figure:: oguz_pics/penalty_type.png
+      :align: center
       :scale: 50 %
       :alt: penalty type add
 
@@ -256,6 +280,7 @@ User can update one record at a time. If more rows selected, user will encounter
 Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
 
    .. figure:: oguz_pics/update_penalty.png
+      :align: center
       :scale: 50 %
       :alt: penalty update
 
@@ -272,6 +297,7 @@ Again in same fashion, popularity records also uses generic table view for user 
 be done in people record. For further information please refer to :ref:`people-rec`.
 
    .. figure:: oguz_pics/popularity_main.png
+      :align: center
       :scale: 50 %
       :alt: popularity main
 
@@ -283,6 +309,7 @@ When user clicks the ''Add New Data'' button this time add modal directly appear
 should fill all necessary input or a warning will warn the user and prevent submitting info.
 
    .. figure:: oguz_pics/popularity_add.png
+      :align: center
       :scale: 50 %
       :alt: popularity add
 
@@ -294,6 +321,7 @@ Again in here, user can update one record at a time. If more rows selected, user
 Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
 
    .. figure:: oguz_pics/popularity_update.png
+      :align: center
       :scale: 50 %
       :alt: popularity update
 
@@ -312,12 +340,14 @@ that operations please refer to :ref:`people-rec`. Additionally, user can see th
 will appear. Still, user can only see one location at a time. If it selects more an error will appear.
 
    .. figure:: oguz_pics/city_main.png
+      :align: center
       :scale: 50 %
       :alt: city main
 
       City main screen.
 
    .. figure:: oguz_pics/city_location.png
+      :align: center
       :scale: 50 %
       :alt: city location
 
@@ -329,6 +359,7 @@ Again as it before, when user clicks ''Add New Data'' button, a modal which prov
 appear.
 
    .. figure:: oguz_pics/city_add.png
+      :align: center
       :scale: 50 %
       :alt: city add
 
@@ -340,6 +371,7 @@ User can update one record at a time. If more rows selected, user will encounter
 Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
 
    .. figure:: oguz_pics/city_update.png
+      :align: center
       :scale: 50 %
       :alt: city update
 

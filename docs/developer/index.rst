@@ -1,3 +1,5 @@
+.. _dev-guide:
+
 Developer Guide
 ===============
 
@@ -6,7 +8,12 @@ Database Design
 
 **explain the database design of your project**
 
-**include the E/R diagram(s)**
+   .. figure:: er.png
+      :align: center
+      :scale: 50 %
+      :alt: entity-relation diagram
+
+      Entity-Relation Diagram for Database
 
 Git Workflow
 ------------

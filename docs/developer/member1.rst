@@ -13,17 +13,17 @@ Generic Table View
 REST API Skeleton
 -----------------
 
-Add Operation
+Get Operation
 +++++++++++++
 
+Add Operation
++++++++++++++
 
 Update Operation
 ++++++++++++++++
 
-
 Delete Operation
 ++++++++++++++++
-
 
 User Login and Register System
 ------------------------------
@@ -45,5 +45,3 @@ Popularity Records
 
 City Records
 ------------
-
-
