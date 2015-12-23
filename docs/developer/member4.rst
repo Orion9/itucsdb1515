@@ -140,7 +140,7 @@ Generic Function Bodies
 All classes have same function bodies. They differ with only the queries they have. So to reduce explanation for each of them,
 I will show generic function bodies.
 
-First is Add Function,
+First is add_to_db() Function,
 
     .. figure:: furkan_pics/generic_add.png
        :align: center
@@ -152,7 +152,7 @@ All classes share these bodies, only difference is queries. Another thing is jus
 are set with name values but we instead use id values for them. So first we must call another queries to get their ids.
 Then simply execute operational query.
 
-Update Function,
+update_db() Function,
 
     .. figure:: furkan_pics/generic_update.png
        :align: center
@@ -160,7 +160,7 @@ Update Function,
 
        Generic Update Function
 
-Delete Function,
+delete_from_db() Function,
 
     .. figure:: furkan_pics/generic_delete.png
        :align: center
@@ -168,10 +168,218 @@ Delete Function,
 
        Generic Delete Function
 
-Retrieve Function,
+get_(classname)_by_id() Function,
 
     .. figure:: furkan_pics/generic_get.png
        :align: center
        :alt: generic get
 
        Generic Retrieve
+
+Functions up to now were only class operations. Each class have four functions above. Next functions are for add, delete,
+and update operations done in website. These operation are again same for other classes except some extra operations for
+getting referenced objects.
+
+Add Operation,
+
+    .. figure:: furkan_pics/generic_add_op.png
+       :align: center
+       :alt: generic add operation
+
+       Generic Add Operation
+
+As can be seen above, add operation creates an instance of class with json data provided by forms. After an instance is created
+that objects is added to the database. After a log will created for this given operation and the operation ends.
+
+Delete Operation,
+
+    .. figure:: furkan_pics/generic_delete_op.png
+       :align: center
+       :alt: generic delete operation
+
+       Generic Delete Operation
+
+In delete operation we get all selected item ids in an array, then in a for loop we delete all selected items.
+
+Update Operation,
+
+    .. figure:: furkan_pics/generic_update_op.png
+       :align: center
+       :alt: generic update operation
+
+       Generic Update Operation
+
+Just like in the add operation we get json data from forms and instead creating a new entry, we set properties of
+this instance to what we get from the forms and then update the item.
+
+Country
+-------
+
+Country object has four properties; id, name, capital and population. Capital is a foreign key to the cities table.
+
+INSERT INTO QUERY
++++++++++++++++++
+
+We have already provided bodies of all the functions. Those bodies were all same for all classes. What makes each class
+different are their unique queries for operations. These queries are executed in those functions and we complete what we try to
+accomplish.
+
+    .. figure:: furkan_pics/country_add_q.png
+        :align: center
+        :alt: country add query
+
+        Country Insert Into Query
+
+In above queries, first is used to get id of the referenced capital, and then all properties of class are used as parameters
+to add this instance to the database.
+
+DELETE FROM QUERY
++++++++++++++++++
+
+     .. figure:: furkan_pics/country_del_q.png
+        :align: center
+        :alt: country delete query
+
+        Country Delete Query
+
+Country with given id is deleted from the database.
+
+SELECT QUERY
+++++++++++++
+
+    .. figure:: furkan_pics/country_sel_q.png
+        :align: center
+        :alt: country select query
+
+        Country Select Query
+
+In case we pass no parameter to get_country_by_id() function, the query with no "WHERE" clause will be used. Above query
+is used when we pass an id parameter.
+
+UPDATE QUERY
+++++++++++++
+
+    .. figure:: furkan_pics/country_update_q.png
+       :align: center
+       :alt: country update query
+
+       Country Update Query
+
+Just like in the add operation queries excluding update query gets referenced item ids and then use them as parameter in
+the update query.
+
+Matches
+-------
+
+Match object has nine properties; id, home team, score of home team, away team, score of away team,
+stadium, referee, league and match date. Team, stadium, referee and league are all foreign keys.
+
+INSERT INTO QUERY
++++++++++++++++++
+
+We have already provided bodies of all the functions. Those bodies were all same for all classes. What makes each class
+different are their unique queries for operations. These queries are executed in those functions and we complete what we try to
+accomplish.
+
+    .. figure:: furkan_pics/match_add_q.png
+        :align: center
+        :alt: match add query
+
+        Match Insert Into Query
+
+In above queries, queries except the last one are used to get ids of the referenced items, and then all properties of class are used as parameters
+to add this instance to the database.
+
+DELETE FROM QUERY
++++++++++++++++++
+
+     .. figure:: furkan_pics/match_del_q.png
+        :align: center
+        :alt: match delete query
+
+        Match Delete Query
+
+Match with given id is deleted from the database.
+
+SELECT QUERY
+++++++++++++
+
+    .. figure:: furkan_pics/match_sel_q.png
+        :align: center
+        :alt: match select query
+
+        Match Select Query
+
+In case we pass no parameter to get_match_by_id() function, the query with no "WHERE" clause will be used. Above query
+is used when we pass an id parameter.
+
+UPDATE QUERY
+++++++++++++
+
+    .. figure:: furkan_pics/match_update_q.png
+       :align: center
+       :alt: match update query
+
+       Match Update Query
+
+Just like in the add operation queries excluding update query gets referenced item ids and then use them as parameter in
+the update query.
+
+League
+------
+
+League object has four properties; id, name, country and start date. Country is a foreign key to the country table.
+
+INSERT INTO QUERY
++++++++++++++++++
+
+We have already provided bodies of all the functions. Those bodies were all same for all classes. What makes each class
+different are their unique queries for operations. These queries are executed in those functions and we complete what we try to
+accomplish.
+
+    .. figure:: furkan_pics/league_add_q.png
+        :align: center
+        :alt: league add query
+
+        League Insert Into Query
+
+In above queries, first is used to get id of the referenced country, and then all properties of class are used as parameters
+to add this instance to the database.
+
+DELETE FROM QUERY
++++++++++++++++++
+
+     .. figure:: furkan_pics/league_del_q.png
+        :align: center
+        :alt: league delete query
+
+        Leauge Delete Query
+
+League with given id is deleted from the database.
+
+SELECT QUERY
+++++++++++++
+
+    .. figure:: furkan_pics/league_sel_q.png
+        :align: center
+        :alt: league select query
+
+        League Select Query
+
+In case we pass no parameter to get_league_by_id() function, the query with no "WHERE" clause will be used. Above query
+is used when we pass an id parameter.
+
+UPDATE QUERY
+++++++++++++
+
+    .. figure:: furkan_pics/league_update_q.png
+       :align: center
+       :alt: league update query
+
+       League Update Query
+
+Just like in the add operation queries excluding update query gets referenced item ids and then use them as parameter in
+the update query.
+
+
+
