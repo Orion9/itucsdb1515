@@ -9,7 +9,7 @@ consists of three major columns excluding id; first is the description and gener
 second is the user logged in when given operation performed , this way we are able to track any user activites, and finally
 third one is the date of operation.
 
-    .. figure:: furkan_pics/log_properties
+    .. figure:: furkan_pics/log_properties.png
        :align: center
        :alt: log properties
 
@@ -19,7 +19,7 @@ Inside log class, we have three functions; retrieve a log by passing an id or re
 adding log data to database and deleting log data from the database. Now we will cover these three functions respectively.
 
 Adding a Log to the Database
-++++++++++++++++++++++++++
+++++++++++++++++++++++++++++
 
 To be able to show logs in home screen or manager main screen we needed to add them to the database. To add log data to the
 database, we simply created an object and then set its properties. After an instance of object have all properties set, we
@@ -86,10 +86,9 @@ After that add_to_db() function on that log instance is called and log is added 
 
        Generating a Log After an Operation
 
-As you can see, right before function is completed a description is created given the operation. Simply "Added","Updated",
-    or "Deleted" expressions are used are all operation functions. Then user (session['alias']) and date are passed as parameters
- and a new log object is created. Right after creation of this new instance we called add_to_db() function and added it to
- the database.
+As you can see right before function is completed a description is created given the operation. Simply "Added",
+"Updated" or "Deleted" expressions are used for all operations. Here user is passed to the object constructor
+as session['alias'].
 
 Displaying Last 5 Changes in Home Page
 ++++++++++++++++++++++++++++++++++++++
