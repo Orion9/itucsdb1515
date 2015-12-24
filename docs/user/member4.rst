@@ -1,5 +1,5 @@
 Parts Implemented by Furkan Akgün
-================================
+=================================
 
 Change Log
 ----------
@@ -45,7 +45,7 @@ on /country route and its purpose to represent data we have in an elegant way an
        :scale: 50%
        :alt: country front page
 
-        Front Page For Countries
+       Front Page For Countries
 
 As can seen in the above figure, data simply divided into 3 columns; country name, country's capital and the population.
 Also table is striped table meaning that if you have your cursor over a row, that row will be focused and will be easy to see.
@@ -69,7 +69,7 @@ and only users with sufficient permissions can locate the page. In this page, al
 Also any columns for country such as id are shown here while it was not showing in the front page.
 
     .. figure:: furkan_pics/country_manager.png
-       :aling: center
+       :align: center
        :scale: 50%
        :alt: country manager screen
 

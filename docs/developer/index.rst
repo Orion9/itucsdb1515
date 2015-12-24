@@ -19,6 +19,11 @@ Git Workflow
 ------------
 Git workflow thorough development process has been visualized with open source software called gource.
 
+   .. figure:: git.png
+      :align: center
+      :scale: 50 %
+      :alt: git workflow
+
 Code
 ----
 

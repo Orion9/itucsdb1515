@@ -17,7 +17,7 @@ user can be able to see latest changes on records have done by registered users.
       Main screen of the application.
 
 Navigation Bar
-++++++++++++++
+^^^^^^^^^^^^^^
 
 From this area users can move thorough table views of front area. Also from right corner, where a door symbol seen,
 user can login to the application. If user already logged in, it can enter management area using drop down menu which
@@ -53,7 +53,7 @@ view, search and filter the records. Both user login and register operations are
 been provided by application itself. For further information about API please reference to :ref:`dev-guide`.
 
 Login Using Interface
-+++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^
 
 To login using interface, user should click the button provided in navigation bar's top right corner with the door symbol on it.
 After click, a modal window will be shown which provides user name and password fields to user for log in operation.
@@ -90,7 +90,7 @@ management areas for different tables from sidebar.
       Manager main screen.
 
 Sidebar
-+++++++
+^^^^^^^
 From this section, user can navigate through different tables easily. Active page will be highlighted.
 
    .. figure:: oguz_pics/manager_sidebar.png
@@ -171,7 +171,7 @@ If operations are successful a success message will appear on top of the table, 
       Error message.
 
 Add Operation
-+++++++++++++
+^^^^^^^^^^^^^
 User can add both person information and person type. Still be warned, person types cannot be deleted from database so
 add them wisely and only when its necessary.
 
@@ -204,7 +204,7 @@ User should fill all necessary inputs. If it skips any of them a warning will ap
       User warning.
 
 Update Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 User can update records easily first selecting which record will be updated and then clicking ''Update Selected Row'' button.
 Still, only one record can be updated at time. If user selects more record and hits the update button an error message different from
 other will be appear.
@@ -235,7 +235,7 @@ pre-filled inputs would appear. After that user can change any value as it would
       Person update modal.
 
 Delete Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 
 User can delete multiple records at one time. User only needs to select which records to be deleted and hit the
 delete button. If operation successful the success message will appear and page will reload.
@@ -254,9 +254,10 @@ table design. Hence, user can search, filter and move across table pages in same
       Penalty records table.
 
 Add Operation
-+++++++++++++
+^^^^^^^^^^^^^
 When user clicks the ''Add New Data'' button a drop down similar in people records will appear. From there user can add
 either a new penalty record or penalty type record.
+
     * **PS.** *Beware penalty type records cannot be deleted*
     * **PPS.** *If user not using Chromium-based browser, it should enter the date in ISO format (YYYY-mm-dd).*
 
@@ -275,7 +276,7 @@ either a new penalty record or penalty type record.
       Penalty type add modal.
 
 Update Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 User can update one record at a time. If more rows selected, user will encounter with an error same as in people records.
 Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
 
@@ -287,7 +288,7 @@ Again user should click ''Update Selected Row'' button to reveal update modal wh
       Penalty update modal.
 
 Delete Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 User can delete selected rows. First it should select every rows that need to be deleted then it should hit
 ''Delete Selected Row(s)'' button. If operation successful, success message will appear and page will be reloaded.
 
@@ -304,7 +305,7 @@ be done in people record. For further information please refer to :ref:`people-r
       Popularity main screen.
 
 Add Operation
-+++++++++++++
+^^^^^^^^^^^^^
 When user clicks the ''Add New Data'' button this time add modal directly appears and provides input for record. User
 should fill all necessary input or a warning will warn the user and prevent submitting info.
 
@@ -316,7 +317,7 @@ should fill all necessary input or a warning will warn the user and prevent subm
       Popularity add modal.
 
 Update Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 Again in here, user can update one record at a time. If more rows selected, user will encounter with an error same as in people records.
 Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
 
@@ -328,7 +329,7 @@ Again user should click ''Update Selected Row'' button to reveal update modal wh
       Popularity update modal.
 
 Delete Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 User can delete selected rows. First it should select every rows that need to be deleted then it should hit
 ''Delete Selected Row(s)'' button. If operation successful, success message will appear and page will be reloaded.
 
@@ -354,7 +355,7 @@ will appear. Still, user can only see one location at a time. If it selects more
       City location modal.
 
 Add Operation
-+++++++++++++
+^^^^^^^^^^^^^
 Again as it before, when user clicks ''Add New Data'' button, a modal which provides necessary inputs for record will
 appear.
 
@@ -366,7 +367,7 @@ appear.
       City add modal.
 
 Update Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 User can update one record at a time. If more rows selected, user will encounter with an error same as in people records.
 Again user should click ''Update Selected Row'' button to reveal update modal which provides necessary inputs for operation.
 
@@ -378,6 +379,6 @@ Again user should click ''Update Selected Row'' button to reveal update modal wh
       City update modal.
 
 Delete Operation
-++++++++++++++++
+^^^^^^^^^^^^^^^^
 User can delete selected rows. First it should select every rows that need to be deleted then it should hit
 ''Delete Selected Row(s)'' button. If operation successful, success message will appear and page will be reloaded.
