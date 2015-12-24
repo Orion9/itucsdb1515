@@ -1059,9 +1059,9 @@ $(function() {
         var data = {
             sponsorship_id: $('#modal-update-sponsorship-id').val(),
             sponsorship_name: $('#modal-update-sponsorship-name').val(),
-            sponsorship_name: $('#modal-update-sponsorship-league').val(),
-            sponsorship_name: $('#modal-update-sponsorship-team').val(),
-            sponsorship_name: $('#modal-update-sponsorship-person').val()
+            sponsorship_league: $('#modal-update-sponsorship-league').val(),
+            sponsorship_team: $('#modal-update-sponsorship-team').val(),
+            sponsorship_person: $('#modal-update-sponsorship-person').val()
         };
 
        $.ajax({
