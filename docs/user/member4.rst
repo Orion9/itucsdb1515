@@ -104,7 +104,7 @@ By clicking the "Update Selected Data" button a modal will show up if the user h
 exceeds one, then right after user clicked update button an error will show up on the top of table warning users about number
 of selected items.
 
-    .. figure:: furkan_pics/county_update_manyrows.png
+    .. figure:: furkan_pics/country_update_manyrows.png
        :align: center
        :scale: 50%
        :alt: can not update many rows at once
