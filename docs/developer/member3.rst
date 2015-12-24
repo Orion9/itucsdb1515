@@ -11,7 +11,8 @@ Team
 ----
 
 Team tuples have three columns; id, name and coach. Coach is a foreign key to the person table.
-GET TEAM BY ID
+
+Get Team By Id
 ++++++++++++++
 
 In order to get teams and use them in functions, the primary key(team_id) is used.
@@ -78,13 +79,13 @@ You can see how this operation is done in the code below:
                 connection.rollback()
 
 
-
-ADD TEAM TO DATABASE
+Add Team To Database
 ++++++++++++++++++++
 
 In order to add team tuples to the database, INSERT INTO queries are used and executed.
 The foreign keys are selected from the referenced tables by id.You can see it in the code below:
-.. code-block:: python
+
+    .. code-block:: python
 
       def add_to_db(self):
         connection = db_connect()
@@ -116,11 +117,13 @@ The foreign keys are selected from the referenced tables by id.You can see it in
         connection.close()
         return status
 
-DELETE TEAM FROM DATABASE
+
+Delete Team From Database
 +++++++++++++++++++++++++
 The team to be deleted is selected by id and deleted by using DELETE FROM query.
 You can see it in the code below:
-.. code-block:: python
+
+    .. code-block:: python
 
       def delete_from_db(self):
         connection = db_connect()
@@ -142,7 +145,8 @@ You can see it in the code below:
         connection.close()
         return status
 
-UPDATE TEAM
+
+Update Team
 +++++++++++
 The team to be updated is selected by id and updated by the UPDATE query. Just like in add operation,the foreign
 keys are selected from the referenced table by id.
@@ -181,7 +185,8 @@ Player
 ------
 
 Player tuples have four columns; id,name, team and number of goals. Team is a foreign key to the teams table.
-GET PLAYER BY ID
+
+Get Player By Id
 ++++++++++++++++
 
 In order to get players and use them in functions, the primary key(player_id) is used.
@@ -254,7 +259,7 @@ You can see how this operation is done in the code below:
 
 
 
-ADD PLAYER TO DATABASE
+Add Player To Database
 ++++++++++++++++++++++
 
 In order to add player tuples to the database, INSERT INTO queries are used and executed.
@@ -293,7 +298,8 @@ The foreign keys are selected from the referenced tables by id.You can see it in
 
         return status
 
-DELETE PLAYER FROM DATABASE
+
+Delete Player From Database
 +++++++++++++++++++++++++++
 The player to be deleted is selected by id and deleted by using DELETE FROM query.
 You can see it in the code below:
@@ -320,7 +326,8 @@ You can see it in the code below:
         connection.close()
         return status
 
-UPDATE PLAYER
+
+Update Player
 +++++++++++++
 The player to be updated is selected by id and updated by the UPDATE query. Just like in add operation,the foreign
 keys are selected from the referenced table by id.
@@ -354,12 +361,14 @@ You can see it in the code below:
             connection.close()
             return status
 
+
 Tournament
 ----------
 
 Tournament tuples have seven columns; id,name,number of matches,start date,end date,country and prize.
 Country is a foreign key to the countries table.
-GET TOURNAMENT BY ID
+
+Get Tournament By Id
 ++++++++++++++++++++
 
 In order to get tournaments and use them in functions, the primary key(tournament_id) is used.
@@ -431,7 +440,8 @@ You can see how this operation is done in the code below:
 
             return array
 
-ADD TOURNAMENT TO DATABASE
+
+Add Tournament To Database
 ++++++++++++++++++++++++++
 
 In order to add tournament tuples to the database, INSERT INTO queries are used and executed.
@@ -471,7 +481,8 @@ The foreign keys are selected from the referenced tables by id.You can see it in
 
         return status
 
-DELETE TOURNAMENT FROM DATABASE
+
+Delete Tournament From Database
 +++++++++++++++++++++++++++++++
 The tournament to be deleted is selected by id and deleted by using DELETE FROM query.
 You can see it in the code below:
@@ -498,7 +509,8 @@ You can see it in the code below:
         connection.close()
         return status
 
-UPDATE TOURNAMENT
+
+Update Tournament
 +++++++++++++++++
 The tournament to be updated is selected by id and updated by the UPDATE query. Just like in add operation,the foreign
 keys are selected from the referenced table by id.
