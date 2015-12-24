@@ -8,22 +8,11 @@ can be accessible through front view. DBall also provides a abstract interface f
 developers can use our services in their programs easily. For further information about this topic please advance
 to :ref:`dev-guide`.
 
-**explain how your application works from the user perspective, use
-screenshots whereever appropriate**
-
-**to add a picture, use the following example**::
-
-   .. figure:: picture.png
-      :scale: 50 %
-      :alt: map to buried treasure
-
-      This is the caption of the figure (a simple paragraph).
-
 .. toctree::
 
    member1
    member2
    member3
    member4
-   member5
+
    
